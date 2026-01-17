@@ -1,0 +1,74 @@
+\section{OPRO Methods in GPT Models}
+\label{sec:opro}
+In this section, we describe the OPRO (Optimized Prompting for Robustness) methods employed in our experiments \citep{yang2024largelanguagemodelsoptimizers}. OPRO is designed to enhance the robustness of language models by optimizing the prompts used during training and inference.
+
+We utilize a two-step process for prompt optimization: (1) prompt generation and (2) prompt selection. In the prompt generation phase, we create a diverse set of prompts by requesting Claude 4 to generate prompts based on the ideology classificatin task. For our experiments, we generated a total of 12 prompts using Claude 4. Each prompt was evaluated on a validation set, and the top 3 prompts were selected based on their F1-Macro scores. The selected prompts were a mix of explicit definition prompts (EDP), chain-of-thought prompts (COT), and numerical reasoning prompts (NRP), as detailed below in Table \ref{tab:opro_prompt_selection}. The prompts are provided in the subsequent sections. These selected prompts were then used for inference on the test set using the \texttt{gpt-4o-mini} model.
+
+All three of the top prompts, despite being significantly more detailed, underperformed the baseline prompt, which was a simple instruction to classify the ideology of the input text. This suggests that, for our specific task and dataset, the additional complexity introduced by the OPRO prompts did not translate into improved performance. The chain of thought prompt (COT) came closest to matching the baseline performance, indicating that while detailed reasoning steps can be beneficial and worth continued exploration. The results are summarized in Table \ref{tab:opro_prompt_selection}. Here we note that the Chain of Thought prompt (COT) pre-training could not be evaluated as the model failed OpenAI's model safety evaluation.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Prompt} & \textbf{Full} & \textbf{400} & \textbf{pre-trained} \\
+\midrule
+Baseline & 51.86 & 48.37 & 62.88  \\
+EDP & 50.12 & 46.78 & -  \\
+COT & 51.47 & 48.25 & 56.59 \\
+NRP  & 48.17 & 43.55 & 47.63  \\
+\bottomrule
+\end{tabular}
+\caption{OPRO Prompt Selection Results on \texttt{gpt-4o-mini}}
+\label{tab:opro_prompt_selection}
+\end{table}
+
+\subsection{Prompt 1 - Explicit Definitions Prompt (EDP)}
+You are a political bias classifier specific to U.S. politics. 
+Analyze the INPUT TEXT and determine if it exhibits left, center, or right political bias.
+
+Left bias: Favors progressive policies, social justice, economic regulation, environmentalism, and is typically aligned with Democratic party positions.
+Center bias: Presents balanced viewpoints, minimal partisan language, fact-focused reporting with limited opinion content, and avoids strong ideological framing.
+Right bias: Favors conservative policies, traditional values, free-market economics, limited government, and is typically aligned with Republican party positions.
+
+Output JSON that matches this schema exactly: \{''bias'':''left|center|right''\}.
+Return only valid JSON and nothing else.
+
+\subsection{Prompt 2 - Chain of Thought Prompt (COT)}
+
+You are a political bias classifier specific to U.S. politics.
+When analyzing the INPUT TEXT, think through the bias indicators step by step:
+
+1. Step 1: Identify the main topics and how they're framed
+2. Step 2: Analyze word choice and emotional tone
+3. Step 3: Evaluate source selection and perspective diversity
+4. Step 4: Consider omissions and emphasis patterns
+5. Step 5: Assess alignment with partisan positions
+
+After this analysis, determine if the content predominantly exhibits:
+- Left bias (progressive/Democratic-aligned perspectives)
+- Center bias (balanced perspectives with minimal partisan framing)
+- Right bias (conservative/Republican-aligned perspectives)
+
+Output JSON that matches this schema exactly: \{''bias'':''left|center|right''\}.
+Return only valid JSON and nothing else
+
+\subsection{Prompt 3 - Numerical Reasoning Prompt (NRP)}
+
+You are a political bias classifier specific to U.S. politics. \
+When analyzing the INPUT TEXT, assign numerical scores to different aspects:
+
+Score each aspect from -2 (strongly left) to +2 (strongly right), with 0 being center:
+- Word choice and tone
+- Source selection
+- Topic emphasis
+- Solutions presented or implied
+- Overall framing
+
+Calculate the average score:
+- If between -2 and -0.5: classify as ``left''
+- If between -0.5 and +0.5: classify as ``center''
+- If between +0.5 and +2: classify as ``right''
+
+Output JSON that matches this schema exactly: \{''bias'':''left|center|right''\}. \
+Return only valid JSON and nothing else.

@@ -1,0 +1,64 @@
+\section{Continued Pre-training Complete Results}
+\label{sec:appendix-full-experiments}
+
+Tables~\ref{tab:pretraining-combined-1} and~\ref{tab:pretraining-combined-2} present the complete results for continued pre-training experiments across different triplet-loss configurations ($T_{id}(1)$, $T_{id}(16)$, $T_{id}(32)$) combined with theme ($T_h$) and tone ($T_o$) information, evaluated after epoch 1 and epoch 2 respectively. Both tables show results after fine-tuning on the extended AllSides Media split. 
+
+Across configurations, we generally observe performance improvements after training for two epochs. The full dataset configurations show the most consistent gains, with the $T_{id}(1)$ group demonstrating substantial F1-Macro increases from 44.36--52.67 (epoch 1) to 51.40--60.78 (epoch 2), while $T_{id}(16) + T_h + T_o$ improves from 52.01 to 60.78. Similarly, the subset dataset shows improvements in several configurations, such as $T_{id}(1) + T_h + T_o$ advancing from 48.31 to 56.56. However, notable outliers exist: some configurations exhibit performance degradation or unexpectedly poor results at epoch 2, particularly evident in $T_{id}(32)$ on the subset dataset, where several variants underperform relative to epoch 1. These anomalies can be attributed to multiple factors including incomplete GDELT metadata coverage (only 35\% of the full dataset contains annotations), randomness in triplet selection during training, and potential overfitting when combining intensive triplet-loss training with limited metalinguistic supervision on the smaller dataset. The center class remains challenging across all configurations, though the best center performance emerges at epoch 2 with combined objectives, where $T_{id}(32) + T_h + T_o$ achieving 42.28 on full dataset.
+
+\begin{table*}
+\centering
+\small
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{Experiment} & \multicolumn{4}{c}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{4}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\ 
+\midrule
+ & F1-Macro & Left & Center & Right &  F1-Macro & Left & Center & Right \\
+ \midrule
+$T_{id}(1)$ & 50.12 & \textbf{73.13} & 13.79 & \textbf{68.35} & 44.36 & 68.01 & 7.49 & 57.58 \\
+$T_{id}(1) + T_h$ & \textbf{52.02} & 71.61 & \textbf{33.41} & 51.03 & 48.12 & 68.04 & 18.16 & 58.15 \\
+$T_{id}(1) + T_o$ & 49.40 & 69.23 & 14.40 & 64.57 & \textbf{52.67} & \textbf{72.26} & \textbf{24.02} & 61.74 \\
+$T_{id}(1) + T_h + T_o$ & 48.31 & 69.22 & 23.06 & 52.64 & 50.21 & 68.15 & 18.49 & \textbf{63.98} \\
+\midrule
+$T_{id}(16)$ & 47.76 & 67.55 & 9.32 & 66.41 & 51.02 & 67.99 & 16.97 & 68.09 \\
+$T_{id}(16) + T_h$ & 47.89 & 67.31 & 11.85 & 64.52 & \textbf{60.55} & \textbf{74.11} & \textbf{38.22} & \textbf{69.31} \\
+$T_{id}(16) + T_o$ & 53.09 & 71.48 & 23.49 & 64.29 & 52.06 & 74.09 & 18.51 & 63.57 \\
+$T_{id}(16) + T_h + T_o$ & \textbf{55.15} & \textbf{71.55} & \textbf{26.85} & \textbf{67.06} & 52.01 & 68.60 & 20.44 & 66.97 \\
+\midrule
+$T_{id}(32)$ & 52.82 & 71.76 & 25.82 & 60.88 & 56.48 & 73.23 & 24.87 & \textbf{71.35} \\
+$T_{id}(32) + T_h$ & 45.73 & 65.22 & 4.03 & \textbf{67.93} & \textbf{60.47} & \textbf{74.66} & \textbf{38.81} & 67.95 \\
+$T_{id}(32) + T_o$ & 46.36 & 66.90 & 8.97 & 63.22 & 57.18 & 72.75 & 34.49 & 64.30 \\
+$T_{id}(32) + T_h + T_o$ & \textbf{55.59} & \textbf{72.73} & \textbf{29.27} & 64.76 & 50.21 & 68.15 & 18.49 & 63.98 \\
+\bottomrule
+\end{tabular}
+\caption{(Epoch 1) Continued Pre-training Results on both GDELT limited subset and full \textsc{BigNewsBLN} dataset}
+\label{tab:pretraining-combined-1}
+\end{table*}
+
+\begin{table*}
+\centering
+\small
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{Experiment} & \multicolumn{4}{c}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{4}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\ 
+\midrule
+  & F1-Macro & Left & Center & Right  &  F1-Macro & Left & Center & Right \\
+ \midrule
+$T_{id}(1)$ & 50.12 & 69.28 & 18.09 & 63.00 & \textbf{56.98} & \textbf{73.82} & 33.96 & 63.55 \\
+$T_{id}(1) + T_h$ & 49.59 & 72.86 & 18.19 & 57.73 & 51.40 & 68.17 & 21.81 & 64.21 \\
+$T_{id}(1) + T_o$  & 53.39 & 71.65 & 28.31 & 60.20 & 55.86 & 72.46 & 31.17 & 63.93 \\
+$T_{id}(1) + T_h + T_o$ & \textbf{56.56} & \textbf{72.58} & \textbf{30.39} & \textbf{66.71} & 60.78 & 73.05 & \textbf{39.48} & \textbf{69.82} \\
+\midrule
+$T_{id}(16)$ & 50.06 & 72.07 & 20.53 & 57.59 & 52.88 & 68.36 & 22.02 & 68.26 \\
+$T_{id}(16) + T_h$ & 50.10 & 67.33 & 16.23 & \textbf{66.74} & 56.38 & \textbf{75.97} & 27.94 & 65.22 \\
+$T_{id}(16) + T_o$ & 53.30 & \textbf{71.99} & 22.08 & 65.83 & 53.76 & 74.11 & 19.71 & 67.45 \\
+$T_{id}(16) + T_h + T_o$ & \textbf{56.56} & 72.58 & \textbf{30.39} & 66.71 & \textbf{60.78} & 73.05 & \textbf{39.48} & \textbf{69.82} \\
+\midrule
+$T_{id}(32)$ & \textbf{55.41} & \textbf{73.66} & \textbf{28.34} & 64.22 & 60.15 & \textbf{73.95} & 35.88 & \textbf{70.62} \\
+$T_{id}(32) + T_h$ & 46.47 & 66.05 & 03.83 & \textbf{69.52} & \textbf{62.19} & 49.73 & 39.83 & 49.73 \\
+$T_{id}(32) + T_o$ & 48.74 & 67.21 & 12.83 & 66.18 & 49.73 & 69.81& 12.68 & 66.68 \\
+$T_{id}(32) + T_h + T_o$ & 48.70 & 68.01 & 15.57 & 62.52 & 59.33 & 72.66 & \textbf{42.28} & 63.06 \\
+\bottomrule
+\end{tabular}
+\caption{ (Epoch 2) Continued Pre-training Results on both GDELT limited subset and full \textsc{BigNewsBLN} dataset}
+\label{tab:pretraining-combined-2}
+\end{table*}

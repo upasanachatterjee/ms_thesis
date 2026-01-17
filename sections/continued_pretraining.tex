@@ -1,0 +1,63 @@
+\section{Continued Pre-Training with Metalinguistic Objectives}
+
+\subsection{Method}
+To incorporate metalinguistic features into the continued pre-training framework, we require a large-scale corpus of political news articles annotated with structured metadata. We leverage the \href{https://www.gdelt.org/}{GDELT Project},\footnote{https://www.gdelt.org/} a global news monitoring system that processes articles across 100+ languages and extracts structured metadata through lexicon-based NLP pipelines. Following \citet{ronnback2025biasoutlets}, who demonstrate that GDELT-derived features enable effective source-level ideology detection without manual annotation, we integrate two complementary metadata types:
+
+\begin{itemize}
+    \item \textsc{V2Themes}: Multi-label topic annotations assigned via keyword matching against a curated lexicon of 2,300+ categories (e.g., $ENV\_CLIMATECHANGE$, $ECON\_INFLATION$). Each article receives multiple theme codes reflecting its topical content.
+    \item \textsc{V2Tone}: Sentiment scores computed as the mean valence of matched lexical items, yielding scalar values typically in the range [–10, +10]. While GDELT provides six tone subdimensions (overall tone, positive/negative scores, polarity, activity reference density, and self-reference density), we use only the aggregate tone score in our framework.
+\end{itemize}
+
+\begin{table*}[ht]
+\centering
+\small
+\begin{tabular}{@{}lcccccccccc@{}}
+\toprule
+\textbf{Experiment} & \multicolumn{5}{c}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{5}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\ 
+\midrule
+ & Ep. & F1-Macro & Left & Center & Right & Ep. &  F1-Macro & Left & Center & Right \\
+ \midrule
+$T_{id}(1)$ & 2 & 50.12 & 69.28 & 18.09 & 63.00 & 2 & 56.98 & 73.82 & 33.96 & 63.55 \\
+$T_{id}(1) + T_h$ & 1 & 52.02 & 71.61 & \textbf{33.41} & 51.03 & 2 & 51.40 & 68.17 & 21.81 & 64.21 \\
+$T_{id}(1) + T_o$ & 2 & 53.39 & 71.65 & 28.31 & 60.20 & 2 & 55.86 & 72.46 & 31.17 & 63.93 \\
+$T_{id}(1) + T_h + T_o$ & 2 & \textbf{56.56} & \textbf{72.58} & 30.39 & \textbf{66.71} & 2 & \textbf{60.78} & \textbf{73.05} & \textbf{39.48} & \textbf{69}.82 \\
+\midrule
+$T_{id}(16)$ & 2 & 50.06 & 72.07 & 20.53 & 57.59 & 2 & 52.88 & 68.36 & 22.02 & 68.26 \\
+$T_{id}(16) + T_h$ & 2 & 50.10 & 67.33 & 16.23 & \textbf{66.74} & 1 & 60.55 & \textbf{74.11} & 38.22 & 69.31 \\
+$T_{id}(16) + T_o$ & 2 & 53.30 & 71.99 & 22.08 & 65.83 & 2 & 53.76 & \textbf{74.11} & 19.71 & 67.45 \\
+$T_{id}(16) + T_h + T_o$ & 2 & \textbf{56.56} & \textbf{72.58} & \textbf{30.39} & 66.71 & 2 & \textbf{60.78} & 73.05 & \textbf{39.48} & \textbf{69.82} \\
+\midrule
+$T_{id}(32)$ & 2 & 55.41 & 73.66 & 28.34 & 64.22 & 2 & 60.15 & 73.95 & 35.88 & 70.62 \\
+$T_{id}(32) + T_h$ & 2 & 46.47 & 66.05 & 03.83 & 69.52 & 2 & \textbf{62.19} & \textbf{75.97} & \textbf{39.83} & \textbf{70.76} \\
+$T_{id}(32) + T_o$ & 2 & 48.74 & 67.21 & 12.83 & 66.18 & 1 &  57.18 & 72.75 & 34.49 & 64.30 \\
+$T_{id}(32) + T_h + T_o$ & 1 & \textbf{55.59} & \textbf{72.73} & 29.27 & \textbf{64.76} & 2 & 59.33 & 72.66 & \textbf{42.28} & 63.06 \\
+\bottomrule
+\end{tabular}
+\caption{Continued Pre-training Results on both GDELT limited subset and full \textsc{BigNewsBLN} dataset. Best epoch shown (1 or 2). All models fine-tuned on AllSides Media train and evaluated on test split.}
+\label{tab:pretraining-combined}
+\end{table*}
+
+Our pre-training dataset consists of articles from the \textsc{BigNewsBLN} dataset \citep{liu2022politics} for which GDELT metadata is available. This subset comprises approximately 1.6 million articles containing both \textsc{V2Themes} and \textsc{V2Tone} annotations, or around 35\% of the total \textsc{BigNewsBLN} dataset. This extended dataset is available 
+%\href{https://huggingface.co/datasets/dragonslayer631/bignewsalign-with-gdelt}{here} 
+on HuggingFace.\footnote{Link removed to anonymize submission. The data is available under the CC-BY-SA 4.0 license, same as the original dataset \citep{liu2022politics}.}
+
+We implement a multi-objective training approach with three concurrent objectives: (1) $T_{id}(x)$ - triplet-loss for ideological representation (see section \ref{sec:transformer-baselines}) using $x$ triplet-loss samples, (2) $T_h$ - multi-label classification for GDELT \textsc{V2Themes}, and (3) $T_o$ - regression for predicting the \textsc{V2Tone} tone values. Our final objective is combined as follows:
+
+\begin{equation}
+    \mathcal{L} = \mathcal{L}_{trip} + \mathcal{L}_{T_o} + \mathcal{L}_{T_o} + \mathcal{L}_{MLM}
+\end{equation}
+
+where $\mathcal{L}_{trip}$ is the triplet-loss defined in equation \ref{eqn:triplet_loss}. We note that whereas \citet{liu2022politics} opted for two contrastive loss objectives, one on story and the other on ideology, we followed the approach demonstrated by \citet{baly2020we} and used only the ideology based triplet-loss objective.
+
+The pre-training configuration can be found in Figure~\ref{tab:pretraining_config}. The fine-tuning configuration was the same as the one in Table~\ref{tab:finetuning_config}. All code for the experiments can be found on GitHub.\footnote{Link removed to anonmymize submission. Code available under the MIT license.}
+%\href{https://github.com/upasanachatterjee/nlp_political_bias_project}{GitHub} %and is available under the MIT license.
+
+\subsection{Results}
+
+We conducted experiments varying two key factors: the number of triplet samples per batch (1, 16, or 32) and the inclusion of metalinguistic objectives (theme prediction $T_h$, tone regression $T_o$, or both). Triplet generation followed the standard contrastive learning protocol: for each anchor article, we paired it with a positive example (same ideology label) and a negative example (different ideology label). During training, we randomly sampled the specified number of such triplets per batch from all valid combinations.
+
+Following continued pre-training, we fine-tuned all models on the extended AllSides Media training split and evaluated on the test split. Each configuration was trained for two epochs, with Table~\ref{tab:pretraining-combined} reporting the best performance achieved across epochs.
+
+Table~\ref{tab:pretraining-combined} presents results from pre-training on both the 1.6 million article subset with complete GDELT coverage, and the full 4.5 million article \textsc{BigNewsBLN} corpus, where metalinguistic objectives were applied only to the articles with available GDELT metadata. Our most effective configuration, $T_{32} + T_h$, achieved 62.19 F1-Macro on the full dataset, outperforming the POLITICS baseline (60.60) and demonstrating the value of combining intensive triplet training with theme prediction. The full results for each configuration across both epochs can be found in Appendix~\ref{sec:appendix-full-experiments}.
+
+These findings extend prior work \citep{hamborg2019automatedmediabias,rashkin2016connotationframesdatadriveninvestigation} demonstrating the utility of metalinguistic cues such as sentiment and emotional tone in political ideology detection. Our results illustrate that explicitly incorporating such signals as auxiliary training objectives can yield substantial performance improvements for article-level political ideology classification. The best performing models (both pre-trained checkpoints and fine-tuned versions on the extended AllSides dataset) are publicly available on HuggingFace.\footnote{Link removed to anonymize submission. Models available under the Apache 2.0 license.}

@@ -1,0 +1,50 @@
+\section{Human Annotation Tests}
+\label{sec:appendix-human-tests}
+
+To establish a reference point for system performance, we conducted an informal human evaluation study using a randomly sampled subset of 102 articles from the AllSides dataset Media test split. The articles were stratified equally across the three political ideology categories (left, center, right), with 34 articles representing each class.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Annotator}  & \textbf{F1-Macro} & \textbf{Left} & \textbf{Center} & \textbf{Right} \\
+\midrule
+Annotator 1 & 46.57 & 43.59 & 41.27 & 54.84 \\
+Annotator 2 & 35.46 & 39.02 & 26.67 & 40.68 \\
+Annotator 3 & 40.96 & 23.26 & 56.14 & 43.48 \\
+Annotator 4 & 44.75 & 43.37 & 32.26 & 58.62 \\
+\midrule
+Average & 41.94 & 37.31 & 39.09 & 49.41 \\
+\midrule
+Kripp. $\alpha$ & 0.241 & 0.229 & 0.188 & 0.345 \\
+\bottomrule
+\end{tabular}
+\caption{Annotator Performance}
+\label{tab:human_baseline}
+\end{table}
+
+Four annotators participated in the evaluation process. All annotators were under 35 years of age, self-identified as politically liberal to moderate, and reported good familiarity with U.S. politics. The participants included three men and one woman, all of whom had resided in the U.S for more than 10 years. They were all volunteers who were acquainted socially with the authors, received no compensation, and were informed that anonymised results may be used for publication. 
+
+Each annotator reviewed the complete set of articles and assigned political ideology classifications (left, lean-left, center, lean-right, right) based solely on article content, without explicit access to publication source information. Although annotators were allowed to rate across five categories, the results were aggregated into three ideologies (left and lean-left were grouped into left, right and lean-right were grouped into right) for ease of analysis.
+
+The experiment was conducted over a one-month period in a non-controlled environment, allowing annotators to complete the task at their own pace. Annotators were given a Google Sheet (sample available at \url{https://tinyurl.com/yv83wfrx}) containing article content, along with columns to record their classifications. The instructions were as follows:
+
+\begin{quote}
+In the articles tab, you will find 102 articles. Please read as much as you need to classify them as having one of the following biases:
+\begin{itemize}
+    \item \href{https://www.allsides.com/media-bias/left}{left}
+    \item \href{https://www.allsides.com/media-bias/left-center}{lean-left}
+    \item \href{https://www.allsides.com/media-bias/center}{center}
+    \item \href{https://www.allsides.com/media-bias/right-center}{lean-right}
+    \item \href{https://www.allsides.com/media-bias/right}{right}
+\end{itemize}
+
+The definitions of these biases are linked above, you can use these to inform your intuition. If you are curious: forms of media bias can be found \href{https://www.allsides.com/media-bias/how-to-spot-types-of-media-bias}{here}. This will likely take between 1-2 hours.
+
+In the demographics tab, there is a brief demographics questionnaire. Please do fill it out.
+
+Please send me your responses by July 2! Earlier is better :)
+\end{quote}
+
+Despite relatively strong demographic homogeneity among annotators, we observed substantial variability in judgment as evidenced by relatively low inter-annotator agreement (Krippendorff's $\alpha = 0.241$) and consistently moderate F-1 metrics across all participants (Table~\ref{tab:human_baseline}). These findings suggest that political ideology classification presents significant challenges even for human evaluators. This difficulty likely stems from the inherently subjective nature of ideology perception, as well as from subtle variations in annotators' interpretative frameworks and ideological calibrations. Anecdotally, annotators reported that this task was particularly challenging for non-hyperpartisan samples, and indicated that source information would have increased their confidence, suggesting a general human instinct to intertwine text and source bias.

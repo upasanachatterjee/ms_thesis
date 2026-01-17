@@ -1,0 +1,73 @@
+\section{Extended AllSides Dataset}
+\label{appendix:extended_dataset}
+
+\begin{table}[ht]
+\centering
+\small 
+\begin{tabular}{c c c c c c}
+\toprule
+\textbf{Split} & \textbf{Total} & \textbf{Left} & \textbf{Center} & \textbf{Right} \\
+\midrule
+ Train (orig) & 26590 & 8861 & 7488 & 10241 \\
+ Train (ext.) & 36774 & 14325 & 9033 & 13416 \\
+ Test (orig) & 1300  & 402 & 299 & 599 \\
+ Test (ext.) & 11516 & 4998 & 2575 & 3943 \\
+\bottomrule
+\end{tabular}
+\caption{Allsides Media Split Dataset}
+\label{tab:media_split_dataset}
+\end{table}
+
+The extended AllSides dataset was created by augmenting the original AllSides Media split with additional articles sourced from the AllSides website. To maintain methodological consistency, we ensured all new articles from sources present in the original test set were included in the extended test set, while all other articles were added to the training set. This approach preserves the source-based separation between training and test data, preventing source leakage that could artificially inflate performance metrics. 
+
+Data collection adhered to the following protocol:
+
+\begin{enumerate}
+    \item Article metadata (e.g. title, source, publication date, bias rating) was scraped from AllSides following their terms of service, which allow research use.
+    \item Articles were then scraped only from source websites that allow research use in their terms of service.
+    \item Each article was verified to contain full text content exceeding 100 tokens.
+\end{enumerate}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrr}
+\toprule
+\textbf{Source} & \textbf{Updated} & \textbf{Original} \\
+\midrule
+CNN (Web News) & 2398 & 101 \\
+BBC News & 1125 & 100 \\
+Reuters & 950 & 100 \\
+The Guardian & 788 & 100 \\
+Associated Press & 737 & 98 \\
+Salon & 705 & 98 \\
+Reason & 617 & 93 \\
+Newsmax & 583 & 88 \\
+Breitbart News & 571 & 97 \\
+CBN & 534 & 98 \\
+The Daily Caller & 509 & 98 \\
+Guest Writer---Right & 471 & 20 \\
+American Spectator & 298 & 83 \\
+ABC News & 296 & 97 \\
+Newsmax (News) & 258 & 1 \\
+Guest Writer---Left & 212 & 2 \\
+ABC News (Online) & 164 & 2 \\
+Guest Writer & 99 & 1 \\
+Newsmax---News & 66 & 9 \\
+John Stossel & 44 & 2 \\
+Newsmax---Opinion & 35 & 2 \\
+The American Spectator & 18 & 1 \\
+AP Fact Check & 8 & 2 \\
+Ann Coulter & 7 & 1 \\
+Tucker Carlson & 7 & 1 \\
+Brent Bozell & 6 & 1 \\
+Ben Stein & 5 & 2 \\
+Matt Welch & 3 & 1 \\
+Dick Morris & 2 & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Sources in Old + Updated AllSides dataset}
+\label{tab:sources_comparison}
+\end{table}
+
+The original dataset, as described in Section~\ref{sec:extended_dataset}, contains a total of 27,890 articles in the training set and 1,300 articles in the test set. The extended dataset increases the training set to 36,774 articles and the test set to 11,516 articles. Table~\ref{tab:sources_comparison} presents the distribution of sources in the original versus extended dataset. Notable expansions include CNN (Web News) increasing from 101 to 2,398 articles, BBC News from 100 to 1,125, and Reuters from 100 to 950. The expanded dataset available on \href{https://huggingface.co/datasets/dragonslayer631/article-bias-prediction-media-splits-updated}{HuggingFace} under the Apache 2.0 licence. This is the same as the original dataset published by \citet{baly2020we}, which can be found on \href{https://github.com/ramybaly/Article-Bias-Prediction/tree/main?tab=readme-ov-file}{GitHub}.

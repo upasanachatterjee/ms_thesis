@@ -1,0 +1,64 @@
+\section{Training Details}
+
+This appendix provides specifications for all training procedures used in our experiments. We present the hyperparameters and computational configurations for both continued pre-training of RoBERTa-based models with metalinguistic objectives and subsequent fine-tuning on the AllSides classification task. All experiments were conducted with fixed random seeds to ensure reproducibility. Hardware requirements differ substantially between the two phases: pre-training leverages distributed training across multiple high-memory GPUs to accommodate large batch processing of the \textsc{BigNewsBLN} corpus, while fine-tuning operates on a single GPU with gradient accumulation to balance memory constraints and effective batch size.
+
+\subsection{Pre-training Configuration}
+
+\begin{table}[ht]
+    \centering
+    \small
+    \begin{tabular}{@{}rl@{}}
+        \toprule
+        \textbf{Parameter} & \textbf{Setting} \\
+        \midrule
+        Optimizer & AdamW \\
+        Loss function & Cross Entropy \\
+        Learning rate & $5 \times 10^{-5}$ \\
+        Batch size & 32 \\
+        Grad. accumulation steps & 8 \\
+        bf16 & True \\
+        Input processing & model max length\\
+        GPU & NVIDIA RTX PRO 6000 S \\
+        & 96GB \\
+        Num. GPUs & 8 \\
+        Seed & 42 \\
+        Training duration & 2 Epochs\\
+        \bottomrule
+    \end{tabular}
+    \caption{Pre-training Configuration for RoBERTa}
+    \label{tab:pretraining_config}
+\end{table}
+
+Pre-training took between one to three hours per epoch depending on the number of objectives and the number of triplet samples. The pre-training configuration is presented in Table~\ref{tab:pretraining_config}.
+
+\subsection{Fine-tuning Configuration}
+
+Fine-tuning varied according to model complexity, ranging between 20--60 minutes under early stopping criteria. The fine-tuning configuration is presented in Table~\ref{tab:finetuning_config}.
+
+\begin{table}[ht]
+    \centering
+    \small
+    \begin{tabular}{@{}rl@{}}
+        \toprule
+        \textbf{Parameter} & \textbf{Setting} \\
+        \midrule
+        Optimizer & AdamW \\
+        Loss function & Cross Entropy \\
+        Learning rate & $5 \times 10^{-5}$ \\
+        Batch size & 64 \\
+        Grad. accumulation steps & 32 \\
+        fp16 & True \\
+        Input processing & model max length\\
+        GPU & NVIDIA RTX 4090 \\
+        & 48GB \\
+        Num. GPUs & 1 \\
+        Seed & 42 \\
+        Training duration &  15 epochs \\
+        Patience & 5 \\
+        Gradient checkpointing & True \\
+        Model selection & eval\_f1\_macro\\
+        \bottomrule
+    \end{tabular}
+    \caption{Fine-tuning Configuration for Transformer Models}
+    \label{tab:finetuning_config}
+\end{table}
