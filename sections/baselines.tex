@@ -3,15 +3,15 @@
 
 \begin{table*}
 \centering
-\small
-\begin{tabular}{@{}lcccccccc@{}}
+\footnotesize
+\begin{tabular}{@{}l|cccc|cccc@{}}
 \toprule
-\textbf{Models} & \multicolumn{4}{c}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{Allsides Random Split}} \\ 
+\textbf{Models} & \multicolumn{4}{c|}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{Allsides Random Split}} \\ 
  & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
  \midrule
 \textbf{Human (average, sample)} & 41.94 & 37.31 & 39.09 & 49.41 & - & - & - & -\\
  \midrule
-\textbf{Transformer Baselines} & & & & & & & \\
+\textbf{Transformer Baselines} & & & & & & & & \\
 BERT & 38.26 & 49.95 & 14.74 & 50.09 & 77.38 & 74.66 & 84.33 & 75.12 \\
 BART & 36.01 & 46.92 & 11.31 & 49.80  & 87.93 & 89.38 & 84.98 & 89.44 \\
 RoBERTa & 42.34 & 56.82 & 04.47 & 65.73  & 83.49 & 81.39 & 83.98 & 85.11 \\

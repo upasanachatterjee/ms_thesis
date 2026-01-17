@@ -10,12 +10,12 @@ To incorporate metalinguistic features into the continued pre-training framework
 
 \begin{table*}[ht]
 \centering
-\small
-\begin{tabular}{@{}lcccccccccc@{}}
+\footnotesize
+\begin{tabular}{@{}l|ccccc|ccccc@{}}
 \toprule
-\textbf{Experiment} & \multicolumn{5}{c}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{5}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\ 
+\textbf{Experiment} & \multicolumn{5}{c|}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{5}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\ 
 \midrule
- & Ep. & F1-Macro & Left & Center & Right & Ep. &  F1-Macro & Left & Center & Right \\
+ & Ep. & F1 & L & C & R & Ep. & F1 & L & C & R \\
  \midrule
 $T_{id}(1)$ & 2 & 50.12 & 69.28 & 18.09 & 63.00 & 2 & 56.98 & 73.82 & 33.96 & 63.55 \\
 $T_{id}(1) + T_h$ & 1 & 52.02 & 71.61 & \textbf{33.41} & 51.03 & 2 & 51.40 & 68.17 & 21.81 & 64.21 \\

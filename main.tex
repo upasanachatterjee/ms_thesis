@@ -14,6 +14,9 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 
+% Table formatting
+\usepackage{booktabs}
+
 \DeclareMathOperator*{\argmax}{arg\,max}
 
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1\right\rangle}}
@@ -122,6 +125,10 @@
 \newpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
+% Reset hyperref page counter to avoid conflicts
+\if@filesw
+  \immediate\write\@auxout{\string\newlabel{LastRomanPage}{{}{\arabic{page}}}}%
+\fi
 % We change the pagestyle 
 \fancypagestyle{plain} {%
 \fancyhf{}
