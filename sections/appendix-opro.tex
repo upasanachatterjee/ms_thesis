@@ -1,4 +1,4 @@
-\section{OPRO Methods in GPT Models}
+\chapter{OPRO Methods in GPT Models}
 \label{sec:opro}
 In this section, we describe the OPRO (Optimized Prompting for Robustness) methods employed in our experiments \citep{yang2024largelanguagemodelsoptimizers}. OPRO is designed to enhance the robustness of language models by optimizing the prompts used during training and inference.
 
@@ -23,7 +23,7 @@ NRP  & 48.17 & 43.55 & 47.63  \\
 \label{tab:opro_prompt_selection}
 \end{table}
 
-\subsection{Prompt 1 - Explicit Definitions Prompt (EDP)}
+\section{Prompt 1 - Explicit Definitions Prompt (EDP)}
 You are a political bias classifier specific to U.S. politics. 
 Analyze the INPUT TEXT and determine if it exhibits left, center, or right political bias.
 
@@ -34,7 +34,7 @@ Right bias: Favors conservative policies, traditional values, free-market econom
 Output JSON that matches this schema exactly: \{''bias'':''left|center|right''\}.
 Return only valid JSON and nothing else.
 
-\subsection{Prompt 2 - Chain of Thought Prompt (COT)}
+\section{Prompt 2 - Chain of Thought Prompt (COT)}
 
 You are a political bias classifier specific to U.S. politics.
 When analyzing the INPUT TEXT, think through the bias indicators step by step:
@@ -53,7 +53,7 @@ After this analysis, determine if the content predominantly exhibits:
 Output JSON that matches this schema exactly: \{''bias'':''left|center|right''\}.
 Return only valid JSON and nothing else
 
-\subsection{Prompt 3 - Numerical Reasoning Prompt (NRP)}
+\section{Prompt 3 - Numerical Reasoning Prompt (NRP)}
 
 You are a political bias classifier specific to U.S. politics. \
 When analyzing the INPUT TEXT, assign numerical scores to different aspects:

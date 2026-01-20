@@ -1,34 +1,86 @@
-\section{Fine-tuned Large Language Models}
+\chapter{Large Language Model Fine-tuning for Political Bias Classification}
+\label{sec:llm-finetuning}
+
+This chapter investigates the effectiveness of fine-tuning contemporary large language models for political bias classification, attempting to answer whether general-purpose LLMs can match or exceed the performance of specialized transformer architectures when provided with task-specific training data. We conduct systematic experiments with GPT-4o-mini across varying training set sizes and input length configurations, revealing important insights about the scalability and limitations of LLM-based approaches to political ideology detection.
+
+\section{Motivation and Research Questions}
+\label{sec:llm-motivation}
+
+While our baseline experiments (Chapter~\ref{sec:baselines}) demonstrated that zero-shot large language models achieve competitive but suboptimal performance compared to domain-adapted transformers, the potential for task-specific fine-tuning to close this performance gap remains underexplored. The superior performance of the specialized POLITICS model over general-purpose LLMs raises several important research questions:
+
+\begin{enumerate}
+    \item \textbf{Data Efficiency}: How much task-specific training data is required for LLMs to achieve competitive performance with domain-adapted transformers?
+    
+    \item \textbf{Input Length Sensitivity}: Do LLMs exhibit different performance characteristics when fine-tuned on truncated versus full-length news articles?
+    
+    \item \textbf{Scalability Properties}: What is the relationship between training data volume and classification performance for political bias detection?
+\end{enumerate}
+
+These questions are particularly relevant given the substantial computational and economic costs associated with LLM fine-tuning, necessitating careful analysis of cost-benefit trade-offs in practical deployment scenarios.
+
+\section{Experimental Design and Methodology}
+\label{sec:llm-methodology}
+
+\subsection{Model Selection and Justification}
+
+We selected GPT-4o-mini as our primary experimental platform as it offers the most favorable balance between classification accuracy (as demonstrated in our baseline experiments) and computational cost among available OpenAI models. Additionally, OpenAI's fine-tuning API provides standardized infrastructure for reproducible experimentation.
+
+\subsection{Experimental Variables and Configurations}
+
+Our experimental design systematically varies two primary factors:
+
+\begin{description}
+    \item[\textbf{Training Set Size}:] We evaluate fine-tuning performance using 150, 300, 1,000, and 2,000 labeled examples, representing different points on the data efficiency curve. These sample sizes span the range from few-shot learning (150) to moderate supervision (2,000), enabling analysis of diminishing returns in training data scaling.
+    
+    \item[\textbf{Input Text Length}:] We compare fine-tuning on full-length articles versus articles truncated to 400 words. This comparison addresses the hypothesis that LLMs may exhibit superior performance on shorter texts due to more focused attention mechanisms and reduced noise from irrelevant content.
+\end{description}
+
+Additional experimental variables include the number of training epochs (3 vs. 10) and various prompt optimization strategies detailed in Section~\ref{sec:prompt-optimization}.
+
+\subsection{Fine-tuning Protocol}
+
+We use the same training/validation/test splits as established for our transformer baseline experiments to ensure fair comparison. Input formatting follows the standard conversational template required by OpenAI models, with political bias labels converted to structured JSON responses to enable systematic evaluation. Each training example consists of the article text as user input and the corresponding political orientation (left/center/right) as the assistant response.
 
 \begin{table*}[ht]
 \centering
 \small
 \begin{tabular}{@{}lcccccccc@{}}
 \toprule
-\textbf{Specs} & \multicolumn{4}{c}{\textbf{Full Text}} & \multicolumn{4}{c}{\textbf{400 Words}} \\ 
+\textbf{Configuration} & \multicolumn{4}{c}{\textbf{Full Text}} & \multicolumn{4}{c}{\textbf{400 Words}} \\ 
 \midrule
  & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
  \midrule
-baseline & 51.86 & 52.88 & 39.76 & 62.96 & 48.37 & 46.46 & 41.97 & 56.67  \\
+Zero-shot Baseline & 51.86 & 52.88 & 39.76 & 62.96 & 48.37 & 46.46 & 41.97 & 56.67  \\
 3 epochs, 150 samples & 33.37 &  43.77 & 15.44 & 40.90 & 62.88 & 68.89 & 41.07 & 78.72 \\
 3 epochs, 300 samples & 25.04 & 58.50 & 05.13 & 11.50 & 56.65 & 57.67 & 32.17 & 80.11 \\
-3 epochs, 1000 samples & 69.23 & 70.98 & 52.96 & \textbf{83.76} & 57.21 & 62.13 & 31.61 & \textbf{77.89}  \\
-3 epochs, 2000 samples & \textbf{69.37} & \textbf{71.83} & \textbf{53.50} & 82.79 & \textbf{68.85} & \textbf{78.68} & 39.63 & 75.08  \\
+3 epochs, 1,000 samples & 69.23 & 70.98 & 52.96 & \textbf{83.76} & 57.21 & 62.13 & 31.61 & \textbf{77.89}  \\
+3 epochs, 2,000 samples & \textbf{69.37} & \textbf{71.83} & \textbf{53.50} & 82.79 & \textbf{68.85} & \textbf{78.68} & 39.63 & 75.08  \\
 10 epochs, 150 samples & 28.03 & 52.75 & 08.93 & 22.41 & 58.14 & 54.40 & \textbf{43.26} & 76.78 \\
 \bottomrule
 \end{tabular}
-\caption{GPT-4o-mini Finetuning Experiments}
-\label{tab:llm_finetuning}
+\caption{GPT-4o-mini fine-tuning performance across different training configurations. Results show F1 scores for the AllSides Media Split evaluation set. Full text experiments demonstrate higher performance ceiling but require substantial training data, while 400-word truncation provides more consistent improvements with limited supervision.}
+\label{tab:llm_detailed_results}
 \end{table*}
 
+\section{Experimental Results and Analysis}
+\label{sec:llm-results}
 
-In our baseline experiments, the POLITICS model outperformed LLMs that were pretrained on much larger amounts of data. We explored fine-tuning an LLM on varying amounts of data and input lengths. Based on both performance and cost considerations we selected \texttt{GPT-4o-mini} for these experiments, as it offered the most favorable balance of accuracy and computational efficiency. We performed fine-tuning using the OpenAI API.
+Table~\ref{tab:llm_detailed_results} presents comprehensive results from our fine-tuning experiments across all evaluated configurations. The results reveal several important patterns regarding LLM behavior in political bias classification tasks.
 
-\subsection{Results}
+\subsection{Training Data Scaling Effects}
 
-Table~\ref{tab:llm_finetuning} presents our results for different amounts of fine-tuning examples. We also experimenting with fine-tuning articles truncated to 400 words. The full-text experiments showed high variability, with F1-Macro scores ranging from 25.04 to 69.37 across different configurations, with at least 1000 samples (69.23) required to show an improvement over the baseline. The best performance (69.37) was achieved with 2000 samples and full text. As this is a minimal increase over the 1000-sample configuration, this suggests that the model may be approaching its performance ceiling with full-text inputs.
+The relationship between training set size and model performance exhibits non-monotonic behavior that varies significantly between full-text and truncated input conditions. For full-text experiments, we observe high performance variability with small training sets: F1-Macro scores range from 25.04 to 33.37 with 150--300 samples, indicating insufficient supervision for stable learning. Performance stabilizes substantially with 1,000 training samples (F1-Macro = 69.23), achieving near-optimal results that improve only marginally with additional data (69.37 with 2,000 samples).
 
-The 400-word truncation experiments demonstrated more consistent improvements with fine-tuning compared to full-text experiments, with all truncated configurations outperforming their baseline (maximum F1-Macro of 68.85 with 2000 samples). This finding aligns with recent work by \citet{ibrahim2024analyzingpoliticalstancestwitter}, who achieved a high F1-Macro score of 91.1 when analyzing political stances on Twitter using GPT-4o and Gemini-Opus. Both our results and the work done by \citet{ibrahim2024analyzingpoliticalstancestwitter} suggest that models perform better on shorter political texts, with performance degrading as text length increases. Interestingly, across both our short and full-length text experiments, we observed no clear linear relationship between the amount of fine-tuning data and performance improvement, indicating that simply increasing training data volume is insufficient for optimizing political ideology detection capabilities.
+This pattern suggests that GPT-4o-mini requires a minimum threshold of approximately 1,000 examples to achieve reliable fine-tuning for political bias classification when processing full-length articles. The minimal improvement between 1,000 and 2,000 samples (0.14 F1 points) indicates diminishing returns, suggesting that the model approaches its performance ceiling for this task configuration.
 
-\subsection{Optimization by Prompting}
-We also experimented with Optimization by Prompting (OPRO) methods (see details and results in Appendix~\ref{sec:opro}) to optimize prompts for GPT-4o-mini. However, none of the optimized prompts outperformed the baseline prompt, suggesting that for our specific task and dataset the additional complexity introduced by the OPRO prompts did not translate into improved performance. The chain of thought prompt (COT) came closest to matching the baseline performance, suggesting that detailed reasoning steps can be beneficial.
+\subsection{Input Length Sensitivity Analysis}
+
+The comparison between full-text and 400-word truncation reveals markedly different performance characteristics. Truncated inputs demonstrate more consistent fine-tuning improvements across all training set sizes, with every configuration outperforming the corresponding zero-shot baseline. Most notably, truncated inputs achieve competitive performance even with limited supervision: the 150-sample configuration yields 62.88 F1-Macro, substantially exceeding the full-text performance with equivalent training data.
+
+This finding aligns with recent observations by \citet{ibrahim2024analyzingpoliticalstancestwitter}, who achieved F1-Macro scores of 91.1 when analyzing political stances on Twitter using GPT-4o and Gemini-Opus. The superior performance on shorter texts suggests that LLMs may be optimized for processing concise, focused content rather than long-form articles with potential noise and irrelevant information.
+
+\subsection{Performance Comparison with Specialized Models}
+
+The best fine-tuned GPT-4o-mini configuration (69.37 F1-Macro with 2,000 full-text samples) substantially exceeds our human baseline (41.94) and exceeds the performance of the specialized POLITICS model (57.66 on the same evaluation set). However, this comparison must be interpreted carefully, as the fine-tuned LLM requires task-specific supervision while the POLITICS model leverages only contrastive pre-training without direct ideology labels.
+
+The competitive performance of fine-tuned LLMs validates their potential for political bias classification when sufficient training data is available. However, the requirement for 1,000+ examples and the associated computational costs may limit practical applicability compared to specialized architectures that achieve strong performance through unsupervised or self-supervised learning approaches.

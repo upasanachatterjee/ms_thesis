@@ -1,8 +1,9 @@
-\section{Training Details}
+\chapter{Training Details}
+\label{appendix:training-configurations}
 
 This appendix provides specifications for all training procedures used in our experiments. We present the hyperparameters and computational configurations for both continued pre-training of RoBERTa-based models with metalinguistic objectives and subsequent fine-tuning on the AllSides classification task. All experiments were conducted with fixed random seeds to ensure reproducibility. Hardware requirements differ substantially between the two phases: pre-training leverages distributed training across multiple high-memory GPUs to accommodate large batch processing of the \textsc{BigNewsBLN} corpus, while fine-tuning operates on a single GPU with gradient accumulation to balance memory constraints and effective batch size.
 
-\subsection{Pre-training Configuration}
+\section{Pre-training Configuration}
 
 \begin{table}[ht]
     \centering
@@ -31,7 +32,7 @@ This appendix provides specifications for all training procedures used in our ex
 
 Pre-training took between one to three hours per epoch depending on the number of objectives and the number of triplet samples. The pre-training configuration is presented in Table~\ref{tab:pretraining_config}.
 
-\subsection{Fine-tuning Configuration}
+\section{Fine-tuning Configuration}
 
 Fine-tuning varied according to model complexity, ranging between 20--60 minutes under early stopping criteria. The fine-tuning configuration is presented in Table~\ref{tab:finetuning_config}.
 

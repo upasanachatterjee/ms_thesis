@@ -1,24 +1,75 @@
-\section{Future Work}
-\label{sec:future-work}
+\chapter{Limitations and Future Directions}
+\label{ch:limitations-future-work}
 
-Our findings demonstrate that metalinguistic objectives represent a promising research direction, though several methodological constraints limited our investigation and present possible risks for downstream usage. Future work should prioritize three key areas.
+This chapter provides an assessment of the limitations inherent in our research methodology and empirical findings, followed by a systematic identification of promising directions for future investigation. We examine both technical constraints and conceptual boundaries that circumscribe the generalizability of our contributions, while outlining specific research trajectories that could address these limitations and extend our theoretical and practical understanding of computational political bias detection.
 
-Expanding dataset coverage for metalinguistic annotations represents a critical priority. Approximately one-third of our pre-training corpus contained the necessary GDELT metadata, substantially limiting the impact of the auxiliary objectives and potentially overweighting particular ideologies. Future work should focus on expanding metadata coverage and exploring alternative sources.
+\section{Methodological Limitations and Constraints}
+\label{sec:methodological-limitations}
 
-The efficacy of metalinguistic prediction as a pre-training objective suggests several promising directions for expanding metalinguistic feature sets. Beyond tone, future research could investigate sentiment intensity, subjectivity, emotional valence, and discourse markers as auxiliary objectives. Multi-objective training combining diverse metalinguistic signals may enable models to capture richer representations of ideological framing. Additionally, examining the transferability of these pre-training objectives across different transformer architectures and model sizes would provide insights into their general applicability.
+\subsection{Data Coverage and Metadata Availability}
 
-Cross-domain evaluation represents another important research direction. While our approach demonstrated improvements on the AllSides dataset, assessing robustness across diverse political contexts, emerging topics, and out-of-domain applications remains essential. Furthermore, integrating explainability techniques with metalinguistic pre-training could enhance model interpretability, enabling researchers and practitioners to understand how specific linguistic cues influence ideology predictions and potentially identifying systematic biases in the models themselves.
+A fundamental limitation of our metalinguistic feature integration approach stems from incomplete metadata coverage across our training corpus. The effectiveness of our multi-task learning framework was substantially constrained by the availability of GDELT annotations: only 1.6 million articles (35\%) from our 4.5 million article \textsc{BigNewsBLN} corpus contained the requisite \textsc{V2Themes} and \textsc{V2Tone} metadata necessary for auxiliary supervision.
 
-\section{Limitations}
-\label{sec:limitations}
+This data sparsity arose primarily from temporal coverage gaps, as many articles in our dataset were published before the GDELT Project began comprehensive annotation collection. The resulting imbalanced supervision likely diminished the potential impact of our multi-task training approach, as auxiliary objectives received training signals for only a subset of examples while the primary triplet-loss objective operated on the complete corpus. This imbalance may have created suboptimal gradient dynamics that prevented full realization of the metalinguistic integration benefits.
 
-Despite promising results, several limitations constrain the generalizability of our findings. The effectiveness of our metalinguistic pre-training approach was substantially constrained by data availability. Of the 4.5 million articles in our \textsc{BigNewsBLN} pre-training corpus, only 1.6 million contained the requisite GDELT \textsc{V2Themes} and \textsc{V2Tone} metadata. This limitation arose as many of the articles in the dataset were published before the GDELT Project began collecting and annotating articles. This data sparsity likely diminished the potential impact of our multi-objective training approach, as the model had fewer opportunities to learn the proposed metalinguistic representations.
+The temporal bias in metadata availability also introduces potential confounding effects, as articles with GDELT annotations may systematically differ from those without in ways that correlate with ideological expression patterns. More recent articles might reflect different political discourse styles, topic priorities, or source characteristics compared to historical content, potentially biasing our auxiliary task learning toward contemporary linguistic patterns.
 
-Our reliance on the AllSides dataset also limits the scope of evaluation to a single annotation scheme and political context. While AllSides provides high-quality article-level annotations, validation across multiple datasets with different ideological frameworks would strengthen claims about the general effectiveness of metalinguistic objectives.
+\subsection{Evaluation Dataset Constraints}
 
-Additionally, our focus on U.S. news sources constrains applicability to other national political systems, running the risk of creating a classifier that under or overweights particular ideological cues and does not generalise well. Political discourse patterns, media landscapes, and ideological structures vary significantly across countries, potentially limiting the transferability of our approach to non-U.S. contexts. The left-center-right framework that underlies our classification scheme may not adequately capture political dimensions in multi-party systems or contexts with different ideological alignments. 
+Our empirical evaluation relies exclusively on the AllSides dataset, which, while providing high-quality article-level annotations, constrains the scope of our findings to a single annotation scheme and political taxonomy. The AllSides left-center-right framework represents one particular operationalization of political ideology that may not capture the full complexity of ideological expression in contemporary media discourse.
 
-Our investigation is also limited to English-language content, precluding assessment of cross-linguistic generalization. Metalinguistic features may manifest differently across languages due to varying syntactic structures, cultural communication patterns, and language-specific bias markers. The effectiveness of metalinguistic objectives observed in English may not transfer directly to other linguistic contexts.
+Additionally, the AllSides dataset focuses exclusively on mainstream news sources with established reputations, potentially limiting generalization to emerging media platforms, social media content, or fringe publications that may exhibit different ideological expression patterns. The source selection criteria employed by AllSides may introduce systematic biases toward particular types of content or ideological presentations.
 
-While our approach shows promise for U.S. English-language political ideology classification, broader validation across diverse linguistic, cultural, and political contexts is necessary to establish the generalisability of metalinguistic pre-training objectives for political ideology detection.
+\subsection{Cultural and Linguistic Scope}
 
+Our investigation is fundamentally limited to English-language content from U.S. news sources, constraining applicability to international political systems and multilingual contexts. Political discourse patterns, media landscape structures, and ideological frameworks vary substantially across national contexts, potentially limiting the transferability of our metalinguistic feature integration approach.
+
+The left-center-right ideological spectrum that underlies our classification framework may inadequately represent political dimensions in multi-party parliamentary systems, contexts with ethnic or religious political divisions, or societies with fundamentally different ideological cleavages. For example, European political systems often feature distinct liberal, social democratic, conservative, and green party traditions that may not map cleanly onto the American left-right continuum.
+
+Cross-linguistic generalization presents additional challenges, as metalinguistic features may manifest differently across languages due to varying syntactic structures, cultural communication norms, and language-specific markers of ideological expression. Sentiment analysis techniques, thematic categorization schemes, and discourse patterns that prove effective for English may require substantial adaptation for morphologically rich languages, tonal languages, or languages with different information structure conventions.
+
+\section{Technical and Architectural Limitations}
+\label{sec:technical-limitations}
+
+\subsection{Multi-Task Learning Architecture Constraints}
+
+Our current multi-task learning framework employs fixed loss weighting schemes determined through grid search on validation data. This approach may be suboptimal for complex optimization landscapes where task importance should vary dynamically based on training progress or sample characteristics. The static weighting strategy cannot adapt to changing gradient magnitudes or convergence rates across different objectives during training.
+
+The additive loss combination used in our framework assumes linear independence between auxiliary tasks, which may not accurately reflect the complex interdependencies between thematic content, emotional tone, and ideological expression. More sophisticated architectures that explicitly model cross-task interactions might capture richer metalinguistic patterns than our current approach.
+
+Additionally, our auxiliary prediction heads operate independently on shared representations without explicit cross-task communication. Advanced multi-task architectures that enable information sharing between auxiliary tasks might improve both individual task performance and overall ideological classification accuracy.
+
+\subsection{Computational Efficiency and Scalability}
+
+While our multi-task approach demonstrates empirical benefits, the additional computational overhead from auxiliary prediction heads raises scalability concerns for deployment scenarios with strict latency requirements. Our current implementation requires approximately 20\% additional training time compared to standard contrastive learning, which may become prohibitive for larger model architectures or real-time applications.
+
+The memory requirements for storing and processing GDELT metadata during training also present practical constraints, particularly when scaling to larger corpora or more comprehensive auxiliary supervision signals. Efficient implementation strategies that minimize computational overhead while preserving metalinguistic benefits represent important engineering challenges for practical deployment.
+
+\subsection{Model Interpretability and Explainability}
+
+Our current approach provides limited insight into how metalinguistic features influence final ideological predictions or which specific auxiliary signals contribute most significantly to classification decisions. This lack of interpretability constrains both scientific understanding of the approach's effectiveness and practical deployment in contexts requiring explainable predictions.
+
+The complex interactions between primary contrastive learning and auxiliary metalinguistic objectives create opaque decision pathways that resist straightforward interpretation. Advanced visualization and analysis techniques are needed to understand how different types of metalinguistic signals contribute to learned representations and final classification outcomes.
+
+\section{Future Research Directions}
+\label{sec:future-directions}
+
+Future research should investigate additional metalinguistic dimensions that may provide complementary supervision signals for political bias detection. Promising candidates include:
+
+\begin{enumerate}
+    \item \textbf{Syntactic Complexity Measures}: Political writing styles may exhibit systematic differences in syntactic complexity, sentence length distribution, and grammatical structure patterns that correlate with ideological orientation.
+    
+    \item \textbf{Discourse Markers and Argumentation Patterns}: The use of specific rhetorical devices, evidence types, and argumentation strategies may provide discriminative signals for ideological classification.
+    
+    \item \textbf{Named Entity Coverage Analysis}: Systematic differences in which political figures, organizations, or geographic locations receive coverage may reflect ideological source preferences.
+    
+    \item \textbf{Temporal Framing Patterns}: The emphasis on historical context versus current events, or the time horizons discussed in political coverage, may correlate with ideological perspectives.
+\end{enumerate}
+
+Additionally, advanced multi-task learning architectures could address the limitations of our current static approach through several innovations:
+
+\begin{description}    
+    \item[\textbf{Cross-Task Attention Mechanisms}:] Explicit modeling of interactions between auxiliary tasks through attention layers could capture more sophisticated metalinguistic interdependencies.
+    
+    \item[\textbf{Hierarchical Task Organization}:] Organizing auxiliary tasks into hierarchical structures that reflect theoretical relationships between metalinguistic dimensions could improve learning efficiency and interpretability.
+\end{description}

@@ -1,72 +1,155 @@
-\section{Preliminary Experiments and Baselines}
+\chapter{Experimental Baselines}
 \label{sec:baselines}
+
+This chapter establishes baseline performance of three distinct classes of systems on the AllSides political bias classification task: human annotators, fine-tuned transformer architectures, and large language models in zero-shot configuration. Our transformer experiments design addresses the challenge of source leakage by employing a data split where all articles from the same source are contained within a single partition. As no fine-tuning is performed for LLMs, they are evaluated only on this source-controlled split to ensure consistency, and the human baseline study is conducted on a subset of this split as well.
+
+\section{Experimental Setup and Data Partitioning}
+\label{sec:experimental-setup}
+
+The AllSides dataset provides two distinct partitioning strategies that enable systematic evaluation of source leakage effects in political bias classification:
+
+\begin{itemize}
+    \item \textbf{Media Split}: All articles from the same publication source are assigned to the same partition (train, validation, or test). This configuration ensures that models cannot exploit source-specific stylistic or lexical patterns during evaluation.
+    
+    \item \textbf{Random Split}: Articles from any source may appear across all partitions, allowing systems to leverage source-identifying information during training and potentially memorize source-specific biases rather than learning generalizable content patterns.
+\end{itemize}
+
+The Media Split represents our primary evaluation configuration, as it provides the most stringent test of content-based political bias detection capabilities. The Random Split serves as a diagnostic tool for quantifying the extent to which models rely on source leakage versus content analysis.
 
 \begin{table*}
 \centering
 \footnotesize
 \begin{tabular}{@{}l|cccc|cccc@{}}
 \toprule
-\textbf{Models} & \multicolumn{4}{c|}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{Allsides Random Split}} \\ 
+\textbf{System} & \multicolumn{4}{c|}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{AllSides Random Split}} \\ 
  & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
  \midrule
-\textbf{Human (average, sample)} & 41.94 & 37.31 & 39.09 & 49.41 & - & - & - & -\\
+\textbf{Human Performance} & 41.94 & 37.31 & 39.09 & 49.41 & - & - & - & -\\
  \midrule
-\textbf{Transformer Baselines} & & & & & & & & \\
+\textbf{Fine-tuned Transformers} & & & & & & & & \\
 BERT & 38.26 & 49.95 & 14.74 & 50.09 & 77.38 & 74.66 & 84.33 & 75.12 \\
 BART & 36.01 & 46.92 & 11.31 & 49.80  & 87.93 & 89.38 & 84.98 & 89.44 \\
 RoBERTa & 42.34 & 56.82 & 04.47 & 65.73  & 83.49 & 81.39 & 83.98 & 85.11 \\
 POLITICS & \textbf{57.66} & \textbf{65.71} & 37.92 & 69.35 &  \textbf{88.31} & \textbf{85.82} & \textbf{91.47} & \textbf{88.44} \\
 \midrule
-\textbf{GPT-4o-mini} & 51.86 & 52.88 & 39.76 & 62.96 & - & - & - & -  \\
-\textbf{GPT-5-nano} & 50.99 & 44.89 & 49.61 & 58.48 & - & - & - & - \\
-\textbf{o3-mini} & 56.92 & 46.54 & \textbf{53.46} & \textbf{70.78} & - & - & - & - \\
+\textbf{Zero-shot LLMs (GPT Family)} & & & & & & & & \\
+GPT-4o-mini & 51.86 & 52.88 & 39.76 & 62.96 & - & - & - & -  \\
+GPT-5-nano & 50.99 & 44.89 & 49.61 & 58.48 & - & - & - & - \\
+o3-mini & 56.92 & 46.54 & \textbf{53.46} & \textbf{70.78} & - & - & - & - \\
 \midrule
-\textbf{LLaMa-3.1-8b-instant} & 29.01 & 41.44 & 30.29 & 15.30 & - & - & - & - \\
-\textbf{LLaMa-3.3-70b-versatile} & 26.01 & 57.26 & 09.86 & 10.93  & - & - & - & - \\ 
+\textbf{Zero-shot LLMs (LLaMA Family)} & & & & & & & & \\
+LLaMA-3.1-8B-instant & 29.01 & 41.44 & 30.29 & 15.30 & - & - & - & - \\
+LLaMA-3.3-70B-versatile & 26.01 & 57.26 & 09.86 & 10.93  & - & - & - & - \\ 
 \bottomrule
 \end{tabular}
-\caption{Baseline results for transformers and zero-shot LLMs on the AllSides test data. Results for human annotators are obtained on a sample of the data. For human annotators and the LLM approaches we only provide results on the Media Split because they require no training.}
+\caption{Baseline system performance on AllSides political bias classification. Human performance represents average scores across four annotators on a subset. Transformer systems are evaluated on both data splits to quantify source leakage effects. LLM systems are evaluated only on Media Split due to zero-shot configuration.}
 \label{tab:main_baseline}
 \end{table*}
 
-To establish baselines, we evaluate three classes of approaches on the original AllSides dataset: human annotation (on a subset of articles), fine-tuned transformer models, and zero-shot LLMs. The AllSides data is available in two different splits. In the \textit{Media Split}, all articles from the same source appear in the same set (train, development, test). In the \textit{Random Split} articles from any source may appear in any set, thus allowing a system to benefit from modeling source-specific indicators. The \textit{Media Split} allows us to evaluate ideology classification based on the content of individual articles alone, without the risk of source leakage.
+\section{Human Performance Baseline}
+\label{sec:human-baseline}
+
+To establish empirical bounds on the difficulty of article-level political bias classification, we conducted a human annotation study. This baseline offers insights into the cognitive challenges faced by layman annotators in this domain.
+
+\subsection{Annotation Protocol}
+
+We recruited four annotators with demonstrated familiarity with U.S. political discourse and comparable demographic profiles (age under 35, self-identified political orientation ranging from liberal to moderate). To minimize source bias effects, annotators were provided with article content only, with all source attribution and author information removed.
+
+The annotation study employed a random sample of 102 articles from the AllSides Media test split, ensuring balanced representation across ideological categories (34 articles per class: left, center, right). Each article was independently classified by all four annotators using the same three-point ideological scale employed in the original dataset.
+
+\subsection{Human Performance Results}
+
+Human performance proved modest across all metrics, with an average F1-Macro score of 41.94 and individual annotator performance ranging from 35.46 to 46.57. Inter-annotator agreement analysis revealed low agreement (Krippendorff's $\alpha = 0.241$), indicating significant subjectivity in political bias perception even among demographically similar annotators.
+
+Performance varied notably across ideological categories, with annotators achieving higher accuracy on right-leaning content (F1 = 49.41) compared to center (F1 = 39.09) and left-leaning (F1 = 37.31) articles. Post-annotation interviews revealed that annotators experienced particular difficulty with non-hyperpartisan content and expressed that access to source information would have substantially increased their classification confidence.
+
+These results highlight the fundamental challenge of article-level political bias classification and provide important context for interpreting automated system performance. Complete human performance metrics and inter-annotator agreement analysis are presented in Appendix~\ref{sec:appendix-human-tests}.
 
 
-\subsection{Human Annotation Baseline}
-To establish an empirical reference point for system performance, we conducted a controlled human evaluation using a stratified subset of 102 articles from the AllSides Media test split (34 articles per ideology). Four annotators with good familiarity with U.S. politics and similar demographic profiles (under 35 years, politically liberal-to-moderate) classified each article without access to publication source information.
-Complete human performance metrics are provided in Table~\ref{tab:human_baseline} in Appendix~\ref{sec:appendix-human-tests}.
-
-
-\subsection{Transformer Baselines}
+\section{Fine-tuned Transformer Architectures}
 \label{sec:transformer-baselines}
-We evaluated several pre-trained transformer architectures fine-tuned for the ideology classification task. Our experiments included three general-purpose  models: BERT \citep{devlin2019bert}, RoBERTa \citep{liu2019roberta}, and BART \citep{lewis2020bart}. We simply add a classification layer and then fine-tune the model end-to-end on the ideology classification task. All models were fine-tuned using the experimental settings outlined in Table~\ref{tab:finetuning_config}.
 
-Additionally, we included the current state-of-the-art model for article-based ideology classification, the POLITICS model \citep{liu2022politics}, a RoBERTa-based encoder domain adapted by continued pre-trained using two contrastive triplet-loss objectives. 
-The loss function of the POLITICS model uses $\langle$anchor $a$, positive $p$, negative $n\rangle$ triples, where the anchor is an article $a$ with label $l$ (right, left, central), positive is another article $p$ of label $l$ but from a different source, and negative is an article $n$ of class $m \neq l$. The loss encourages the model to produce representations for $a$ and $p$ that are more similar to each other than representations for $a$ and $n$, thus picking up on text specific markers and avoiding modelling of source identifying information. This triplet-loss is formulated as follows:
+Our transformer baseline evaluation encompasses both general-purpose pre-trained language models and domain-adapted architectures specifically designed for political text analysis. This comparison enables assessment of the value of domain-specific adaptation for political bias detection.
+
+\subsection{General-Purpose Transformer Models}
+
+We evaluated three representative pre-trained transformer architectures: BERT \citep{devlin2019bert}, RoBERTa \citep{liu2019roberta}, and BART \citep{lewis2020bart}. Each model was fine-tuned end-to-end for three-class political bias classification by adding a linear classification head to the pre-trained encoder representations.
+
+All models employed identical training procedures to ensure fair comparison. Fine-tuning utilized the AdamW optimizer with learning rate scheduling and early stopping based on validation set performance. Complete hyperparameter configurations and training details are provided in Table~\ref{tab:finetuning_config} in the appendices.
+
+\subsection{Domain-Adapted Architecture: POLITICS Model}
+
+We include the current state-of-the-art system for article-level political bias classification, the POLITICS model developed by \citet{liu2022politics}. This system represents a RoBERTa-based encoder enhanced through continued pre-training with carefully designed contrastive learning objectives.
+
+The POLITICS model addresses source leakage through a triplet-loss framework that encourages the learning of ideology-specific rather than source-specific representations. The training procedure employs $\langle$anchor, positive, negative$\rangle$ triplets where:
+
+\begin{itemize}
+    \item \textbf{Anchor}: Article $a$ with political label $l \in \{\text{left}, \text{center}, \text{right}\}$
+    \item \textbf{Positive}: Article $p$ with identical label $l$ from a different publication source
+    \item \textbf{Negative}: Article $n$ with different label $m \neq l$ from any source
+\end{itemize}
+
+The triplet loss objective encourages the model to produce representations where ideologically similar articles from different sources are closer in embedding space than ideologically different articles:
+
 \begin{equation}
-    \mathcal{L}_{trip} = \sum_{\langle a,p,n \rangle \in \mathcal{T}} \max( g(a, p)- g(a,n) + \delta, 0)
+    \mathcal{L}_{\text{triplet}} = \sum_{\langle a,p,n \rangle \in \mathcal{T}} \max\left( \|f(a) - f(p)\|_2 - \|f(a) - f(n)\|_2 + \delta, 0\right)
     \label{eqn:triplet_loss}
 \end{equation}
 
+where $f(\cdot)$ denotes the model's [CLS] token representation, and $\delta$ is a margin hyperparameter. The POLITICS model incorporates both story-level objectives (positive samples discuss the same event) and ideology-level objectives (positive samples share political orientation) during continued pre-training.
 
-where $g(x,y) =  \Vert f(x) - f(y)\Vert_2$, $f(x)$ is the [CLS] representation of an article produced by RoBERTa, and $\delta$ is a hyperparameter. The POLITICS model employs triplet-loss on both a story objective (where positive samples are articles discussing the same event) and an ideology objective (where positive samples are articles from sources with the same political ideology).
+\section{Large Language Model Evaluation}
+\label{sec:llm-baselines}
 
-\subsection{LLM Baselines}
-We evaluated five state-of-the-art large language models from the LLaMa and GPT families \citep{touvron2023llama,brown2020gpt3,openai2024gpt4} in a zero-shot classification setting. The LLaMa models were accessed through the GroqCloud API platform with a default temperature setting of 1.0 to maintain output variability. For the GPT family models, we first conducted preliminary evaluations on a smaller sample of 100 articles to identify the three best-performing models, which were then evaluated on the full test set. 
-For all LLM experiments, we employed a consistent prompt structure to ensure comparability:
+The recent emergence of large-scale language models necessitates comprehensive evaluation of their capabilities for political bias classification. We assess five state-of-the-art models from the GPT \citep{openai2024gpt4,openai_o3_systemcard_2025,openai_gpt5_systemcard_2025} and LLaMA families \citep{touvron2023llama} in zero-shot configuration to establish baseline performance without task-specific adaptation.
+
+\subsection{Model Selection and Access}
+
+Our evaluation encompasses models from two prominent LLM families:
+
+\begin{itemize}
+    \item \textbf{GPT Family}: GPT-4o-mini, GPT-5-nano, and o3-mini accessed via OpenAI API
+    \item \textbf{LLaMA Family}: LLaMA--3.1--8B-instant and LLaMA--3.3--70B-versatile accessed via GroqCloud API
+\end{itemize}
+
+LLaMA models were evaluated with temperature = 1.0 to maintain output diversity, while GPT models employed default temperature settings. For computational efficiency, we conducted preliminary screening on a 100-article subset to identify the most promising GPT variants before full-scale evaluation.
+
+\subsection{Prompt Design and Evaluation Protocol}
+
+To ensure consistent evaluation across models, we employed a standardized prompt format designed to elicit structured responses:
 
 \begin{quote}
-You are a political bias classifier specific to U.S. politics. Given the user's INPUT TEXT, return only valid JSON of the form \{''bias'':''left|center|right''\}. No extra text.
+\texttt{You are a political bias classifier specific to U.S. politics. Given the user's INPUT TEXT, return only valid JSON of the form \{''bias'':''left|center|right''\}. No extra text.}
 \end{quote}
 
-\subsection{Baseline Results}
-Table~\ref{tab:main_baseline} presents our baseline results. 
-Human performance was modest, with an average F1-Macro score of 41.94 (individual scores ranging from 35.46 to 46.57). Inter-annotator agreement was relatively low (Krippendorff's $\alpha = 0.241$), suggesting substantial subjectivity in ideology perception. Performance varied across ideologies, with higher average F1 scores for right-leaning content (49.41) compared to center (39.09) and left-leaning (37.31) content. Annotators reported particular difficulty with non-hyperpartisan samples and indicated that source information would have increased their confidence in classifications. 
+This prompt design minimizes variability in response format while providing clear task specification. All models were evaluated exclusively on the Media Split configuration to maintain consistency with our content-based evaluation framework. We also tested multiple prompt variants, including chain-of-thought and detailed definition prompts, but found no significant performance improvements over the baseline prompt. These are detailed in Appendix~\ref{sec:opro}.
 
-On the Media split, the POLITICS model achieved the highest F1-Macro score (57.66), outperforming general-purpose transformers and human annotators (41.94). This result underscores the effectiveness of domain-specific pre-training for capturing ideological nuances in political text.
+\section{Baseline Performance Analysis}
+\label{sec:baseline-results}
 
-The comparison across splits reveals substantial performance differences attributable to source leakage. All transformer models exhibit markedly higher scores on the Random split, where articles from the same source may appear in both training and test sets. This performance gap is most pronounced for the center category, which shows improvements of 40+ points on the Random split compared to the Media split. This sensitivity suggests that centrist sources possess distinct lexical or stylistic markers that models readily exploit when source information is available, but struggle to identify from content alone. 
+Table~\ref{tab:main_baseline} presents comprehensive baseline results across all evaluated systems. The performance patterns reveal several important findings regarding the challenges and opportunities in automated political bias classification.
 
-The LLM baselines achieved intermediate performance (best F1-Macro: 56.92 with o3-mini), outperforming human annotators (41.94) but falling short of the POLITICS model (57.66) on the Media split. Notably, the LLMs demonstrated relatively stronger performance on center (best: 53.46) and right (best: 70.78) classifications compared to transformer baselines. However, interpreting these results is complicated by uncertainty regarding source leakage in LLM pre-training data. Given the massive scale and often undisclosed composition of LLM training corpora, we cannot rule out the possibility that these models have been exposed to the same news sources present in our test set, potentially memorizing source-specific patterns rather than learning generalizable content-based signals. This concern does not apply to our transformer baselines, where we have full control and transparency over the training data composition, ensuring that the Media split results reflect genuine content-based classification capabilities.
+\subsection{Source Leakage Effects}
 
-These findings align with \citet{Wen_2023}, who demonstrate that while LLMs can achieve competitive performance on more explicit classification tasks (e.g., racial bias, hate speech), they consistently underperform on nuanced tasks requiring deeper contextual understanding (e.g., fake news detection, contextual bias) when compared to specialized fine-tuned models.
+The comparison between Media Split and Random Split performance provides crucial insights into source leakage susceptibility. All transformer models demonstrate substantially higher performance on the Random Split, with improvements of 30--50 F1 points across most configurations. This performance differential is most pronounced for center-category classification, where Random Split performance exceeds Media Split by over 40 points in several cases.
+
+These results indicate that centrist publications possess distinctive lexical or stylistic signatures that models can easily memorize when source information is available during training. However, the substantial performance degradation on the Media Split suggests that these signatures may not correspond to genuine ideological content markers, highlighting the importance of source-controlled evaluation for political bias detection systems.
+
+\subsection{Transformer Architecture and Large Language Model Performance}
+
+Among general-purpose transformers, RoBERTa achieved the highest Media Split performance (F1-Macro = 42.34), followed by BERT (38.26) and BART (36.01). However, all general-purpose models were substantially outperformed by the domain-adapted POLITICS system (57.66), demonstrating the value of triplet-loss pre-training in learning useful embeddings for this kind of nuanced classification task.
+
+Zero-shot LLM performance varied considerably across model families and sizes. GPT family models achieved competitive results, with o3-mini reaching 56.92 F1-Macro—approaching the performance of the specialized POLITICS system. Notably, LLMs demonstrated relatively stronger performance on center (53.46) and right (70.78) categories compared to transformer baselines.
+
+However, LLaMA family models underperformed significantly, with both evaluated models falling below human baseline performance. This disparity may reflect differences in training data composition, model architecture, or prompt sensitivity across LLM families.
+
+\subsection{Performance Interpretation Challenges}
+
+LLM performance interpretation is complicated by potential training data contamination. Given the massive scale and often proprietary nature of LLM training corpora, we cannot exclude the possibility that these models encountered AllSides articles or similar content during pre-training. This potential exposure could enable memorization of source-specific patterns rather than genuine content-based classification capabilities.
+
+This concern does not apply to our transformer baselines, where training data composition is fully controlled and transparent. Consequently, transformer results on the Media Split provide the most reliable assessment of content-based classification performance.
+
+These baseline findings align with observations by \citet{Wen_2023}, who demonstrate that while LLMs achieve competitive performance on explicit classification tasks, they consistently underperform specialized fine-tuned models on nuanced tasks requiring deeper contextual understanding.
+
+% TODO: - Error analysis across different article types and lengths
+% TODO: - Analysis of performance correlation with article metadata (length, topic, etc.)

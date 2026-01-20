@@ -1,15 +1,17 @@
-\section{Extended AllSides Dataset}
-\label{sec:extended_dataset}
+\chapter{AllSides Dataset Augmentation}
+\label{sec:dataset}
+
+This chapter presents our systematic extension of the AllSides political bias classification dataset, which increases training data by 2.5× while maintaining source consistency and improving class balance. Our augmentation methodology and empirical analysis reveal important insights about data limitations versus inherent task complexity in political bias detection.
 
 To improve the scale of the original AllSides dataset \citep{baly2020we}, we expanded the corpus by collecting additional articles from the same news sources present in the original dataset. This approach maintains source consistency while substantially increasing training data volume, allowing us to evaluate whether the performance limitations observed in prior work were primarily attributable to data scarcity rather than inherent task difficulty.
 
 The extended dataset adds 10,184 samples to the training split and 10,216 samples to the test split based on the sources seen in the original AllSides dataset. The validation set remained unchanged at 2,356 samples to ensure consistent evaluation metrics. This expansion represents approximately a $2.5\times$ increase in training data and a $8.5\times$ increase in test data compared to the original dataset. The distribution of political ideology labels remained roughly balanced across the extended samples. Appendix~\ref{appendix:extended_dataset} provides details about our data collection methodology and source-level statistics.  
 
-
 \begin{table}[t!]
+\centering
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-Model & F1-Macro & Left & Center & Right\\
+\textbf{System} & \textbf{F1-Macro} & \textbf{Left} & \textbf{Center} & \textbf{Right}\\
  \midrule
 BERT & 40.95 & 65.20 & 20.11 & 37.53 \\
 BART &  47.55 & 70.94 & 25.73 & 45.99\\
@@ -17,13 +19,17 @@ RoBERTa & 47.83 & 70.66 & 25.73 & 54.86 \\
 POLITICS & \textbf{60.60} & \textbf{77.94} & \textbf{38.55} & \textbf{65.30} \\
 \bottomrule
 \end{tabular}
-\caption{Extended AllSides Media Split Results}
+\caption{Baseline system performance on extended AllSides dataset (Media Split). All systems show improved performance compared to original dataset results, with particularly notable gains for center-category classification.}
 \label{tab:extended_results}
 \end{table}
-
 
 When we re-run the transformer baseline evaluation on the extended dataset, we observe significant but uneven performance improvements across all evaluated models (Table~\ref{tab:extended_results}), thus revealing fundamental limitations in data-driven approaches to this task. While F1-Macro scores consistently increase with additional training data, left and center classifications show substantial gains (12+ percentage points for BERT and RoBERTa on left), whereas right performance stagnates or declines across all models. This pattern reflects the class imbalance in the original dataset: 10,241 right samples, 8,861 left samples, and only 7,488 center samples. Our extended dataset provides more balanced representation (14,325 left, 13,416 right, 9,033 center), which particularly benefits the previously under-represented center category. However, despite near-parity in left and right sample counts, the F1 scores for these classes differ by over 10 percentage points (77.94 for left vs. 65.30 for right) for the POLITICS experiments, suggesting that some right-leaning content contains intrinsic properties that resist classification even with ample training data.
 
 Additionally, the domain-adapted POLITICS model showed limited total improvement with additional data (3.24 percentage points) compared to general-purpose transformers, which gained 7.3--13.89 percentage points. This divergence indicates that specialized pre-training approaches may be approaching a performance ceiling for this task when relying solely on contrastive learning objectives. While additional data helps general models catch up to specialized architectures, neither approach fully resolves the classification challenge, particularly for right and center categories. The consistent performance ranking across dataset versions suggests that domain-specific pre-training and increased data volume offer complementary but ultimately bounded benefits for political bias detection. These findings motivate our investigation into alternative pre-training strategies that incorporate explicit metalinguistic objectives that may capture ideological signals that remain elusive to purely contrastive or content-based approaches.
+
+
+% TODO: - Detailed temporal analysis of political bias evolution across the extended time periods
+% TODO: - Analysis of article length distribution and its impact on classification performance
+% TODO: - Error analysis identifying specific types of articles that remain challenging after dataset extension
 
 

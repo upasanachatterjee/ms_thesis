@@ -1,31 +1,87 @@
-\section{Introduction}
+\chapter{Introduction}
 
-The proliferation of politically biased content in news media poses significant challenges for public discourse, political polarization, and information integrity. Automatic detection of political bias in news articles represents an important research direction with applications in media literacy tools, content recommendation systems, and journalistic analysis. This paper addresses three interconnected questions in political ideology classification of U.S. news articles: (1) What level of performance can human annotators achieve when classifying ideology from text content alone, and how does this baseline inform our understanding of automated approaches? (2) How effectively can metalinguistic features such as article-level theme and tone be leveraged to improve transformer-based classification models? (3) How do modern large language models, both in zero-shot and fine-tuned settings, compare to specialized transformer architectures on this task?
+\section{Background and Motivation}
 
-Online media bias resources such as  or AdFontes\footnote{\url{https://adfontesmedia.com/}}, AllSides,\footnote{\url{https://www.allsides.com/unbiased-balanced-news}}, or MB/FC,\footnote{\url{https://mediabiasfactcheck.com/}} typically provide source-level rather than article-level bias ratings. Much of the previous work on news bias detection has similarly aimed at detecting bias at level of entire publications or authors \citep{baly2020acl, darwish2020aaai, ronnback2025biasoutlets}. Only AllSides additionally provides article-level ratings, and notably these ratings do not always align with source bias. \citet{baly2020we} used the article-level ratings to create the AllSides dataset, containing 34,737 articles with left, center, or right labels, which we use and extend in this paper.
+In the current digital landscape, the proliferation of politically biased news content presents substantial challenges for democratic discourse and informed decision-making. The increasing polarization of media sources, combined with algorithmic content curation systems, has created online ecosystems where partipants are exposed to ideologically diverse context, yet are becoming politically polarised \citep{flaxman2016filterbubblesechochambers,kitchens2020echochambersfilterbubbles,Garimella_Smith_Weiss_West_2021, cinelli2021echochambereffectsocialmedia}. As people are generally worse at identifying their own biases \citep{wang2020bias} than those of others, this phenomenon raises concerns about how individuals consume, interpret, and share news information. 
 
-Even though article level bias does not align with source level bias one-to-one, there is generally a strong correlation. \textit{Source leakage}, where classifiers learn specific patterns associated with the source (including identifiers such as author, style, explicit mentions) rather than content-based bias signals, is a crucial issue in article level bias detection. \citet{baly2020we} address this problem using triplet-loss pre-training for BERT, using contrastive learning to structure embeddings based on ideological similarity rather than source identifying patterns (see section \ref{sec:transformer-baselines}). \citet{liu2022politics} scaled the triplet-loss approach with a significantly larger pre-training dataset and refined the contrastive learning objectives to focus more specifically on same-story article comparisons across different sources. This resulted in the POLITICS model, which achieves current state of the art results on the AllSides dataset.
+The automatic detection and classification of political bias in textual content has emerged as a recent research area within natural language processing and computational social science. Such systems have practical applications in media literacy tools, content recommendation algorithms, fact-checking platforms, and journalistic analysis workflows. However, the computational modeling of political ideology remains a challenging problem due to the inherent subjectivity of bias perception, the complex relationship between explicit content and implicit framing, and the need to distinguish between source-level and article-level ideological markers.
 
-Recently, \citet{ronnback2025biasoutlets} demonstrated how semantic, syntactic, and metalinguistic features effectively capture source-level political bias 
-We are the first to integrate metalinguistic features into an article-level bias classification system. Specifically, our approach extends triplet-loss pre-training approaches for transformer based classifiers to incorporate theme and tone prediction as auxiliary tasks, enabling the model to learn representations sensitive to both explicit content and implicit stylistic markers of political orientation.
+Traditional approaches to bias detection have primarily focused on source-level classification, where entire news outlets or authors are categorized according to their general political orientation \citep{baly2020acl, darwish2020aaai, ronnback2025biasoutlets}. While this coarse-grained approach provides useful insights for media analysis, it fails to capture the significant variation in political perspective that can occur within individual articles from the same source. Article-level classification represents a more nuanced and practically valuable approach, enabling fine-grained analysis of ideological content and reducing the risk of overgeneralization based on source reputation alone.
 
-We compare the performance of our pre-trained and fine-tuned classifier with general-purpose large language models, considering both zero-shot prompting and fine-tuned LLMs. Our experiments demonstrate that continued pre-trained/fine-tuned transformer classifiers demonstrate superior performance compared to both human baselines and general-purpose LLMs with zero-shot prompting on the source-separated Media-based split configuration of the AllSides dataset. We show that incorporating metalinguistic information as an auxiliary objective during pre-training yields additional performance improvements, particularly for challenging bias categories such as center-leaning content. 
+\section{Problem Statement and Research Questions}
 
-Fine-tuned LLMs only approach performance of the transformer classifiers with substantial quantities of domain-specific training data. Prompt optimization methodologies yield marginal improvements.
+This thesis addresses the challenge of automatic political ideology classification at the article level, with particular focus on leveraging metalinguistic features to improve classification performance. The research is motivated by four key limitations in existing work: (1) the lack of comprehensive human baseline studies for article-level political bias classification, (2) limited exploration of metalinguistic features for ideology detection, (3) insufficient evaluation of modern large language models on this task, and (4) the absence of causal analysis examining how specific thematic and tonal features influence ideological classification.
 
-The primary contributions of this paper are as follows:
+Specifically, this work investigates four interconnected research questions:
 
-\begin{itemize}
-    \item We establish a new state-of-the-art for political bias classification of news articles via continued pre-training on RoBERTa using metalinguistic features.
-    \item We perform the first evaluation of state-of-the-art language models on the political bias classification task.
-    \item We introduce an expanded version of the AllSides dataset initially curated by \citet{baly2020we}, increasing the available annotated articles by 47\% over the original dataset. 
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Human Performance Baseline}: What level of classification accuracy can human annotators achieve when identifying political ideology from article content alone, and how does this baseline inform the evaluation of automated approaches?
+    
+    \item \textbf{Metalinguistic Feature Integration}: How effectively can article-level metalinguistic features, particularly thematic and tonal characteristics, be incorporated into transformer-based models to improve political bias classification performance?
+    
+    \item \textbf{Large Language Model Evaluation}: How do contemporary large language models, evaluated in both zero-shot and fine-tuned configurations, compare to specialized transformer architectures designed for political bias detection?
+    
+    \item \textbf{Causal Analysis of Theme-Tone-Ideology Relationships}: What are the causal effects of specific thematic and tonal features on political ideology classification, and how do automated systems differ from human expert annotators in their sensitivity to these features?
+\end{enumerate}
 
-\section{Related Work}
-Early approaches in automated ideology classification predominantly formulated the problem as binary classification or focused on identifying extreme partisan viewpoints (hyper-partisan news) \citep{hube2018detecting, semeval2019hyperpartisan, krieger2022daroberta, lin2024inditag}. The literature is also distinguished by granularity of analysis: while substantial research has focused on \textit{sentence-level} bias detection \citep{spinde2021mbic,spinde2021babe, menzner2025biasscanner}, identifying specific biased phrases or sentences, these approaches often fail to capture broader contextual or cumulative framing effects across entire articles. Article-level classification approaches, which we adopt in this work, consider the holistic political orientation of texts.
+\section{Technical Approach and Methodology}
 
-Recently, \citet{ronnback2025biasoutlets} demonstrated how semantic, syntactic, and metalinguistic features effectively capture source-level political bias, while \citet{recasens2013weasel} showed that similar stylistic features can identify potentially biased language in Wikipedia's NPOV corpus. This suggests that metalinguistic features may provide valuable complementary signals for ideology detection beyond content-based representations alone. However, prior work has not explored the integration of metalinguistic features into article-level political ideology classification systems.
+Our technical approach centers on extending domain-adapted transformer models with metalinguistic auxiliary objectives during continued pre-training. Building upon the established triplet-loss methodology introduced by \citet{baly2020we} and refined by \citet{liu2022politics}, we develop a multi-task learning framework that incorporates theme and tone prediction as auxiliary tasks alongside the primary ideology classification objective.
 
-The human ability to recognize and classify political ideology serves as an important reference point for automated systems. Previous studies have demonstrated the challenges inherent in such annotation tasks. The Media Bias Identification Corpus (MBIC) by \citet{spinde2021mbic} utilized crowdworkers to identify biased language, achieving only slight to fair inter-annotator agreement (Fleiss's Kappa $ \approx 0.21$). In response to these annotation challenges, the Bias Annotations by Experts (BABE) dataset relied on expert annotators specifically trained to recognize media bias, resulting in improved but still modest inter-annotator reliability (Krippendorff's Alpha $\approx 0.39$) \citep{spinde2021babe}.
+Our work also addresses the challenge of source leakage, where classifiers learn to exploit source-specific patterns (such as author names, publication styles, or explicit source mentions) rather than content-based ideological markers. By employing contrastive learning techniques and careful data partitioning strategies, our models are trained to focus on genuine linguistic and stylistic indicators of political orientation.
 
-These findings suggest that even expert human annotators face considerable challenges in consistently identifying biased content. Moreover, these prior studies primarily focused on  political bias detection rather than directional classification. In this work, we introduce an informal human baseline for political ideology prediction, to address the limited research involving human annotation that explicitly distinguishes direction (e.g., left-leaning versus right-leaning).
+We extend the AllSides dataset \citep{baly2020we}, which provides article-level political bias annotations for U.S. news content, by incorporating additional annotated articles and enriching the dataset with metalinguistic feature annotations derived from the GDELT Project's V2Themes and V2Tone metadata. This enhanced dataset enables systematic evaluation of the contribution of different feature types to classification performance.
+
+\section{Key Contributions}
+
+The primary contributions of this thesis are:
+
+\begin{enumerate}
+    \item \textbf{Novel Metalinguistic Integration}: We present the first systematic integration of metalinguistic features (theme and tone) into article-level political bias classification, demonstrating significant performance improvements particularly for challenging center-leaning content.
+    
+    \item \textbf{Comprehensive LLM Evaluation}: We conduct the first extensive evaluation of state-of-the-art large language models (including GPT-4o, LLaMA-3, and o3-mini) on political bias classification, examining both zero-shot prompting and fine-tuning approaches.
+    
+    \item \textbf{Enhanced Dataset and Baseline}: We introduce an expanded version of the AllSides dataset with 47\% additional annotated articles and establish an informal human performance baselines through a small annotation study.
+    
+    \item \textbf{Methodological Advances}: We develop improved continued pre-training techniques that achieve new state-of-the-art performance on political bias classification while maintaining robustness to source leakage.
+    
+    \item \textbf{Causal Inference Analysis}: We provide the first causal analysis of theme-tone-ideology relationships in political text classification, comparing human expert judgments with automated system outputs to identify systematic biases and feature dependencies in computational approaches.
+\end{enumerate}
+
+\section{Thesis Organization}
+
+The remainder of this thesis is organized as follows. Chapter~\ref{sec:relatedwork} surveys related work in computational bias detection, transformer-based text classification, and metalinguistic feature extraction. Chapter~\ref{sec:baselines} establishes experimental baselines through human annotation studies and evaluation of existing transformer and large language model approaches. Chapter~\ref{sec:dataset} describes our extensions to the AllSides dataset and the integration of metalinguistic features. Chapter~\ref{sec:continued-pretraining} details our continued pre-training methodology incorporating metalinguistic auxiliary objectives. Chapter~\ref{sec:llm-finetuning} presents comprehensive experiments with fine-tuned large language models and prompt optimization techniques. Chapter~\ref{ch:causal-inference} provides a causal analysis of theme-tone-ideology relationships, comparing human expert annotations with automated system outputs to identify systematic biases and feature dependencies in computational approaches. Chapter~\ref{ch:discussion} analyzes and discusses the experimental results, comparing the effectiveness of different approaches. Chapter~\ref{ch:limitations-future-work} conclude with directions for future research and acknowledgment of current limitations.
+
+\chapter{Related Work}
+\label{sec:relatedwork}
+
+Early approaches in automated ideology classification predominantly formulated the problem as binary classification or focused on identifying extreme partisan viewpoints (hyper-partisan news) \citep{hube2018detecting, semeval2019hyperpartisan, krieger2022daroberta, lin2024inditag}. The literature is distinguished by granularity of analysis: while substantial research has focused on \textit{sentence-level} bias detection \citep{spinde2021mbic,spinde2021babe, menzner2025biasscanner}, identifying specific biased phrases or sentences, these approaches often fail to capture broader contextual or cumulative framing effects across entire articles. Article-level classification approaches, which we adopt in this work, consider the holistic political orientation of texts.
+
+\section{Computational Bias Detection}
+
+The computational detection of political bias in news media has evolved from simple keyword-based approaches to sophisticated neural architectures. Early work in this domain focused primarily on lexical and syntactic features, often employing traditional machine learning methods such as Support Vector Machines and logistic regression \citep{recasens2013weasel}. These approaches, while interpretable, suffered from limited capacity to capture complex semantic relationships and contextual dependencies.
+
+The advent of pre-trained language models has transformed the landscape of bias detection. \citet{baly2020we} introduced the use of BERT for political ideology classification, employing triplet-loss objectives to address the fundamental challenge of source leakage. Their work demonstrated that contrastive learning could encourage models to focus on content-based ideological markers rather than source-identifying patterns. This methodology was subsequently refined by \citet{liu2022politics}, who developed the POLITICS model through large-scale continued pre-training with enhanced contrastive objectives.
+
+Recent work by \citet{ronnback2025biasoutlets} has explored the integration of semantic, syntactic, and metalinguistic features for source-level bias detection, demonstrating the potential value of multi-modal feature representations. However, the systematic integration of such features into article-level classification systems remains underexplored.
+
+\section{Human Annotation and Baseline Studies}
+
+The establishment of human performance baselines represents a critical component of bias detection research, yet comprehensive studies remain limited. The Media Bias Identification Corpus (MBIC) by \citet{spinde2021mbic} utilized crowdworkers to identify biased language, achieving only slight to fair inter-annotator agreement (Fleiss's Kappa $\approx 0.21$). In response to these annotation challenges, the Bias Annotations by Experts (BABE) dataset \citep{spinde2021babe} employed expert annotators specifically trained to recognize media bias, resulting in improved but still modest inter-annotator reliability (Krippendorff's Alpha $\approx 0.39$).
+
+These findings suggest that even expert human annotators face considerable challenges in consistently identifying biased content. Moreover, these prior studies primarily focused on bias detection rather than directional classification. This thesis addresses this gap by introducing an informal layman baseline study for political ideology prediction that explicitly distinguish ideological direction.
+
+\section{Large Language Models in Political Analysis}
+
+The recent emergence of large-scale language models has opened new possibilities for political text analysis. While these models have demonstrated impressive performance across diverse NLP tasks, their application to political bias detection remains understudied. Recent work by \citet{ibrahim2024analyzingpoliticalstancestwitter} has shown promise for political stance detection in social media contexts, but comprehensive evaluation on news article classification has not been conducted.
+
+The potential of prompt engineering and few-shot learning approaches for political classification presents both opportunities and challenges. While these methods can leverage the extensive world knowledge encoded in large language models, they also raise concerns about training data contamination and reproducibility. This thesis provides the first systematic evaluation of modern LLMs on political bias classification, examining both zero-shot and fine-tuning paradigms.
+
+
+% TODO: - Discussion of ethical considerations and potential societal impact
+% TODO: - Comparison table of different bias detection approaches in the literature
+% TODO: - Brief overview of the GDELT metadata and its relevance to political analysis
+% TODO: - Discussion of the challenges in defining and measuring political bias
+% TODO: - Ethical considerations in automated bias detection systems
+% TODO: - Comparison with related work in stance detection and sentiment analysis
+% TODO: - Discussion of dataset bias and annotation quality issues

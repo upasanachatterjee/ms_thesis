@@ -1,0 +1,48 @@
+\chapter{Discussion and Analysis}
+\label{ch:discussion}
+
+This chapter provides an analysis of our experimental findings from both the metalinguistic feature integration framework (Chapter~\ref{sec:continued-pretraining}) and the large language model fine-tuning investigation (Chapter~\ref{sec:llm-finetuning}). We examine the theoretical implications, practical trade-offs, and methodological insights emerging from our comparative evaluation of specialized transformer architectures versus general-purpose LLMs for political bias classification. Our discussion synthesizes empirical observations with broader considerations of computational efficiency, interpretability, and deployment viability in real-world systems.
+
+\section{Metalinguistic Feature Integration: Empirical Findings and Theoretical Implications}
+\label{sec:metalinguistic-analysis}
+
+Our continued pre-training experiments reveal nuanced interactions between triplet-based contrastive learning and auxiliary metalinguistic objectives that exhibit strong dependence on both training configuration parameters and dataset composition characteristics. The experimental results demonstrate that metalinguistic feature integration provides substantial benefits under specific conditions while potentially degrading performance in suboptimal configurations.
+
+On the subset dataset (1.6M articles with complete GDELT metadata coverage), auxiliary objectives consistently enhanced classification performance across all evaluation metrics. The theme prediction task ($T_h$) yielded particularly pronounced improvements for center and right-leaning article classification, addressing a critical weakness observed in baseline contrastive learning approaches. This finding suggests that topical coverage patterns provide discriminative signals that pure content-based representations fail to capture effectively.
+
+The full \textsc{BigNewsBLN} corpus (4.5M articles, 35\% GDELT coverage) exhibited markedly different optimization dynamics. Single-triplet configurations showed performance degradation when metalinguistic objectives were introduced: $T_{id}(1)$ achieved 56.98 F1-Macro compared to $T_{id}(1) + T_h$ at 51.40 F1-Macro (-5.58 points). This degradation likely results from noisy gradient signals arising from sparse GDELT coverage, where auxiliary tasks receive supervision for only a subset of training examples.
+
+However, increasing triplet density substantially altered this relationship. Higher triplet counts enabled effective metalinguistic integration: $T_{id}(16) + T_h$ achieved 60.55 F1-Macro (+7.67 over triplet-only baseline), while $T_{id}(32) + T_h$ reached 62.19 F1-Macro (+2.04 improvement). This pattern indicates that metalinguistic objectives provide optimal value when combined with sufficient primary supervision to establish robust gradient signals for the main classification task.
+
+\subsection{Convergence Dynamics and Training Stability}
+
+An unexpected finding from our experiments concerns the non-monotonic relationship between training epochs and model performance. Optimal results frequently occurred at epoch 1 rather than the expected epoch 2 convergence point, observed consistently across both subset and full dataset configurations. This pattern suggests that factors beyond standard convergence criteria—such as random triplet sampling strategies and batch composition effects—significantly influence optimization dynamics for multi-task political bias classification.
+
+The full dataset exhibited greater epoch-to-epoch performance variability compared to the subset, likely exacerbated by heterogeneous metadata availability that introduces training instability. Articles lacking GDELT annotations contribute only to the primary triplet objective, creating imbalanced gradient updates that may impede stable convergence. Future work should investigate curriculum learning approaches that gradually introduce auxiliary objectives as primary task performance stabilizes.
+
+\subsection{Component-wise Analysis of Auxiliary Objectives}
+
+Theme prediction appears particularly effective, likely because topical focus (e.g., emphasis on immigration, healthcare, or economic policy) correlates with ideological framing in ways that pure contrastive learning cannot fully capture. Tone regression showed more modest gains, suggesting that sentiment signals may be less consistently ideologically aligned in political news discourse. Joint training on both tone and theme objectives occasionally outperformed single-feature approaches, suggesting that these metalinguistic dimensions capture complementary aspects of ideological expression that together provide richer gradient signals than either objective alone. %% TODO back this up with some external citations if possible
+
+\section{Comparative Analysis: Specialized Transformers versus Large Language Models}
+\label{sec:comparative-analysis}
+
+\subsection{Performance Characteristics and Trade-offs}
+
+Our experimental evaluation reveals distinct performance profiles and operational characteristics between domain-adapted transformer architectures and fine-tuned large language models. These differences have significant implications for practical deployment considerations and system design choices.
+
+The best-performing specialized transformer configuration ($T_{id}(32) + T_h$) achieved 62.19 F1-Macro on the AllSides Media split through continued pre-training with metalinguistic objectives. This performance substantially exceeds zero-shot GPT-4o-mini at 51.86 F1-Macro, demonstrating the value of task-specific architectural adaptation and training strategies. The specialized model required no labeled training data beyond the contrastive triplets derived from source-level annotations, representing superior data efficiency for deployment scenarios with limited supervision.
+
+Fine-tuned GPT-4o-mini with 2,000 labeled examples achieved 69.37 F1-Macro, surpassing our best specialized transformer by 7.18 points. However, this performance improvement introduces several methodological concerns and practical limitations. First, the fine-tuned LLM requires substantial labeled training data. Second, the opaque pre-training corpus raises potential data contamination concerns that do not affect our controlled transformer pre-training process.
+
+\subsection{Classification Performance Asymmetries}
+
+Despite quantitative differences between approaches, both methodologies exhibit systematic classification asymmetries that pose significant risks for real-world deployment. Neither approach achieves balanced performance across ideological categories, with particularly poor results for center and right-leaning content classification. This asymmetry creates concerning implications for practical systems: classifiers that systematically mischaracterize centrist and conservative content could reinforce rather than mitigate information polarization effects.
+
+The consistent performance improvements from metalinguistic objectives, particularly for challenging center and right categories, provide empirical validation that stylistic and affective dimensions contain discriminative information not captured by content-based representations alone. This finding supports theoretical frameworks from political communication research emphasizing the multi-dimensional nature of ideological expression in media discourse \citep{hamborg2019automatedmediabias}.
+
+\subsection{Computational and Economic Considerations}
+
+The choice between specialized transformers and fine-tuned LLMs involves substantial trade-offs in computational requirements, economic costs, and operational complexity. Specialized transformers with metalinguistic objectives offer competitive performance with moderate computational demands, full architectural transparency, and superior data efficiency. These characteristics make domain-adapted approaches particularly suitable for scenarios prioritizing interpretability, cost control, and trust requirements.
+
+Fine-tuned LLMs can achieve superior raw performance when sufficient labeled data and computational resources are available. However, practitioners must carefully evaluate several limiting factors: (1) substantial fine-tuning costs and ongoing operational expenses, (2) potential data contamination effects from opaque pre-training procedures, (3) reduced model interpretability and explainability capabilities, and (4) vendor dependency risks for API-based deployment strategies \citep{Wen_2023}.
