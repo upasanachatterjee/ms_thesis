@@ -1,5 +1,5 @@
 \chapter{OPRO Methods in GPT Models}
-\label{sec:opro}
+\label{appendix:opro}
 In this section, we describe the OPRO (Optimized Prompting for Robustness) methods employed in our experiments \citep{yang2024largelanguagemodelsoptimizers}. OPRO is designed to enhance the robustness of language models by optimizing the prompts used during training and inference.
 
 We utilize a two-step process for prompt optimization: (1) prompt generation and (2) prompt selection. In the prompt generation phase, we create a diverse set of prompts by requesting Claude 4 to generate prompts based on the ideology classificatin task. For our experiments, we generated a total of 12 prompts using Claude 4. Each prompt was evaluated on a validation set, and the top 3 prompts were selected based on their F1-Macro scores. The selected prompts were a mix of explicit definition prompts (EDP), chain-of-thought prompts (COT), and numerical reasoning prompts (NRP), as detailed below in Table \ref{tab:opro_prompt_selection}. The prompts are provided in the subsequent sections. These selected prompts were then used for inference on the test set using the \texttt{gpt-4o-mini} model.
