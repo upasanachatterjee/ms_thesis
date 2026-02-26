@@ -32,6 +32,16 @@
 
 \usepackage[titletoc]{appendix}
 
+\usepackage{siunitx}        % Column type S for number alignment
+  \sisetup{
+    table-number-alignment = center,
+    table-format            = +1.3,
+  }
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorinlistoftodos, textsize=small]{todonotes}
+  \newcommand{\authortodo}[1]{\todo[inline, color=yellow!40]{\textbf{Author TODO:} #1}}
+
 \usepackage{setspace}
 \doublespacing
 
