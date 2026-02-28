@@ -1,0 +1,36 @@
+\section{Background and Motivation}
+\label{sec:causal-background}
+
+News outlets across the political spectrum cover the same events differently---not just in which topics they emphasize, but in the sentiment they express toward those topics. A growing body of work has examined this relationship between sentiment, topic coverage, and ideological stance \citep{smirnova2017ideology, bhatia2018topic, bestvater2023sentiment}. \citet{smirnova2017ideology} found that \textit{New York Times} coverage of Russia and Islam shifted toward more negative sentiment following the Crimea annexation and 9/11, respectively. \citet{bestvater2023sentiment} caution that tone alone is an imperfect predictor of political stance, but demonstrate that in specific contexts the correlation between sentiment and ideological alignment is substantial. Our own results in Section~\ref{sec:continued-pretraining} provide further support: incorporating thematic and tonal signals during pre-training yields statistically significant improvements in ideology classification.
+
+Table~\ref{fig:khalil} illustrates the phenomenon concretely. AP and Fox News both covered activist Mahmoud Khalil's arrest using the same AllSides topic tags, yet their language diverges sharply. AP describes ``demonstrators'' who ``filled the lobby'' to ``denounce'' an ``immigration arrest''; Fox describes ``protesters'' who ``occupied'' the lobby, labeling Khalil an ``anti-Israel activist'' who was ``detained.'' Even the headlines encode stance: AP uses ``flood'' and explains the protesters' objective; Fox uses ``occupy'' without contextualizing their purpose. Sentiment toward the same topics---Pro-Palestine Protests, Israel, Deportations---serves as a reliable indicator of underlying ideological framing.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{p{2cm}|p{4cm} | p{4cm}}
+\toprule
+ &  Associated Press  & Fox News \\
+ \midrule
+topic tags &  Pro-Palestine Protests, Donald Trump, Israel, Deportations &  Pro-Palestine Protests, Donald Trump, Israel, Deportations \\
+\midrule
+title & Jewish protesters \textcolor{blue}{flood} Trump Tower's lobby to demand the Columbia University activist's release & Protesters supporting Mahmoud Khalil \textcolor{blue}{occupy} Trump Tower lobby \\
+\midrule
+summary &
+
+\textcolor{blue}{Demonstrators} from a Jewish group filled the lobby of Trump Tower on Thursday to denounce the \textcolor{blue}{immigration arrest} of Mahmoud Khalil, a \textcolor{blue}{pro-Palestinian activist} who helped lead protests against Israel at Columbia University.
+
+The \textcolor{blue}{Jewish Voice for Peace protesters}, who carried banners and wore red shirts reading "Jews say stop arming Israel," chanted "Bring Mahmoud home now!"
+ &
+
+About 150 \textcolor{blue}{protesters supporting Mahmoud Khalil} occupied the lobby area of Trump Tower on Manhattan's Fifth Avenue on Thursday, calling for the release of the \textcolor{blue}{anti-Israel activist} who was \textcolor{blue}{detained} over the weekend.
+
+The protesters, many dressed in red, held signs reading "Free Mahmoud, Free Palestine" and "Fight Nazis Not Students." The protesters were also chanting the common "Free, free Palestine" slogan. \\
+\bottomrule
+\end{tabular}
+\caption{AllSides reporting on the Khalil arrest. Words indicating sentiment or stance are highlighted in blue.}
+\label{fig:khalil}
+\end{table}
+
+Despite this suggestive correlation, a critical gap remains: we do not know whether topic-specific sentiment \emph{causes} ideology classification or merely correlates with it. This distinction matters for two reasons. First, a causal analysis can identify which topics carry the strongest ideological signal and how those patterns shift over time. Second, applying causal methods to both human annotations and automated classifiers allows us to detect whether those systems capture genuine ideological signals or spurious associations.
+
+The rest of this chapter presents a causal inference framework applied to the AllSides dataset. We formalize the causal structure using a directed graph, describe our Double Machine Learning (DML) methodology, and report results across three annotation paradigms: human labels, a fine-tuned RoBERTa classifier, and GPT-4o-mini. A key finding is that topic-level sentiment is a weak driver of ideology classification once topic presence is controlled for---and that estimated causal directions can reverse depending on the annotation model used.

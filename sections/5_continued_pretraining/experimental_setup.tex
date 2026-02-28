@@ -1,23 +1,3 @@
-\chapter{Metalinguistic Feature Integration for Political Bias Classification}
-\label{sec:continued-pretraining}
-
-This chapter presents our primary technical contribution: a novel multi-task learning framework that integrates metalinguistic features into transformer-based political bias classification through continued pre-training. We extend the established triplet-loss methodology with auxiliary objectives that capture thematic and tonal characteristics of political discourse, achieving state-of-the-art performance on article-level ideology detection. Our approach demonstrates that explicit modeling of metalinguistic signals provides complementary information to content-based representations, particularly benefiting challenging classification scenarios such as center-leaning articles. All code for the experiments can be found on \href{https://github.com/upasanachatterjee/metalinguistic_features_in_political_bias_detection}{GitHub}.\footnote{Code available under the MIT license.}
-
-\section{Problem Formulation and Technical Approach}
-\label{sec:problem-formulation}
-
-Existing approaches to political bias classification rely primarily on semantic content analysis, either through fine-tuned transformer models or specialized contrastive learning frameworks \citep{baly2020we, liu2022politics}. However, political ideology in news articles manifests not only through explicit content but also through metalinguistic markers such as topic selection, framing strategies, and emotional tone. These higher-level discourse features remain largely unexploited in current computational approaches.
-
-We formulate the integration of metalinguistic features as a multi-task learning problem where the primary political bias classification objective is augmented with auxiliary tasks that capture complementary aspects of political discourse:
-
-\begin{enumerate}
-    \item \textbf{Primary Task}: Political ideology classification using contrastive triplet-loss objectives
-    \item \textbf{Auxiliary Task 1}: Multi-label topic classification capturing thematic focus
-    \item \textbf{Auxiliary Task 2}: Regression of sentiment polarity reflecting tonal characteristics
-\end{enumerate}
-
-This formulation enables the model to learn representations that are sensitive to both explicit ideological content and implicit stylistic markers that correlate with political orientation.
-
 \section{Methodology and Architecture}
 \label{sec:methodology}
 

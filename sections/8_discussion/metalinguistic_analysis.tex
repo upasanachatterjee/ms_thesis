@@ -1,0 +1,20 @@
+\section{Metalinguistic Feature Integration: Empirical Findings and Theoretical Implications}
+\label{sec:metalinguistic-analysis}
+
+Our continued pre-training experiments reveal nuanced interactions between triplet-based contrastive learning and auxiliary metalinguistic objectives that exhibit strong dependence on both training configuration parameters and dataset composition characteristics. The experimental results demonstrate that metalinguistic feature integration provides substantial benefits under specific conditions while potentially degrading performance in suboptimal configurations.
+
+On the subset dataset (1.6M articles with complete GDELT metadata coverage), auxiliary objectives consistently enhanced classification performance across all evaluation metrics. The theme prediction task ($T_h$) yielded particularly pronounced improvements for center and right-leaning article classification, addressing a critical weakness observed in baseline contrastive learning approaches. This finding suggests that topical coverage patterns provide discriminative signals that pure content-based representations fail to capture effectively.
+
+The full \textsc{BigNewsBLN} corpus (4.5M articles, 35\% GDELT coverage) exhibited markedly different optimization dynamics. Single-triplet configurations showed performance degradation when metalinguistic objectives were introduced: $T_{id}(1)$ achieved 56.98 F1-Macro compared to $T_{id}(1) + T_h$ at 51.40 F1-Macro (-5.58 points). This degradation likely results from noisy gradient signals arising from sparse GDELT coverage, where auxiliary tasks receive supervision for only a subset of training examples.
+
+However, increasing triplet density substantially altered this relationship. Higher triplet counts enabled effective metalinguistic integration: $T_{id}(16) + T_h$ achieved 60.55 F1-Macro (+7.67 over triplet-only baseline), while $T_{id}(32) + T_h$ reached 62.19 F1-Macro (+2.04 improvement). This pattern indicates that metalinguistic objectives provide optimal value when combined with sufficient primary supervision to establish robust gradient signals for the main classification task.
+
+\subsection{Convergence Dynamics and Training Stability}
+
+An unexpected finding from our experiments concerns the non-monotonic relationship between training epochs and model performance. Optimal results frequently occurred at epoch 1 rather than the expected epoch 2 convergence point, observed consistently across both subset and full dataset configurations. This pattern suggests that factors beyond standard convergence criteria—such as random triplet sampling strategies and batch composition effects—significantly influence optimization dynamics for multi-task political bias classification.
+
+The full dataset exhibited greater epoch-to-epoch performance variability compared to the subset, likely exacerbated by heterogeneous metadata availability that introduces training instability. Articles lacking GDELT annotations contribute only to the primary triplet objective, creating imbalanced gradient updates that may impede stable convergence. Future work should investigate curriculum learning approaches that gradually introduce auxiliary objectives as primary task performance stabilizes.
+
+\subsection{Component-wise Analysis of Auxiliary Objectives}
+
+Theme prediction appears particularly effective, likely because topical focus (e.g., emphasis on immigration, healthcare, or economic policy) correlates with ideological framing in ways that pure contrastive learning cannot fully capture. Tone regression showed more modest gains, suggesting that sentiment signals may be less consistently ideologically aligned in political news discourse. Joint training on both tone and theme objectives occasionally outperformed single-feature approaches, suggesting that these metalinguistic dimensions capture complementary aspects of ideological expression that together provide richer gradient signals than either objective alone. %% TODO back this up with some external citations if possible

@@ -1,0 +1,43 @@
+\section{Experimental Design and Methodology}
+\label{sec:llm-methodology}
+
+\subsection{Model Selection and Justification}
+
+We selected GPT-4o-mini as our primary experimental platform as it offers the most favorable balance between classification accuracy (as demonstrated in our baseline experiments) and computational cost among available OpenAI models. Additionally, OpenAI's fine-tuning API provides standardized infrastructure for reproducible experimentation.
+
+\subsection{Experimental Variables and Configurations}
+
+Our experimental design systematically varies two primary factors:
+
+\begin{description}
+    \item[\textbf{Training Set Size}:] We evaluate fine-tuning performance using 150, 300, 1,000, and 2,000 labeled examples, representing different points on the data efficiency curve. These sample sizes span the range from few-shot learning (150) to moderate supervision (2,000), enabling analysis of diminishing returns in training data scaling.
+
+    \item[\textbf{Input Text Length}:] We compare fine-tuning on full-length articles versus articles truncated to 400 words. This comparison addresses the hypothesis that LLMs may exhibit superior performance on shorter texts due to more focused attention mechanisms and reduced noise from irrelevant content.
+\end{description}
+
+Additional experimental variables include the number of training epochs (3 vs. 10) and various prompt optimization strategies detailed in Appendix~\ref{appendix:opro}.
+
+\subsection{Fine-tuning Protocol}
+
+We use the same training/validation/test splits as established for our transformer baseline experiments to ensure fair comparison. Input formatting follows the standard conversational template required by OpenAI models, with political bias labels converted to structured JSON responses to enable systematic evaluation. Each training example consists of the article text as user input and the corresponding political orientation (left/center/right) as the assistant response.
+
+\begin{table*}[ht]
+\centering
+\small
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+\textbf{Configuration} & \multicolumn{4}{c}{\textbf{Full Text}} & \multicolumn{4}{c}{\textbf{400 Words}} \\
+\midrule
+ & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
+ \midrule
+Zero-shot Baseline & 51.86 & 52.88 & 39.76 & 62.96 & 48.37 & 46.46 & 41.97 & 56.67  \\
+3 epochs, 150 samples & 33.37 &  43.77 & 15.44 & 40.90 & 62.88 & 68.89 & 41.07 & 78.72 \\
+3 epochs, 300 samples & 25.04 & 58.50 & 05.13 & 11.50 & 56.65 & 57.67 & 32.17 & 80.11 \\
+3 epochs, 1,000 samples & 69.23 & 70.98 & 52.96 & \textbf{83.76} & 57.21 & 62.13 & 31.61 & \textbf{77.89}  \\
+3 epochs, 2,000 samples & \textbf{69.37} & \textbf{71.83} & \textbf{53.50} & 82.79 & \textbf{68.85} & \textbf{78.68} & 39.63 & 75.08  \\
+10 epochs, 150 samples & 28.03 & 52.75 & 08.93 & 22.41 & 58.14 & 54.40 & \textbf{43.26} & 76.78 \\
+\bottomrule
+\end{tabular}
+\caption{GPT-4o-mini fine-tuning performance across different training configurations.}
+\label{tab:llm_detailed_results}
+\end{table*}

@@ -1,0 +1,22 @@
+\section{Technical and Architectural Limitations}
+\label{sec:technical-limitations}
+
+\subsection{Multi-Task Learning Architecture Constraints}
+
+Our current multi-task learning framework employs fixed loss weighting schemes determined through grid search on validation data. This approach may be suboptimal for complex optimization landscapes where task importance should vary dynamically based on training progress or sample characteristics. The static weighting strategy cannot adapt to changing gradient magnitudes or convergence rates across different objectives during training.
+
+The additive loss combination used in our framework assumes linear independence between auxiliary tasks, which may not accurately reflect the complex interdependencies between thematic content, emotional tone, and ideological expression. More sophisticated architectures that explicitly model cross-task interactions might capture richer metalinguistic patterns than our current approach.
+
+Additionally, our auxiliary prediction heads operate independently on shared representations without explicit cross-task communication. Advanced multi-task architectures that enable information sharing between auxiliary tasks might improve both individual task performance and overall ideological classification accuracy.
+
+\subsection{Computational Efficiency and Scalability}
+
+While our multi-task approach demonstrates empirical benefits, the additional computational overhead from auxiliary prediction heads raises scalability concerns for deployment scenarios with strict latency requirements. Our current implementation requires approximately 20\% additional training time compared to standard contrastive learning, which may become prohibitive for larger model architectures or real-time applications.
+
+The memory requirements for storing and processing GDELT metadata during training also present practical constraints, particularly when scaling to larger corpora or more comprehensive auxiliary supervision signals. Efficient implementation strategies that minimize computational overhead while preserving metalinguistic benefits represent important engineering challenges for practical deployment.
+
+\subsection{Model Interpretability and Explainability}
+
+Our current approach provides limited insight into how metalinguistic features influence final ideological predictions or which specific auxiliary signals contribute most significantly to classification decisions. This lack of interpretability constrains both scientific understanding of the approach's effectiveness and practical deployment in contexts requiring explainable predictions.
+
+The complex interactions between primary contrastive learning and auxiliary metalinguistic objectives create opaque decision pathways that resist straightforward interpretation. Advanced visualization and analysis techniques are needed to understand how different types of metalinguistic signals contribute to learned representations and final classification outcomes.

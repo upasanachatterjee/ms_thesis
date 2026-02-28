@@ -1,0 +1,19 @@
+
+\section{Human Performance Baseline}
+\label{sec:human-baseline}
+
+To establish empirical bounds on the difficulty of article-level political bias classification, we conducted a human annotation study. This baseline offers insights into the cognitive challenges faced by layman annotators in this domain.
+
+\subsection{Annotation Protocol}
+
+We recruited four annotators with demonstrated familiarity with U.S. political discourse and comparable demographic profiles (age under 35, self-identified political orientation ranging from liberal to moderate). To minimize source bias effects, annotators were provided with article content only, with all source attribution and author information removed.
+
+The annotation study employed a random sample of 102 articles from the AllSides Media test split, ensuring balanced representation across ideological categories (34 articles per class: left, center, right). Each article was independently classified by all four annotators using the same three-point ideological scale employed in the original dataset.
+
+\subsection{Human Performance Results}
+
+Human performance proved modest across all metrics, with an average F1-Macro score of 41.94 and individual annotator performance ranging from 35.46 to 46.57. Inter-annotator agreement analysis revealed low agreement (Krippendorff's $\alpha = 0.241$), indicating significant subjectivity in political bias perception even among demographically similar annotators.
+
+Performance varied notably across ideological categories, with annotators achieving higher accuracy on right-leaning content (F1 = 49.41) compared to center (F1 = 39.09) and left-leaning (F1 = 37.31) articles. Post-annotation interviews revealed that annotators experienced particular difficulty with non-hyperpartisan content and expressed that access to source information would have substantially increased their classification confidence.
+
+These results highlight the fundamental challenge of article-level political bias classification and provide important context for interpreting automated system performance. Complete human performance metrics and inter-annotator agreement analysis are presented in Appendix~\ref{sec:appendix-human-tests}.

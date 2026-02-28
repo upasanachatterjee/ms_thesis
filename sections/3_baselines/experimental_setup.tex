@@ -1,0 +1,43 @@
+
+\section{Experimental Setup and Data Partitioning}
+\label{sec:experimental-setup}
+
+The AllSides dataset provides two distinct partitioning strategies that enable systematic evaluation of source leakage effects in political bias classification:
+
+\begin{itemize}
+    \item \textbf{Media Split}: All articles from the same publication source are assigned to the same partition (train, validation, or test). This configuration ensures that models cannot exploit source-specific stylistic or lexical patterns during evaluation.
+    
+    \item \textbf{Random Split}: Articles from any source may appear across all partitions, allowing systems to leverage source-identifying information during training and potentially memorize source-specific biases rather than learning generalizable content patterns.
+\end{itemize}
+
+The Media Split represents our primary evaluation configuration, as it provides the most stringent test of content-based political bias detection capabilities. The Random Split serves as a diagnostic tool for quantifying the extent to which models rely on source leakage versus content analysis.
+
+\begin{table*}
+\centering
+\footnotesize
+\begin{tabular}{@{}l|cccc|cccc@{}}
+\toprule
+\textbf{System} & \multicolumn{4}{c|}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{AllSides Random Split}} \\ 
+ & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
+ \midrule
+\textbf{Human Performance} & 41.94 & 37.31 & 39.09 & 49.41 & - & - & - & -\\
+ \midrule
+\textbf{Fine-tuned Transformers} & & & & & & & & \\
+BERT & 38.26 & 49.95 & 14.74 & 50.09 & 77.38 & 74.66 & 84.33 & 75.12 \\
+BART & 36.01 & 46.92 & 11.31 & 49.80  & 87.93 & 89.38 & 84.98 & 89.44 \\
+RoBERTa & 42.34 & 56.82 & 04.47 & 65.73  & 83.49 & 81.39 & 83.98 & 85.11 \\
+POLITICS & \textbf{57.66} & \textbf{65.71} & 37.92 & 69.35 &  \textbf{88.31} & \textbf{85.82} & \textbf{91.47} & \textbf{88.44} \\
+\midrule
+\textbf{Zero-shot LLMs (GPT Family)} & & & & & & & & \\
+GPT-4o-mini & 51.86 & 52.88 & 39.76 & 62.96 & - & - & - & -  \\
+GPT-5-nano & 50.99 & 44.89 & 49.61 & 58.48 & - & - & - & - \\
+o3-mini & 56.92 & 46.54 & \textbf{53.46} & \textbf{70.78} & - & - & - & - \\
+\midrule
+\textbf{Zero-shot LLMs (LLaMA Family)} & & & & & & & & \\
+LLaMA-3.1-8B-instant & 29.01 & 41.44 & 30.29 & 15.30 & - & - & - & - \\
+LLaMA-3.3-70B-versatile & 26.01 & 57.26 & 09.86 & 10.93  & - & - & - & - \\ 
+\bottomrule
+\end{tabular}
+\caption{Baseline system performance on AllSides political bias classification.}
+\label{tab:main_baseline}
+\end{table*}

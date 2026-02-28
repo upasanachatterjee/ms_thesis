@@ -1,0 +1,27 @@
+
+
+\section{Large Language Model Evaluation}
+\label{sec:llm-baselines}
+
+The recent emergence of large-scale language models necessitates comprehensive evaluation of their capabilities for political bias classification. We assess five state-of-the-art models from the GPT \citep{openai2024gpt4,openai_o3_systemcard_2025,openai_gpt5_systemcard_2025} and LLaMA families \citep{touvron2023llama} in zero-shot configuration to establish baseline performance without task-specific adaptation.
+
+\subsection{Model Selection and Access}
+
+Our evaluation encompasses models from two prominent LLM families:
+
+\begin{itemize}
+    \item \textbf{GPT Family}: GPT-4o-mini, GPT-5-nano, and o3-mini accessed via OpenAI API
+    \item \textbf{LLaMA Family}: LLaMA--3.1--8B-instant and LLaMA--3.3--70B-versatile accessed via GroqCloud API
+\end{itemize}
+
+LLaMA models were evaluated with temperature = 1.0 to maintain output diversity, while GPT models employed default temperature settings. For computational efficiency, we conducted preliminary screening on a 100-article subset to identify the most promising GPT variants before full-scale evaluation.
+
+\subsection{Prompt Design and Evaluation Protocol}
+
+To ensure consistent evaluation across models, we employed a standardized prompt format designed to elicit structured responses:
+
+\begin{quote}
+\texttt{You are a political bias classifier specific to U.S. politics. Given the user's INPUT TEXT, return only valid JSON of the form \{''bias'':''left|center|right''\}. No extra text.}
+\end{quote}
+
+This prompt design minimizes variability in response format while providing clear task specification. All models were evaluated exclusively on the Media Split configuration to maintain consistency with our content-based evaluation framework. We also tested multiple prompt variants, including chain-of-thought and detailed definition prompts, but found no significant performance improvements over the baseline prompt. These are detailed in Appendix~\ref{sec:opro}.

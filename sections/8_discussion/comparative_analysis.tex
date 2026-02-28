@@ -1,0 +1,22 @@
+\section{Comparative Analysis: Specialized Transformers versus Large Language Models}
+\label{sec:comparative-analysis}
+
+\subsection{Performance Characteristics and Trade-offs}
+
+Our experimental evaluation reveals distinct performance profiles and operational characteristics between domain-adapted transformer architectures and fine-tuned large language models. These differences have significant implications for practical deployment considerations and system design choices.
+
+The best-performing specialized transformer configuration ($T_{id}(32) + T_h$) achieved 62.19 F1-Macro on the AllSides Media split through continued pre-training with metalinguistic objectives. This performance substantially exceeds zero-shot GPT-4o-mini at 51.86 F1-Macro, demonstrating the value of task-specific architectural adaptation and training strategies. The specialized model required no labeled training data beyond the contrastive triplets derived from source-level annotations, representing superior data efficiency for deployment scenarios with limited supervision.
+
+Fine-tuned GPT-4o-mini with 2,000 labeled examples achieved 69.37 F1-Macro, surpassing our best specialized transformer by 7.18 points. However, this performance improvement introduces several methodological concerns and practical limitations. First, the fine-tuned LLM requires substantial labeled training data. Second, the opaque pre-training corpus raises potential data contamination concerns that do not affect our controlled transformer pre-training process.
+
+\subsection{Classification Performance Asymmetries}
+
+Despite quantitative differences between approaches, both methodologies exhibit systematic classification asymmetries that pose significant risks for real-world deployment. Neither approach achieves balanced performance across ideological categories, with particularly poor results for center and right-leaning content classification. This asymmetry creates concerning implications for practical systems: classifiers that systematically mischaracterize centrist and conservative content could reinforce rather than mitigate information polarization effects.
+
+The consistent performance improvements from metalinguistic objectives, particularly for challenging center and right categories, provide empirical validation that stylistic and affective dimensions contain discriminative information not captured by content-based representations alone. This finding supports theoretical frameworks from political communication research emphasizing the multi-dimensional nature of ideological expression in media discourse \citep{hamborg2019automatedmediabias}.
+
+\subsection{Computational and Economic Considerations}
+
+The choice between specialized transformers and fine-tuned LLMs involves substantial trade-offs in computational requirements, economic costs, and operational complexity. Specialized transformers with metalinguistic objectives offer competitive performance with moderate computational demands, full architectural transparency, and superior data efficiency. These characteristics make domain-adapted approaches particularly suitable for scenarios prioritizing interpretability, cost control, and trust requirements.
+
+Fine-tuned LLMs can achieve superior raw performance when sufficient labeled data and computational resources are available. However, practitioners must carefully evaluate several limiting factors: (1) substantial fine-tuning costs and ongoing operational expenses, (2) potential data contamination effects from opaque pre-training procedures, (3) reduced model interpretability and explainability capabilities, and (4) vendor dependency risks for API-based deployment strategies \citep{Wen_2023}.

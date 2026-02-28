@@ -1,0 +1,7 @@
+\section{Computational Bias Detection}
+
+The computational detection of political bias in news media has evolved from simple keyword-based approaches to sophisticated neural architectures. Early work in this domain focused primarily on lexical and syntactic features, often employing traditional machine learning methods such as Support Vector Machines and logistic regression \citep{recasens2013weasel}. These approaches, while interpretable, suffered from limited capacity to capture complex semantic relationships and contextual dependencies.
+
+The advent of pre-trained language models has transformed the landscape of bias detection. \citet{baly2020we} introduced the use of BERT for political ideology classification, employing triplet-loss objectives to address the fundamental challenge of source leakage. Their work demonstrated that contrastive learning could encourage models to focus on content-based ideological markers rather than source-identifying patterns. This methodology was subsequently refined by \citet{liu2022politics}, who developed the POLITICS model through large-scale continued pre-training with enhanced contrastive objectives.
+
+Recent work by \citet{ronnback2025biasoutlets} has explored the integration of semantic, syntactic, and metalinguistic features for source-level bias detection, demonstrating the potential value of multi-modal feature representations. However, the systematic integration of such features into article-level classification systems remains underexplored.

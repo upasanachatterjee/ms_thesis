@@ -1,0 +1,24 @@
+\section{Methodological Limitations and Constraints}
+\label{sec:methodological-limitations}
+
+\subsection{Data Coverage and Metadata Availability}
+
+A fundamental limitation of our metalinguistic feature integration approach stems from incomplete metadata coverage across our training corpus. The effectiveness of our multi-task learning framework was substantially constrained by the availability of GDELT annotations: only 1.6 million articles (35\%) from our 4.5 million article \textsc{BigNewsBLN} corpus contained the requisite \textsc{V2Themes} and \textsc{V2Tone} metadata necessary for auxiliary supervision.
+
+This data sparsity arose primarily from temporal coverage gaps, as many articles in our dataset were published before the GDELT Project began comprehensive annotation collection. The resulting imbalanced supervision likely diminished the potential impact of our multi-task training approach, as auxiliary objectives received training signals for only a subset of examples while the primary triplet-loss objective operated on the complete corpus. This imbalance may have created suboptimal gradient dynamics that prevented full realization of the metalinguistic integration benefits.
+
+The temporal bias in metadata availability also introduces potential confounding effects, as articles with GDELT annotations may systematically differ from those without in ways that correlate with ideological expression patterns. More recent articles might reflect different political discourse styles, topic priorities, or source characteristics compared to historical content, potentially biasing our auxiliary task learning toward contemporary linguistic patterns.
+
+\subsection{Evaluation Dataset Constraints}
+
+Our empirical evaluation relies exclusively on the AllSides dataset, which, while providing high-quality article-level annotations, constrains the scope of our findings to a single annotation scheme and political taxonomy. The AllSides left-center-right framework represents one particular operationalization of political ideology that may not capture the full complexity of ideological expression in contemporary media discourse.
+
+Additionally, the AllSides dataset focuses exclusively on mainstream news sources with established reputations, potentially limiting generalization to emerging media platforms, social media content, or fringe publications that may exhibit different ideological expression patterns. The source selection criteria employed by AllSides may introduce systematic biases toward particular types of content or ideological presentations.
+
+\subsection{Cultural and Linguistic Scope}
+
+Our investigation is fundamentally limited to English-language content from U.S. news sources, constraining applicability to international political systems and multilingual contexts. Political discourse patterns, media landscape structures, and ideological frameworks vary substantially across national contexts, potentially limiting the transferability of our metalinguistic feature integration approach.
+
+The left-center-right ideological spectrum that underlies our classification framework may inadequately represent political dimensions in multi-party parliamentary systems, contexts with ethnic or religious political divisions, or societies with fundamentally different ideological cleavages. For example, European political systems often feature distinct liberal, social democratic, conservative, and green party traditions that may not map cleanly onto the American left-right continuum.
+
+Cross-linguistic generalization presents additional challenges, as metalinguistic features may manifest differently across languages due to varying syntactic structures, cultural communication norms, and language-specific markers of ideological expression. Sentiment analysis techniques, thematic categorization schemes, and discourse patterns that prove effective for English may require substantial adaptation for morphologically rich languages, tonal languages, or languages with different information structure conventions.

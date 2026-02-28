@@ -1,0 +1,7 @@
+\section{Technical Approach and Methodology}
+
+Our technical approach centers on extending domain-adapted transformer models with metalinguistic auxiliary objectives during continued pre-training. Building upon the established triplet-loss methodology introduced by \citet{baly2020we} and refined by \citet{liu2022politics}, we develop a multi-task learning framework that incorporates theme and tone prediction as auxiliary tasks alongside the primary ideology classification objective.
+
+Our work also addresses the challenge of source leakage, where classifiers learn to exploit source-specific patterns (such as author names, publication styles, or explicit source mentions) rather than content-based ideological markers. By employing contrastive learning techniques and careful data partitioning strategies, our models are trained to focus on genuine linguistic and stylistic indicators of political orientation.
+
+We extend the AllSides dataset \citep{baly2020we}, which provides article-level political bias annotations for U.S. news content, by incorporating additional annotated articles and enriching the dataset with metalinguistic feature annotations derived from the GDELT Project's V2Themes and V2Tone metadata. This enhanced dataset enables systematic evaluation of the contribution of different feature types to classification performance.

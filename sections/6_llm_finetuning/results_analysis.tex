@@ -1,0 +1,22 @@
+\section{Experimental Results and Analysis}
+\label{sec:llm-results}
+
+Table~\ref{tab:llm_detailed_results} presents comprehensive results from our fine-tuning experiments across all evaluated configurations. The results reveal several important patterns regarding LLM behavior in political bias classification tasks.
+
+\subsection{Training Data Scaling Effects}
+
+The relationship between training set size and model performance exhibits non-monotonic behavior that varies significantly between full-text and truncated input conditions. For full-text experiments, we observe high performance variability with small training sets: F1-Macro scores range from 25.04 to 33.37 with 150--300 samples, indicating insufficient supervision for stable learning. Performance stabilizes substantially with 1,000 training samples (F1-Macro = 69.23), achieving near-optimal results that improve only marginally with additional data (69.37 with 2,000 samples).
+
+This pattern suggests that GPT-4o-mini requires a minimum threshold of approximately 1,000 examples to achieve reliable fine-tuning for political bias classification when processing full-length articles. The minimal improvement between 1,000 and 2,000 samples (0.14 F1 points) indicates diminishing returns, suggesting that the model approaches its performance ceiling for this task configuration.
+
+\subsection{Input Length Sensitivity Analysis}
+
+The comparison between full-text and 400-word truncation reveals markedly different performance characteristics. Truncated inputs demonstrate more consistent fine-tuning improvements across all training set sizes, with every configuration outperforming the corresponding zero-shot baseline. Most notably, truncated inputs achieve competitive performance even with limited supervision: the 150-sample configuration yields 62.88 F1-Macro, substantially exceeding the full-text performance with equivalent training data.
+
+This finding aligns with recent observations by \citet{ibrahim2024analyzingpoliticalstancestwitter}, who achieved F1-Macro scores of 91.1 when analyzing political stances on Twitter using GPT-4o and Gemini-Opus. The superior performance on shorter texts suggests that LLMs may be optimized for processing concise, focused content rather than long-form articles with potential noise and irrelevant information.
+
+\subsection{Performance Comparison with Specialized Models}
+
+The best fine-tuned GPT-4o-mini configuration (69.37 F1-Macro with 2,000 full-text samples) substantially exceeds our human baseline (41.94) and exceeds the performance of the specialized POLITICS model (57.66 on the same evaluation set). However, this comparison must be interpreted carefully, as the fine-tuned LLM requires task-specific supervision while the POLITICS model leverages only contrastive pre-training without direct ideology labels.
+
+The competitive performance of fine-tuned LLMs validates their potential for political bias classification when sufficient training data is available. However, the requirement for 1,000+ examples and the associated computational costs may limit practical applicability compared to specialized architectures that achieve strong performance through unsupervised or self-supervised learning approaches.

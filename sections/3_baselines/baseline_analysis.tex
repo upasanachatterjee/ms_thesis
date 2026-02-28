@@ -1,0 +1,30 @@
+
+\section{Baseline Performance Analysis}
+\label{sec:baseline-results}
+
+Table~\ref{tab:main_baseline} presents comprehensive baseline results across all evaluated systems. The performance patterns reveal several important findings regarding the challenges and opportunities in automated political bias classification.
+
+\subsection{Source Leakage Effects}
+
+The comparison between Media Split and Random Split performance provides crucial insights into source leakage susceptibility. All transformer models demonstrate substantially higher performance on the Random Split, with improvements of 30--50 F1 points across most configurations. This performance differential is most pronounced for center-category classification, where Random Split performance exceeds Media Split by over 40 points in several cases.
+
+These results indicate that centrist publications possess distinctive lexical or stylistic signatures that models can easily memorize when source information is available during training. However, the substantial performance degradation on the Media Split suggests that these signatures may not correspond to genuine ideological content markers, highlighting the importance of source-controlled evaluation for political bias detection systems.
+
+\subsection{Transformer Architecture and Large Language Model Performance}
+
+Among general-purpose transformers, RoBERTa achieved the highest Media Split performance (F1-Macro = 42.34), followed by BERT (38.26) and BART (36.01). However, all general-purpose models were substantially outperformed by the domain-adapted POLITICS system (57.66), demonstrating the value of triplet-loss pre-training in learning useful embeddings for this kind of nuanced classification task.
+
+Zero-shot LLM performance varied considerably across model families and sizes. GPT family models achieved competitive results, with o3-mini reaching 56.92 F1-Macro—approaching the performance of the specialized POLITICS system. Notably, LLMs demonstrated relatively stronger performance on center (53.46) and right (70.78) categories compared to transformer baselines.
+
+However, LLaMA family models underperformed significantly, with both evaluated models falling below human baseline performance. This disparity may reflect differences in training data composition, model architecture, or prompt sensitivity across LLM families.
+
+\subsection{Performance Interpretation Challenges}
+
+LLM performance interpretation is complicated by potential training data contamination. Given the massive scale and often proprietary nature of LLM training corpora, we cannot exclude the possibility that these models encountered AllSides articles or similar content during pre-training. This potential exposure could enable memorization of source-specific patterns rather than genuine content-based classification capabilities.
+
+This concern does not apply to our transformer baselines, where training data composition is fully controlled and transparent. Consequently, transformer results on the Media Split provide the most reliable assessment of content-based classification performance.
+
+These baseline findings align with observations by \citet{Wen_2023}, who demonstrate that while LLMs achieve competitive performance on explicit classification tasks, they consistently underperform specialized fine-tuned models on nuanced tasks requiring deeper contextual understanding.
+
+% TODO: - Error analysis across different article types and lengths
+% TODO: - Analysis of performance correlation with article metadata (length, topic, etc.)

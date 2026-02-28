@@ -1,0 +1,14 @@
+\section{Motivation and Research Questions}
+\label{sec:llm-motivation}
+
+While our baseline experiments (Chapter~\ref{sec:baselines}) demonstrated that zero-shot large language models achieve competitive but suboptimal performance compared to domain-adapted transformers, the potential for task-specific fine-tuning to close this performance gap remains underexplored. The superior performance of the specialized POLITICS model over general-purpose LLMs raises several important research questions:
+
+\begin{enumerate}
+    \item \textbf{Data Efficiency}: How much task-specific training data is required for LLMs to achieve competitive performance with domain-adapted transformers?
+
+    \item \textbf{Input Length Sensitivity}: Do LLMs exhibit different performance characteristics when fine-tuned on truncated versus full-length news articles?
+
+    \item \textbf{Scalability Properties}: What is the relationship between training data volume and classification performance for political bias detection?
+\end{enumerate}
+
+These questions are particularly relevant given the substantial computational and economic costs associated with LLM fine-tuning, necessitating careful analysis of cost-benefit trade-offs in practical deployment scenarios.
