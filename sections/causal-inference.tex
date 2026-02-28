@@ -234,7 +234,7 @@ Missing topic-presence values are imputed as 0, reflecting the semantic equivale
 \subsubsection{Multi-Treatment DML}
 \label{sec:multi-treatment-design}
 
-While mediation analysis fits one model per topic pair $(F_T, F_M)$, a complementary approach fits a \emph{single} model with all qualifying topic sentiments simultaneously as a treatment matrix $\mathbf{T} \in \mathbb{R}^{N \times k}$. This controls for correlations among sentiments and yields one ATE per topic, interpreted as the effect of that topic's sentiment \emph{holding all other topic sentiments constant}.
+While mediation analysis fits one model per topic pair $(F_T, F_M)$, a complementary approach fits a single model with all qualifying topic sentiments simultaneously as a treatment matrix $\mathbf{T} \in \mathbb{R}^{N \times k}$. This controls for correlations among sentiments and yields one ATE per topic, interpreted as the effect of that topic's sentiment \emph{holding all other topic sentiments constant}.
 
 Topics are included only if they appear in at least 50 articles ($N_\text{topic} \geq 50$). Of the 625 topic columns, 11 meet this threshold: \textbf{Donald Trump}, \textbf{Politics}, \textbf{Media Bias}, \textbf{Race and Racism}, \textbf{FBI}, \textbf{Defense and Security}, \textbf{Hillary Clinton}, \textbf{LGBTQ Issues}, \textbf{Russia Probe}, \textbf{Media Watch}, and \textbf{Economy and Jobs}. Both continuous and discrete encodings are run for each dataset.
 
@@ -441,12 +441,10 @@ Three observations stand out:
 \begin{itemize}
   \item \textbf{No ideology-based heterogeneity within any paradigm.}  For both
     treatments, the CATE is nearly uniform across Left, Centre, and Right outlet
-    groups. The causal forest finds no evidence that the sentiment--ideology effect
-    differs by outlet type.
+    groups.
   \item \textbf{Large between-paradigm divergence.}  The GPT-4o-mini Politics
     CATE ($\approx +0.18$) is roughly three times the Fine-tuned RoBERTa CATE
-    ($\approx +0.05$) and nine times the Human CATE ($\approx +0.002$). This
-    divergence is a property of the labelling models, not the articles.
+    ($\approx +0.05$) and nine times the Human CATE ($\approx +0.002$). 
   \item \textbf{Trump CATE sign flip.}  Human and Fine-tuned RoBERTa CATEs for
     Trump are uniformly negative; GPT-4o-mini CATEs are uniformly positive,
     mirroring the TE sign flip in Table~\ref{tab:te-trump}.
