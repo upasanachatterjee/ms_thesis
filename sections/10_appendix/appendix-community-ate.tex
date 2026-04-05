@@ -1,0 +1,80 @@
+\chapter{Community-Level ATE Results}
+\label{sec:appendix-community-ate}
+
+This appendix provides the full community-level ATE breakdown and ideology prediction distributions for the significant communities identified in Section~\ref{sec:community-ate}.
+
+\section{Ideology Prediction Distributions}
+
+Figure~\ref{fig:bias_overall_appendix} shows the overall prediction distribution across the full dataset. GPT-4o-mini (baseline) exhibits a pronounced centrist tendency, Fine-tuned GPT-4o-mini and Llama-3.3-70B both skew leftward, and human annotations are the most right-leaning overall, reflecting the ideological composition of the AllSidesV2 corpus.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/bias_distribution/overall.png}
+    \caption{Overall ideology prediction distribution across all 11,516 articles, by annotation paradigm.}
+    \label{fig:bias_overall_appendix}
+\end{figure}
+
+Figures~\ref{fig:bias_comm1_appendix} through~\ref{fig:bias_comm11_appendix} show the per-community distributions for the four communities with significant ATE results.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/bias_distribution/community_1_elections_politics.png}
+    \caption{Ideology prediction distribution for Community 1 (Electoral Politics). 45/77 topics matched; $N=209$ articles.}
+    \label{fig:bias_comm1_appendix}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/bias_distribution/community_3_social_issues.png}
+    \caption{Ideology prediction distribution for Community 3 (Social Issues). 27/42 topics matched; $N=103$ articles.}
+    \label{fig:bias_comm3_appendix}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/bias_distribution/community_9_foreign_affairs_climate.png}
+    \caption{Ideology prediction distribution for Community 9 (Geopolitics and Foreign Affairs). 38/90 topics matched; $N=137$ articles.}
+    \label{fig:bias_comm9_appendix}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/bias_distribution/community_11_government_politics.png}
+    \caption{Ideology prediction distribution for Community 11 (Trump Presidency). 48/81 topics matched; $N=761$ articles.}
+    \label{fig:bias_comm11_appendix}
+\end{figure}
+
+\section{Complete Community-Level ATE Table}
+
+Table~\ref{tab:community_ate_full} presents the average treatment effect of community-level sentiment on ideology classification across all nine communities that met the minimum presence threshold. We compare estimates derived from human annotations against three LLM-based annotation pipelines---GPT-4o-mini (baseline), Fine-tuned GPT-4o-mini, and Llama-3.3-70B---and one fine-tuned encoder model (Fine-tuned RoBERTa).
+
+\begin{table}[h!]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{l c c c c c c}
+  \toprule
+  Community & Human & Fine-tuned RoBERTa & GPT-4o-mini (baseline) & Fine-tuned GPT-4o-mini & Llama-3.3-70B & Num.\ Articles\\
+  \midrule
+  Comm.\ 0  & $-0.009\ [-0.024,\ 0.014]$  & $-0.002\ [-0.023,\ 0.017]$  & $-0.003\ [-0.015,\ 0.009]$         & $0.008\ [-0.009,\ 0.021]$           & $0.002\ [-0.017,\ 0.018]$  & 95\\
+  Comm.\ 1  & $-0.014\ [-0.030,\ 0.003]$  & $0.001\ [-0.017,\ 0.018]$   & $\mathbf{-0.015^{*}}\ [-0.029,\ -0.001]$    & $-0.013\ [-0.031,\ 0.003]$          & $0.000\ [-0.015,\ 0.015]$  & 220\\
+  Comm.\ 2  & $-0.001\ [-0.021,\ 0.016]$  & $0.013\ [-0.005,\ 0.028]$   & $0.006\ [-0.008,\ 0.019]$          & $0.003\ [-0.008,\ 0.025]$           & $-0.007\ [-0.025,\ 0.007]$ & 108\\
+  Comm.\ 3  & $0.011\ [-0.010,\ 0.024]$   & $0.001\ [-0.016,\ 0.020]$   & $-0.004\ [-0.014,\ 0.009]$         & $\mathbf{-0.023^{*}}\ [-0.030,\ -0.005]$     & $-0.007\ [-0.026,\ 0.004]$ & 132\\
+  Comm.\ 4  & $-0.005\ [-0.025,\ 0.011]$  & $0.008\ [-0.015,\ 0.018]$   & $0.008\ [-0.001,\ 0.028]$          & $-0.004\ [-0.016,\ 0.021]$          & $0.011\ [-0.011,\ 0.024]$  & 229\\
+  Comm.\ 5  & $0.004\ [-0.016,\ 0.021]$   & $-0.006\ [-0.024,\ 0.011]$  & $-0.003\ [-0.013,\ 0.009]$         & $-0.001\ [-0.018,\ 0.018]$          & $-0.003\ [-0.017,\ 0.014]$ & 193\\
+  Comm.\ 7  & $0.006\ [-0.013,\ 0.023]$   & $0.006\ [-0.017,\ 0.024]$   & $0.004\ [-0.012,\ 0.018]$          & $0.003\ [-0.020,\ 0.021]$           & $-0.004\ [-0.018,\ 0.016]$ & 218\\
+  Comm.\ 9  & $-0.014\ [-0.030,\ 0.003]$  & $-0.015\ [-0.028,\ 0.005]$  & $-0.006\ [-0.023,\ 0.008]$         & $\mathbf{-0.013^{*}}\ [-0.032,\ -0.002]$     & $0.002\ [-0.015,\ 0.021]$  & 139\\
+  Comm.\ 11 & $-0.017\ [-0.029,\ 0.006]$  & $-0.008\ [-0.022,\ 0.012]$  & $0.003\ [-0.012,\ 0.020]$          & $\mathbf{0.018^{*}}\ [0.000,\ 0.036]$        & $0.007\ [-0.011,\ 0.024]$  & 772\\
+  \bottomrule
+  \end{tabular}%
+  }
+  \caption{Community-level ATE by annotation paradigm (continuous sentiment, min presence${}=50$). $^*p < 0.05$.}
+  \label{tab:community_ate_full}
+\end{table}
+
+Most communities yield small, statistically non-significant ATEs across all annotation sources, with confidence intervals spanning zero. Given the modest dataset size (11,516 articles, with individual communities containing as few as 95 articles after topic filtering), wide confidence intervals are expected. Nevertheless, the relative patterns across annotation sources remain informative: several communities reveal systematic divergences between human and LLM-derived causal estimates.
+
+The most striking divergence occurs in Community~3 (Social Issues): human annotations yield a positive estimate ($0.011$), while all three LLMs estimate negative effects, with the fine-tuned model producing the only significant result ($-0.023$). Fine-tuned RoBERTa ($+0.001$) is the only automated paradigm to share the human direction. A similar sign reversal appears in Community~11 (Trump Presidency): human annotators estimate a negative effect ($-0.017$), whereas all LLM models estimate positive effects; RoBERTa again aligns with the human direction ($-0.008$).
+
+In contrast, Community~1 (Electoral Politics) exhibits the strongest human-LLM alignment, with Human ($-0.014$), baseline GPT ($-0.015$), and fine-tuned GPT ($-0.013$) producing nearly identical estimates. Notably, Llama-3.3-70B diverges here ($0.000$), detecting no effect whatsoever. A comparable pattern holds for Community~9 (Geopolitics), where human and Fine-tuned GPT estimates are closely aligned ($-0.014$ and $-0.013$, respectively), while Llama again attenuates toward zero ($0.002$).
+
+These results point to three model-family-specific tendencies. First, GPT-based models, particularly after fine-tuning, tend to produce estimates that are either well-calibrated to human judgments or sharply divergent, with little middle ground. Second, Llama-3.3-70B consistently compresses effect sizes toward zero across communities, suggesting a general attenuation bias that may stem from more conservative or hedged sentiment predictions. Third, Fine-tuned RoBERTa produces universally non-significant estimates but tends to track human annotations in sign more closely than any LLM---in Communities 3, 9, and 11, RoBERTa matches the human direction while the generative models diverge. The one exception is Community~1 (Electoral Politics), where RoBERTa ($+0.001$) is the only paradigm to estimate a positive effect. This suggests the encoder-based architecture captures aspects of human judgment that generative models miss or override, even when neither paradigm reaches statistical significance.

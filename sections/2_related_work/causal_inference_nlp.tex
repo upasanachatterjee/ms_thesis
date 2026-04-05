@@ -1,0 +1,8 @@
+\subsection{Causal Inference in NLP}
+\label{sec:rw-causal-inference-nlp}
+
+Causal inference methods have been applied to text analysis across a range of settings. \citet{feder2022causalinferenceinnlp} provide a comprehensive survey of causal inference in NLP, covering settings where text serves as treatment, outcome, or confounder. \citet{veitch2019textembeddingscausalinference} propose using text embeddings to adjust for confounding in causal inference, while \citet{keith-etal-2021-text} develop a framework for text as causal mediator, estimating direct and indirect effects of social group signals through language. \citet{tierney-volfovsky-2021-sensitivity} apply causal mediation analysis to political polarization through text.
+
+In parallel, causal methods have been applied to understand LLM behavior. \citet{vig2020genderbiasLLMs} use causal mediation analysis to detect gender bias in language models, \citet{stolfo2023mechanisticinterpretationarithmeticreasoning} apply mechanistic interpretation to arithmetic reasoning via causal mediation, and \citet{han2024surfacestructurecausalassessment} assess LLM comprehension beyond surface structure using causal probing.
+
+Our work in Chapter~\ref{ch:causal-inference} contributes to this literature by applying causal inference not to explain model internals, but to diagnose systematic differences between human and LLM annotation behavior---comparing the causal structure of ideology annotations across human experts and multiple LLM paradigms.

@@ -1,0 +1,79 @@
+\section{Community-Level Results}
+\label{sec:community-level-results}
+
+This section presents results from the community-level causal analysis. By aggregating topic sentiments within detected communities, we increase the number of articles per treatment unit and obtain more reliable estimates than the topic-level analysis in Section~\ref{sec:topic-level-results}. Community-level results are available for all five annotation paradigms: Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), Fine-tuned GPT-4o-mini, and Llama-3.3-70B.
+
+\subsection{Community-Level ATE Results}
+\label{sec:community-ate}
+
+Figure~\ref{fig:community_ate} shows the community-level ATE estimates across the three available annotation paradigms. The complete ATE table for all nine communities is provided in Appendix~\ref{sec:appendix-community-ate}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/ate_communities.png}
+    \caption{Community-level ATE (continuous sentiment). Filled markers indicate statistical significance at $\alpha = 0.05$.}
+    \label{fig:community_ate}
+\end{figure}
+
+The Human, Fine-tuned RoBERTa, and Llama-3.3-70B annotations yield \textbf{no significant results} at any community level, consistent with the topic-level null findings. The Fine-tuned GPT-4o-mini annotations reveal significant effects for three communities, while the baseline GPT-4o-mini shows a significant effect for one community:
+
+\begin{itemize}
+    \item \textbf{Community 1} (Electoral Politics: topics include Bernie Sanders, presidential elections, mail-in voting): Positive sentiment shifts baseline GPT-4o-mini ideology predictions leftward (ATE $= -0.015$; $\approx$1.5\% of one category step toward Left per unit sentiment increase).
+
+    \item \textbf{Community 3} (Social Issues: topics include immigration, LGBTQ, abortion, religion): Positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.023$; $\approx$2.3\% of one category step toward Left).
+
+    \item \textbf{Community 9} (Geopolitics and Foreign Affairs: topics include foreign policy, climate, global affairs): Positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.013$; $\approx$1.3\% of one category step toward Left).
+
+    \item \textbf{Community 11} (Trump Presidency: topics include January 6, Trump, impeachment hearings): Positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions rightward (ATE $= +0.018$; $\approx$1.8\% of one category step toward Right).
+\end{itemize}
+
+Fine-tuned RoBERTa yields no significant community-level ATEs, joining Human and Llama-3.3-70B in the null-finding group. However, its point estimates exhibit a distinctive alignment with human annotations. In Community~9, RoBERTa ($-0.015$) nearly replicates the human estimate ($-0.014$). In Community~11, both RoBERTa ($-0.008$) and Human ($-0.017$) estimate negative effects while all LLMs are positive. In Community~3, RoBERTa ($+0.001$) shares the positive sign of the human estimate ($+0.011$), whereas all LLMs are negative. This pattern suggests that the fine-tuned encoder model captures aspects of human sentiment-ideology judgment that are lost or reversed in the generative LLM paradigms.
+
+Notably, the human annotations yield a \textbf{sign reversal} relative to the Fine-tuned GPT-4o-mini in two communities. In Community~3 (Social Issues), human annotations estimate a positive effect ($+0.011$) while all three LLMs estimate negative effects, with the Fine-tuned GPT-4o-mini producing the only significant result ($-0.023$). Fine-tuned RoBERTa sides with the human direction here ($+0.001$), making it the only automated paradigm to do so. In Community~11 (Trump Presidency), human annotations estimate a negative effect ($-0.017$) while all LLMs estimate positive effects; Fine-tuned RoBERTa again aligns with the human direction ($-0.008$). These sign reversals indicate that LLMs encode qualitatively different sentiment-ideology mappings for politically contentious topics, while the encoder-based RoBERTa preserves the human directional pattern.
+
+Community~1 (Electoral Politics) exhibits the strongest human-LLM alignment: Human ($-0.014$), baseline GPT ($-0.015$), and Fine-tuned GPT ($-0.013$) produce nearly identical estimates. Notably, Llama-3.3-70B diverges here ($0.000$), detecting no effect whatsoever, and Fine-tuned RoBERTa is the sole paradigm to estimate a positive effect in this community ($+0.001$), diverging from both human and GPT-based annotations. Llama-3.3-70B consistently compresses effect sizes toward zero across communities, suggesting a general attenuation bias that may stem from more conservative or hedged sentiment predictions. Despite its pronounced leftward prediction distribution, its lower F1 (54.61) and broader prediction variance produce null findings throughout the community-level analysis.
+
+\subsection{Community-Level Mediation Analysis}
+\label{sec:community-mediation}
+
+For community-level mediation, we examine whether the ATE of one community's sentiment on ideology operates directly or is mediated through another community's sentiment. Let $C$ be the treatment community and $C'$ the mediator community. The estimands use the $Q_{25} \to Q_{75}$ interquartile contrast:
+
+\begin{align}
+  \text{TE}(f_1, f_0;\, Y) &= E[Y_{f_1}] - E[Y_{f_0}], \label{eq:te_comm} \\
+  \text{NDE}(f_1, f_0;\, Y) &= E\!\left[Y_{f_1,\; F_{C'}(f_0)}\right] - E[Y_{f_0}], \label{eq:nde_comm} \\
+  \text{NIE}(f_1, f_0;\, Y) &= \text{TE} - \text{NDE}, \label{eq:nie_comm}
+\end{align}
+
+\noindent where $f_1 = Q_{75}$ and $f_0 = Q_{25}$ of the treatment community's sentiment distribution.
+
+Of the communities with significant ATEs (Communities 3, 9, and 11), six treatment-mediator pairs were evaluated. However, only the $(9 \to 11)$ and $(11 \to 9)$ pathways had sufficient article overlap for valid mediation analysis; the remaining four pairs degenerated due to insufficient topic co-occurrence (see Appendix~\ref{sec:appendix-community-mediation} for details on pathway selection).
+
+\subsubsection{Community $9 \to 11$: Geopolitics as Treatment}
+
+Figure~\ref{fig:mediation_9_11} shows mediation results for Community~9 (Geopolitics and Foreign Affairs) as treatment and Community~11 (Trump Presidency) as mediator ($N = 139$ articles, $Q_{25} \to Q_{75}$ contrast from sentiment $-0.3$ to $0.0$).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{sections/images/community_analysis/mediation_community_9_11.png}
+    \caption{Community $9 \to 11$ mediation results ($Q_{25} \to Q_{75}$ contrast, $N=139$). Error bars show 95\% bootstrap CIs; filled markers indicate significance.}
+    \label{fig:mediation_9_11}
+\end{figure}
+
+Only the Fine-tuned GPT-4o-mini model reaches significance: TE $= -0.108$ (approximately 5.4\% of one category step toward Left) and NDE $= -0.105$. The NIE is negligible ($-0.003$, 3.2\% of TE), ruling out the cascading interpretation: Community~9 sentiment does not shift ideology \emph{through} changes in Community~11 sentiment. The effect operates through a direct pathway---how an annotator frames geopolitics and climate content independently predicts ideology classification, regardless of how they frame domestic political content.
+
+All five annotators show a negative direction (positive geopolitics/climate sentiment $\to$ left-leaning prediction), confirming directional consistency; the non-significant annotators reflect a power limitation at $N=139$ rather than directional disagreement. Fine-tuned RoBERTa (TE $= -0.069$) ranks second in magnitude after Fine-tuned GPT-4o-mini, further supporting the directional consensus. Llama-3.3-70B produces a near-zero TE ($-0.007$) with the widest confidence interval of any paradigm, consistent with its general attenuation pattern.
+
+The per-unit effect magnitude within the engaged subpopulation is substantially larger than the global ATE. Within the $N=139$ Community~9 subgroup, the $Q_{25} \to Q_{75}$ contrast spans a 0.3-unit sentiment shift, yielding a per-unit effect of approximately $-0.36$---roughly 28$\times$ larger than the global ATE of $-0.013$. The two estimates are not in conflict: the ATE averages a concentrated subgroup effect across the 99\% of articles where Community~9 topics are absent; the mediation TE isolates that effect within the engaged subpopulation.
+
+\subsubsection{Community $11 \to 9$: Trump Presidency as Treatment}
+
+Figure~\ref{fig:mediation_11_9} shows the reverse pathway: Community~11 as treatment ($N = 772$ articles, $Q_{25} \to Q_{75}$ contrast from sentiment $-0.4$ to $0.1$).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{sections/images/community_analysis/mediation_community_11_9.png}
+    \caption{Community $11 \to 9$ mediation results ($Q_{25} \to Q_{75}$ contrast, $N=772$). Error bars show 95\% bootstrap CIs; filled markers indicate significance.}
+    \label{fig:mediation_11_9}
+\end{figure}
+
+No annotator produces a significant TE for this direction. The Fine-tuned GPT-4o-mini TE ($+0.056$) is the largest in magnitude but falls short of significance. Llama-3.3-70B produces a small positive TE ($+0.008$), again consistent with its attenuation pattern. The asymmetry between $9 \to 11$ (significant) and $11 \to 9$ (null) is structurally coherent: Community~9's effect on ideology is concentrated and direct, while Community~11 is a larger community whose ideological influence is diffuse across many mediators. Fine-tuned RoBERTa (TE $= -0.016$) is the only automated paradigm to produce a negative estimate for this pathway, aligning with the human direction ($-0.045$) while all three LLMs estimate positive effects---further distinguishing the encoder-based paradigm from the generative models. Full tabular results are provided in Appendix~\ref{sec:appendix-community-mediation}.
