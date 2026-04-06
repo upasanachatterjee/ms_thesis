@@ -22,13 +22,13 @@ Our pre-training dataset consists of articles from the \textsc{BigNewsBLN} datas
 \subsection{Multi-Task Learning Framework}
 \label{sec:multitask-framework}
 
-We implement a unified multi-task learning architecture that optimizes three concurrent objectives during continued pre-training:
+We implement a unified multi-task learning architecture that optimizes four concurrent objectives during continued pre-training:
 
 \begin{align}
-\mathcal{L}_{total} &=  \mathcal{L}_{ideology} + \mathcal{L}_{themes} + \mathcal{L}_{tone} \label{eq:total-loss}
+\mathcal{L} &=  \mathcal{L}_{trip} + \mathcal{L}_{T_h} + \mathcal{L}_{T_o} + \mathcal{L}_{MLM} \label{eq:total-loss}
 \end{align}
 
-The three component losses are:
+The four component losses are:
 
 \begin{description}
     \item[\textbf{Ideological Representation Loss} ($\mathcal{L}_{ideology}$):] A triplet-loss objective similar to the POLITICS model (see Section~\ref{sec:transformer-baselines}) that learns to position articles from ideologically similar sources closer in the representation space:
@@ -54,7 +54,11 @@ The three component losses are:
     \end{equation}
     
     where $s_i$ is the true tone score and $\hat{s}_i$ is the predicted score for article $i$.
+
+    \item[\textbf{Masked Language Modeling Loss} ($\mathcal{L}_{MLM}$):] The standard masked language modeling objective from RoBERTa, which preserves the model's general language understanding capabilities during continued pre-training.
 \end{description}
+
+We note that whereas \citet{liu2022politics} applied two contrastive loss objectives (one on story and one on ideology), we followed the approach of \citet{baly2020we} and used only the ideology-based triplet-loss objective, as we are specifically interested in the ideology prediction task. This choice is further supported by \citet{liu2022politics}, who report worse ideology classification performance when the story contrastive objective is included alongside the ideology objective.
 
 This multi-task approach follows the principle that shared representations beneficial for auxiliary tasks (theme classification and tone prediction) will also improve the primary task (ideological classification) by capturing more comprehensive discourse patterns.
 
@@ -65,40 +69,39 @@ We employed the RoBERTa-base architecture \citep{liu2019roberta} as our foundati
 
 We conducted experiments varying two key factors: the number of triplet samples per batch (1, 16, or 32) and the inclusion of metalinguistic objectives (theme prediction $T_h$, tone regression $T_o$, or both). Triplet generation followed the standard contrastive learning protocol: for each anchor article, we paired it with a positive example (same ideology label) and a negative example (different ideology label). During training, we randomly sampled the specified number of such triplets per batch from all valid combinations.
 
-Following continued pre-training, we fine-tuned all models on the extended AllSides Media training split and evaluated on the test split. Each configuration was trained for two epochs, with Table~\ref{tab:pretraining-combined} reporting the best performance achieved across epochs.
+Following continued pre-training, we fine-tuned all models on the AllSidesV2 Media training split and evaluated on the test split. Each configuration was trained for two epochs, with Table~\ref{tab:pretraining-combined} reporting the best performance achieved across epochs.
 
 \begin{table}[ht]
 \centering
 \footnotesize
-\begin{tabular}{@{}l|ccccc|ccccc@{}}
+\begin{tabular}{@{}lcccccccc@{}}
 \toprule
-\textbf{Experiment} & \multicolumn{5}{c|}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{5}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\ 
+\textbf{Experiment} & \multicolumn{4}{c}{\textbf{Subset (1.6M, Complete GDELT)}} & \multicolumn{4}{c}{\textbf{Full (4.5M, 35\% GDELT)}} \\
+ & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
 \midrule
- & Ep. & F1 & L & C & R & Ep. & F1 & L & C & R \\
- \midrule
-$T_{id}(1)$ & 2 & 50.12 & 69.28 & 18.09 & 63.00 & 2 & 56.98 & 73.82 & 33.96 & 63.55 \\
-$T_{id}(1) + T_h$ & 1 & 52.02 & 71.61 & \textbf{33.41} & 51.03 & 2 & 51.40 & 68.17 & 21.81 & 64.21 \\
-$T_{id}(1) + T_o$ & 2 & 53.39 & 71.65 & 28.31 & 60.20 & 2 & 55.86 & 72.46 & 31.17 & 63.93 \\
-$T_{id}(1) + T_h + T_o$ & 2 & \textbf{56.56} & \textbf{72.58} & 30.39 & \textbf{66.71} & 2 & \textbf{60.78} & \textbf{73.05} & \textbf{39.48} & \textbf{69}.82 \\
+$T_{id}(1)$          & 50.12 & 69.28 & 18.09 & 63.00 & 56.98 & 73.82 & 33.96 & 63.55 \\
+$T_{id}(1) + T_h$    & \cellcolor{blue!15}52.02 & \cellcolor{blue!15}71.61 & \cellcolor{blue!15}\textbf{33.41} & \cellcolor{blue!15}51.03 & 51.40 & 68.17 & 21.81 & 64.21 \\
+$T_{id}(1) + T_o$    & 53.39 & 71.65 & 28.31 & 60.20 & 55.86 & 72.46 & 31.17 & 63.93 \\
+$T_{id}(1) + T_h + T_o$ & \textbf{56.56} & 72.58 & 30.39 & 66.71 & 60.78 & 73.05 & 39.48 & 69.82 \\
 \midrule
-$T_{id}(16)$ & 2 & 50.06 & 72.07 & 20.53 & 57.59 & 2 & 52.88 & 68.36 & 22.02 & 68.26 \\
-$T_{id}(16) + T_h$ & 2 & 50.10 & 67.33 & 16.23 & \textbf{66.74} & 1 & 60.55 & \textbf{74.11} & 38.22 & 69.31 \\
-$T_{id}(16) + T_o$ & 2 & 53.30 & 71.99 & 22.08 & 65.83 & 2 & 53.76 & \textbf{74.11} & 19.71 & 67.45 \\
-$T_{id}(16) + T_h + T_o$ & 2 & \textbf{56.56} & \textbf{72.58} & \textbf{30.39} & 66.71 & 2 & \textbf{60.78} & 73.05 & \textbf{39.48} & \textbf{69.82} \\
+$T_{id}(16)$         & 50.06 & 72.07 & 20.53 & 57.59 & 52.88 & 68.36 & 22.02 & 68.26 \\
+$T_{id}(16) + T_h$   & 50.10 & 67.33 & 16.23 & 66.74 & \cellcolor{blue!15}60.55 & \cellcolor{blue!15}74.11 & \cellcolor{blue!15}38.22 & \cellcolor{blue!15}69.31 \\
+$T_{id}(16) + T_o$   & 53.30 & 71.99 & 22.08 & 65.83 & 53.76 & 74.11 & 19.71 & 67.45 \\
+$T_{id}(16) + T_h + T_o$ & \textbf{56.56} & 72.58 & 30.39 & 66.71 & 60.78 & 73.05 & 39.48 & 69.82 \\
 \midrule
-$T_{id}(32)$ & 2 & 55.41 & 73.66 & 28.34 & 64.22 & 2 & 60.15 & 73.95 & 35.88 & 70.62 \\
-$T_{id}(32) + T_h$ & 2 & 46.47 & 66.05 & 03.83 & 69.52 & 2 & \textbf{62.19} & \textbf{75.97} & \textbf{39.83} & \textbf{70.76} \\
-$T_{id}(32) + T_o$ & 2 & 48.74 & 67.21 & 12.83 & 66.18 & 1 &  57.18 & 72.75 & 34.49 & 64.30 \\
-$T_{id}(32) + T_h + T_o$ & 1 & \textbf{55.59} & \textbf{72.73} & 29.27 & \textbf{64.76} & 2 & 59.33 & 72.66 & \textbf{42.28} & 63.06 \\
+$T_{id}(32)$         & 55.41 & \textbf{73.66} & 28.34 & 64.22 & 60.15 & 73.95 & 35.88 & 70.62 \\
+$T_{id}(32) + T_h$   & 46.47 & 66.05 & 03.83 & \textbf{69.52} & \textbf{62.19} & \textbf{75.97} & 39.83 & \textbf{70.76} \\
+$T_{id}(32) + T_o$   & 48.74 & 67.21 & 12.83 & 66.18 & \cellcolor{blue!15}57.18 & \cellcolor{blue!15}72.75 & \cellcolor{blue!15}34.49 & \cellcolor{blue!15}64.30 \\
+$T_{id}(32) + T_h + T_o$ & \cellcolor{blue!15}55.59 & \cellcolor{blue!15}72.73 & \cellcolor{blue!15}29.27 & \cellcolor{blue!15}64.76 & 59.33 & 72.66 & \textbf{42.28} & 63.06 \\
 \bottomrule
 \end{tabular}
-\caption{Continued Pre-training Results on both GDELT limited subset and full \textsc{BigNewsBLN} dataset.}
+\caption{Continued pre-training results on both GDELT limited subset and full \textsc{BigNewsBLN} dataset. Best results per column in bold. \colorbox{blue!15}{Highlighted} cells indicate configurations where epoch~1 outperformed epoch~2. All models fine-tuned on AllSidesV2 Media train and evaluated on test split.}
 \label{tab:pretraining-combined}
 \end{table}
 
 Table~\ref{tab:pretraining-combined} presents results from pre-training on both the 1.6 million article subset with complete GDELT coverage, and the full 4.5 million article \textsc{BigNewsBLN} corpus, where metalinguistic objectives were applied only to the articles with available GDELT metadata. Our most effective configuration, $T_{32} + T_h$, achieved 62.19 F1-Macro on the full dataset, outperforming the POLITICS baseline (60.60) and demonstrating the value of combining intensive triplet training with theme prediction. The full results for each configuration across both epochs can be found in Appendix~\ref{sec:appendix-full-experiments}.
 
-These findings extend prior work \citep{hamborg2019automatedmediabias,rashkin2016connotationframesdatadriveninvestigation} demonstrating the utility of metalinguistic cues such as sentiment and emotional tone in political ideology detection. Our results illustrate that explicitly incorporating such signals as auxiliary training objectives can yield substantial performance improvements for article-level political ideology classification. The best performing models (both \href{https://huggingface.co/dragonslayer631/roberta_metalinguistic_features_triplet_loss}{pre-trained checkpoints} and \href{https://huggingface.co/dragonslayer631/ideology_classifier_finetuned}{fine-tuned versions} on the extended AllSides dataset) are publicly available on HuggingFace.\footnote{Models available under the Apache 2.0 license.}
+These findings extend prior work \citep{smirnova2017ideology,bhatia2018topic} demonstrating the utility of metalinguistic cues such as sentiment and emotional tone in political ideology detection. Our results illustrate that explicitly incorporating such signals as auxiliary training objectives can yield substantial performance improvements for article-level political ideology classification. The best performing models (both \href{https://huggingface.co/dragonslayer631/roberta_metalinguistic_features_triplet_loss}{pre-trained checkpoints} and \href{https://huggingface.co/dragonslayer631/ideology_classifier_finetuned}{fine-tuned versions} on the AllSidesV2 dataset) are publicly available on HuggingFace.\footnote{Models available under the Apache 2.0 license.}
 
 % TODO: Add error analysis to understand where the improved model still fails
 % TODO: Add qualitative analysis of specific examples where metalinguistic features help

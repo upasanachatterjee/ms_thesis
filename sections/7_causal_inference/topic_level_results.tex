@@ -1,7 +1,7 @@
 \section{Topic-Level Results}
 \label{sec:topic-level-results}
 
-This section presents results from the topic-level causal analysis across four annotation paradigms: Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), and Fine-tuned GPT-4o-mini.
+Having established that community-level aggregation reveals paradigm-specific effects (Section~\ref{sec:community-level-results}), we now present the finer-grained topic-level analysis for completeness. These results are available for four annotation paradigms: Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), and Fine-tuned GPT-4o-mini. \authortodo{Investigate fine-tuned RoBERTa on the AllSidesV2 Random split.}
 
 \subsection{Mediation Analysis Results}
 \label{sec:mediation-results}
@@ -168,24 +168,7 @@ Tables~\ref{tab:cate-trump} and~\ref{tab:cate-politics} report mean CATEs within
   \end{tabular}
 \end{table}
 
-Three observations stand out:
-\begin{itemize}
-  \item \textbf{No ideology-based heterogeneity within any paradigm.}  For both
-    treatments, the CATE is nearly uniform across Left, Centre, and Right outlet
-    groups. The causal forest finds no evidence that the sentiment--ideology effect
-    differs by outlet type.
-  \item \textbf{Large between-paradigm divergence.}  The Fine-tuned GPT-4o-mini Politics
-    CATE ($\approx +0.18$) is roughly three times the Fine-tuned RoBERTa CATE
-    ($\approx +0.05$) and nine times the Human CATE ($\approx +0.002$). GPT-4o-mini
-    (baseline) falls between RoBERTa and Fine-tuned GPT ($\approx +0.07$), forming a clear
-    magnitude gradient. This divergence is a property of the labelling models, not the articles.
-  \item \textbf{Trump CATE sign flip.}  Human, Fine-tuned RoBERTa, and GPT-4o-mini (baseline) CATEs for
-    Trump are uniformly negative; Fine-tuned GPT-4o-mini CATEs are uniformly positive,
-    mirroring the TE sign flip in Table~\ref{tab:te-trump}. GPT-4o-mini (baseline) produces
-    the smallest negative CATEs ($\approx -0.06$), intermediate between RoBERTa ($\approx -0.14$)
-    and the fine-tuned model's positive values. The $N$ distribution for GPT-4o-mini (baseline) is
-    heavily centrist (121 of 233 classified as Centre), consistent with its known centrist prediction tendency.
-\end{itemize}
+Three observations stand out. There is \textbf{no ideology-based heterogeneity within any paradigm}: for both treatments, the CATE is nearly uniform across Left, Centre, and Right outlet groups, and the causal forest finds no evidence that the sentiment--ideology effect differs by outlet type. However, there is \textbf{large between-paradigm divergence}: the Fine-tuned GPT-4o-mini Politics CATE ($\approx +0.18$) is roughly three times the Fine-tuned RoBERTa CATE ($\approx +0.05$) and nine times the Human CATE ($\approx +0.002$), with GPT-4o-mini (baseline) falling between RoBERTa and Fine-tuned GPT ($\approx +0.07$), forming a clear magnitude gradient that is a property of the labelling models, not the articles. The \textbf{Trump CATE sign flip} is also notable: Human, Fine-tuned RoBERTa, and GPT-4o-mini (baseline) CATEs for Trump are uniformly negative, while Fine-tuned GPT-4o-mini CATEs are uniformly positive, mirroring the TE sign flip in Table~\ref{tab:te-trump}. GPT-4o-mini (baseline) produces the smallest negative CATEs ($\approx -0.06$), intermediate between RoBERTa ($\approx -0.14$) and the fine-tuned model's positive values, and its $N$ distribution is heavily centrist (121 of 233 classified as Centre), consistent with its known centrist prediction tendency.
 
 % ------------------------------------------------------------------------------
 \subsection{Multi-Treatment DML Results}
@@ -352,4 +335,4 @@ Second, each fine-tuned model finds a \textbf{different significant topic} in th
 
 Across the topic-level analyses, no topic sentiment produces a statistically significant effect that is consistent across all annotation paradigms. Human and GPT-4o-mini (baseline) annotations produce no significant effects across any analysis. Fine-tuned RoBERTa's only significant finding is an isolated Hillary Clinton result in the multi-treatment analysis that does not replicate under any other paradigm. The Politics treatment is directionally consistent (positive in all four paradigms), but never reaches significance except under Fine-tuned GPT-4o-mini. The Donald Trump treatment direction is annotation-model dependent: negative under Human, Fine-tuned RoBERTa, and GPT-4o-mini (baseline), but positive under Fine-tuned GPT-4o-mini. These results suggest that topic-level sentiment, as measured by current annotation models, is not a strong independent driver of ideology classification once topic presence is controlled for.
 
-The primary value of the topic-level analysis lies in demonstrating that identical causal analyses applied to labels from different annotation systems can produce qualitatively different conclusions. We next examine whether community-level aggregation, which increases statistical power by pooling related topics, reveals more robust patterns.
+The primary value of the topic-level analysis lies in demonstrating that identical causal analyses applied to labels from different annotation systems can produce qualitatively different conclusions. As shown in the preceding community-level analysis (Section~\ref{sec:community-level-results}), aggregation across related topics does reveal more robust patterns, but these patterns remain paradigm-specific rather than universal.

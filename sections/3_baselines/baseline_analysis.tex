@@ -26,5 +26,6 @@ This concern does not apply to our transformer baselines, where training data co
 
 These baseline findings align with observations by \citet{Wen_2023}, who demonstrate that while LLMs achieve competitive performance on explicit classification tasks, they consistently underperform specialized fine-tuned models on nuanced tasks requiring deeper contextual understanding.
 
-% TODO: - Error analysis across different article types and lengths
-% TODO: - Analysis of performance correlation with article metadata (length, topic, etc.)
+\subsection{Undersampling Analysis}
+
+All fine-tuning experiments in this thesis, both the transformer baselines reported here and the continued pre-training experiments in Section~\ref{sec:continued-pretraining}, are conducted without class-balancing undersampling. A preliminary study (see Appendix~\ref{appendix:undersampling}) shows that undersampling does not yield consistent improvements: effects are highly model-dependent, with most models degrading overall when undersampling is applied. Where undersampling does help, gains tend to accrue to classes that are already relatively well-classified (particularly Left), rather than to the harder Center and Right categories that most challenge these models. We therefore opt for standard fine-tuning without undersampling to avoid inadvertently trading off performance on the most difficult classes.

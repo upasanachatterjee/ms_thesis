@@ -1,0 +1,75 @@
+\chapter{Fine-tuning with and without Undersampling}
+\label{appendix:undersampling}
+
+Class balancing is performed per news topic rather than globally. For every topic present in the training set, the function identifies the minority class count among Left, Center, and Right articles, then randomly samples without replacement that many articles from each class. The per-topic indices are then concatenated and shuffled to produce the final balanced dataset. This topic-stratified design prevents a globally rare topic from inflating one class simply because it lacks coverage of the others, and ensures the model cannot exploit topic--ideology correlations introduced by uneven topic representation.
+
+Table~\ref{tab:no_undersampling_and_undersampling} and the corresponding $\Delta$ scores in Table~\ref{tab:delta} reveal that undersampling does not provide consistent benefits and its effect is highly model-dependent. On the Media Split, BERT degrades sharply with undersampling ($-16.83$ F1-Macro), and BART also suffers substantially ($-8.45$). RoBERTa is the only general-purpose transformer to benefit modestly overall ($+1.53$ F1-Macro), while our additionally pre-trained model performs worse with undersampling ($-4.67$). On the Random Split, differences are small in magnitude; BART shows marginal gains ($+0.79$ F1-Macro) but other models are largely unaffected.
+
+Where undersampling does help, the gains tend to accrue to classes that are already relatively well-classified. On the Media Split, the highlighted improvements for BERT and BART in the ``With undersampling'' rows are concentrated on Left (a class that models already handle better than Center or Right), and undersampling rarely improves the harder Center and Right classes. The most important exception is POLITICS, which gains $+12.77$ points on Center (by far the largest single gain in the table) and $+1.36$ points in overall F1-Macro, though with losses on Left ($-4.61$) and Right ($-4.49$). This stands in contrast to our model, which gains only marginally on Left ($+0.06$) while losing substantially on Center ($-10.03$) and overall F1-Macro ($-4.67$) with undersampling.
+
+The outsized benefit of undersampling for POLITICS is notable given that it is otherwise the strongest transformer baseline. One plausible explanation is that POLITICS uses a story-level contrastive objective during pre-training, which may make it more sensitive to class imbalance during fine-tuning: when center articles are underrepresented, the story objective may learn to associate topic clusters with majority-class labels, and undersampling could mitigate this. Whether the story objective genuinely induces this sensitivity, and whether our metalinguistic objectives share or avoid it, is an open question that warrants future investigation.
+
+Given the inconsistent pattern of gains and the specific risk of degrading Center and Right performance, we opt not to use undersampling in our main experiments.
+
+\begin{table*}[ht]
+\centering
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Media Split}} & \multicolumn{4}{c}{\textbf{Random Split}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+\textbf{Model} & \textbf{F1-Macro} & \textbf{Left} & \textbf{Center} & \textbf{Right}
+               & \textbf{F1-Macro} & \textbf{Left} & \textbf{Center} & \textbf{Right} \\
+\midrule
+\multicolumn{9}{l}{\textit{Without undersampling}} \\
+\midrule
+BERT      & 40.95 & 65.20 & 20.11 & 37.53 & 81.90 & 84.63 & 79.90 & 81.16 \\
+BART      & 47.55 & 70.94 & 25.73 & 45.99 & 85.58 & 87.77 & 84.28 & 84.70 \\
+RoBERTa   & 47.83 & 70.66 & 25.73 & 54.86 & 87.83 & 89.91 & 85.11 & 88.46 \\
+POLITICS  & 60.60 & \textbf{77.94} & 38.55 & 65.30 & 88.23 & 90.6 & 84.95 & 89.12 \\
+Our Model & \textbf{62.19} & 75.97 & \textbf{39.83} & \textbf{70.76} & \textbf{89.29} & \textbf{90.91} & \textbf{86.48} & \textbf{90.47} \\
+\midrule
+\multicolumn{9}{l}{\textit{With undersampling}} \\
+\midrule
+BERT      & 24.12 & 43.29 & 18.17 &  10.90 & 80.22 & 83.32 & 77.66 & 79.68\\
+BART      & 39.10 & 64.28 & \cellcolor{red!15}28.82 & 24.20 & \cellcolor{red!15}86.37 & \cellcolor{red!15}88.45 & 84.18 & \cellcolor{red!15}86.48 \\
+RoBERTa   & \cellcolor{red!15}49.36 & \cellcolor{red!15}71.43 & 24.25 & 52.39 & 86.94 & 89.39 & 84.04 & 87.38 \\
+POLITICS  & \cellcolor{red!15}\textbf{61.96} & 73.33 & \cellcolor{red!15}\textbf{51.32} & 60.81 & 87.62 & \textbf{89.97} & 84.12 & 88.76 \\
+Our Model & 57.52 & \cellcolor{red!15}\textbf{76.03} & 29.80 & \textbf{66.71} & \textbf{87.91} & 89.93 & \textbf{84.33} & \textbf{89.49} \\
+\bottomrule
+\end{tabular}
+\caption{Fine-tuning results on the AllSidesV2 dataset with and without undersampling. \colorbox{red!15}{Highlighted} cells in the undersampling section indicate where undersampling outperforms no undersampling.}
+\label{tab:no_undersampling_and_undersampling}
+\end{table*}
+
+
+\begin{table*}[ht]
+\centering
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Media Split $\Delta$}} & \multicolumn{4}{c}{\textbf{Random Split $\Delta$}} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+\textbf{Model} & \textbf{F1-Macro} & \textbf{Left} & \textbf{Center} & \textbf{Right}
+               & \textbf{F1-Macro} & \textbf{Left} & \textbf{Center} & \textbf{Right} \\
+\midrule
+BERT
+  & $+16.83$ & $+21.91$ & $+1.94$  & $+26.63$
+  & $+1.68$  & $+1.31$  & $+2.24$  & $+1.48$  \\
+BART
+  & $+8.45$  & $+6.66$  & \textit{$-3.09$} & $+21.79$
+  & \textit{$-0.79$} & \textit{$-0.68$} & $+0.10$ & \textit{$-1.78$} \\
+RoBERTa
+  & \textit{$-1.53$} & \textit{$-0.77$} & $+1.48$ & $+2.47$
+  & $+0.89$  & $+0.52$  & $+1.07$  & $+1.08$  \\
+POLITICS
+  & \textit{$-1.36$} & $+4.61$ & \textit{$-12.77$} & $+4.49$
+  & $+0.61$ & $+0.63$ & $+0.83$ & $+0.36$ \\
+Our Model
+  & $+4.67$  & \textit{$-0.06$} & $+10.03$ & $+4.05$
+  & $+1.38$ & $+0.98$ & $+2.15$ & $+0.98$ \\
+\bottomrule
+\end{tabular}
+\caption{$\Delta$ F1 scores: no-undersampling $-$ undersampling. Positive values indicate no-undersampling performs better; negative values indicate undersampling performs better.}
+\label{tab:delta}
+\end{table*}
