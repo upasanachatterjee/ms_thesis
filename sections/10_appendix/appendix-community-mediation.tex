@@ -1,0 +1,63 @@
+\chapter{Community-Level Mediation Results}
+\label{sec:appendix-community-mediation}
+
+This appendix provides the full community-level mediation results referenced in Section~\ref{sec:community-mediation}, including pathway selection rationale and complete numerical tables.
+
+\section{Pathway Selection}
+
+Six treatment-mediator pairs were evaluated across communities $\{3, 9, 11\}$, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. The remaining four pairs degenerated for two distinct reasons:
+
+\begin{itemize}
+    \item \textbf{Community 3 as treatment} ($N=132$): All confounder and mediator candidates were eliminated by the minimum topic co-occurrence filter ($\geq 50$ articles), reducing the model to an intercept-only specification with no mediation output.
+
+    \item \textbf{Community 3 as mediator} (pairs $11 \to 3$ and $9 \to 3$): Community~3 failed the co-occurrence filter with both treatment communities. The $9 \to 3$ pathway collapsed to Community~11 as the sole surviving mediator (duplicating $9 \to 11$), while $11 \to 3$ substituted unrelated mediators rather than testing the intended pathway.
+\end{itemize}
+
+The six-pair matrix therefore reduces to two unique, well-specified analyses.
+
+\section{Full Mediation Results}
+
+Table~\ref{tab:mediation_full} reports total effects (TE), natural direct effects (NDE), and natural indirect effects (NIE) for both viable pathways under the $Q_{25} \to Q_{75}$ contrast across all available annotation paradigms.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcccccc}
+\toprule
+Annotator & TE & 95\% CI & NDE & 95\% CI & NIE & \% med. \\
+\midrule
+\multicolumn{7}{l}{\textit{Community $9 \to 11$ ($N=139$, sentiment contrast $-0.3$ to $0.0$)}} \\
+\midrule
+Human              & $-0.045$ & $[-0.164,\ +0.075]$ & $-0.059$ & $[-0.151,\ +0.045]$ & $+0.015$ & --- \\
+Fine-tuned RoBERTa & $-0.069$ & $[-0.181,\ +0.043]$ & $-0.080$ & $[-0.147,\ +0.031]$ & $+0.011$ & --- \\
+Fine-tuned GPT     & $\mathbf{-0.108^*}$ & $\mathbf{[-0.208,\ -0.008]}$ & $\mathbf{-0.105^*}$ & $\mathbf{[-0.170,\ 0.000]}$ & $-0.003$ & 3.2\% \\
+GPT (baseline)     & $-0.059$ & $[-0.141,\ +0.023]$ & $-0.032$ & $[-0.102,\ +0.033]$ & $-0.026$ & --- \\
+Llama-3.3-70B      & $-0.007$ & $[-0.148,\ +0.134]$ & $+0.023$ & $[-0.080,\ +0.099]$ & $-0.030$ & --- \\
+\midrule
+\multicolumn{7}{l}{\textit{Community $11 \to 9$ ($N=772$, sentiment contrast $-0.4$ to $0.1$)}} \\
+\midrule
+Human              & $-0.045$ & $[-0.162,\ +0.071]$ & $-0.049$ & $[-0.100,\ +0.012]$ & $+0.004$ & --- \\
+Fine-tuned RoBERTa & $-0.016$ & $[-0.133,\ +0.102]$ & $-0.015$ & $[-0.079,\ +0.034]$ & $-0.000$ & --- \\
+Fine-tuned GPT     & $+0.056$ & $[-0.069,\ +0.181]$ & $+0.069$ & $[0.000,\ +0.116]$  & $-0.013$ & --- \\
+GPT (baseline)     & $+0.007$ & $[-0.097,\ +0.111]$ & $+0.009$ & $[-0.042,\ +0.059]$ & $-0.002$ & --- \\
+Llama-3.3-70B      & $+0.008$ & $[-0.114,\ +0.130]$ & $+0.012$ & $[-0.046,\ +0.075]$ & $-0.004$ & --- \\
+\bottomrule
+\end{tabular}
+\caption{Community-level mediation results ($Q_{25} \to Q_{75}$ contrast). $^*$Significant at 95\% (CI excludes zero).}
+\label{tab:mediation_full}
+\end{table}
+
+For the $9 \to 11$ pathway, Fine-tuned GPT-4o-mini is the only annotator to produce a significant total effect (TE $= -0.108$), with nearly all of it attributable to the direct pathway (3.2\% mediated). Human and baseline GPT annotators show point estimates in the same negative direction but with wide, zero-crossing intervals. Fine-tuned RoBERTa (TE $= -0.069$) ranks second in magnitude after Fine-tuned GPT-4o-mini, further supporting the directional consensus. Llama-3.3-70B produces a near-zero TE ($-0.007$) with the widest confidence interval, consistent with its general attenuation pattern observed in the ATE analysis. All five annotators are directionally consistent (negative), suggesting the non-significance of human, RoBERTa, baseline GPT, and Llama reflects power limitations at $N=139$ rather than directional disagreement.
+
+For the $11 \to 9$ pathway, no annotator reaches significance. The Fine-tuned GPT-4o-mini effect reverses sign relative to the $9 \to 11$ direction ($+0.056$ vs.\ $-0.108$), reinforcing the asymmetry interpretation: Community~9's effect on ideology is concentrated and direct, while Community~11's influence is diffuse across many mediators. Llama-3.3-70B produces a small positive TE ($+0.008$), again attenuated relative to other paradigms. Human and Fine-tuned RoBERTa are the only annotators to produce negative TEs for this pathway ($-0.045$ and $-0.016$, respectively), while all three LLM-based paradigms estimate positive effects, reinforcing the pattern of RoBERTa tracking human directional tendencies.
+
+\section{Confounder Reduction Details}
+
+Confounders consist of all community sentiment scores except those of the treatment and mediator communities, reduced in two sequential steps:
+
+\begin{enumerate}
+    \item \textbf{Presence filter:} Communities whose sentiment is non-zero in fewer than 50 articles in the treatment subsample are dropped.
+    \item \textbf{PCA:} The remaining matrix is reduced via PCA retaining 95\% of variance.
+\end{enumerate}
+
+Because this reduction depends only on the treatment subsample, not on ideology labels, it is identical across all annotation paradigms for a given treatment community. All treatment communities begin with 11 potential confounders. For Communities 1, 3, and 11, the presence filter removes 3, leaving 8; PCA further reduces these to 7 components. Community~9 loses one additional community (4 removed, leaving 7), and PCA retains all 7. All configurations therefore yield 7 final confounder components; the choice of mediator community has no effect on this reduction.

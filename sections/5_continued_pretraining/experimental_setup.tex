@@ -61,7 +61,7 @@ This multi-task approach follows the principle that shared representations benef
 \subsection{Experimental Results}
 \label{sec:continued-pretraining-results}
 
-We employed the RoBERTa-base architecture \citep{liu2019roberta} as our foundation model, initializing from the standard pre-trained checkpoint before applying our continued pre-training regime for 2 epochs over the GDELT corpus. We also considered only the 2000 most frequent GDELT categories, and the triplet loss margin $\delta$ is set to 1. Specific pre-training settings can found in Table~\ref{tab:pretraining_config}.
+We employed the RoBERTa-base architecture \citep{liu2019roberta} as our foundation model, initializing from the standard pre-trained checkpoint before applying our continued pre-training regime for 2 epochs over the GDELT corpus. We also considered only the 2000 most frequent GDELT categories, and the triplet loss margin $\delta$ is set to 1. Specific pre-training settings can be found in Table~\ref{tab:pretraining_config}.
 
 We conducted experiments varying two key factors: the number of triplet samples per batch (1, 16, or 32) and the inclusion of metalinguistic objectives (theme prediction $T_h$, tone regression $T_o$, or both). Triplet generation followed the standard contrastive learning protocol: for each anchor article, we paired it with a positive example (same ideology label) and a negative example (different ideology label). During training, we randomly sampled the specified number of such triplets per batch from all valid combinations.
 

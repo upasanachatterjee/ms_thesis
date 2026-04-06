@@ -1,0 +1,243 @@
+\section{Causal Framework}
+\label{sec:causal-methodology}
+\subsection{Causal Diagram and Variable Definitions}
+
+We model the relationships between article content, sentiment, and ideology using the causal diagram in Figure~\ref{fig:causal_diagram}, which formalizes our assumptions about the data-generating process and determines which variables must be controlled for to obtain unbiased causal estimates.
+
+We define the following variables:
+\begin{itemize}
+    \item $X$: (text) the full article text parsed from the publishing source.
+    \item $T$: (topic tags) AllSides-assigned topic tags (e.g.\ Politics, Government Efficiency, Foreign Affairs).
+    \item $F$: (sentiment) sentiment toward each topic, inferred from article text using an LLM.
+    \item $Y$: (ideology) the political ideology label assigned by AllSides.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=2cm]
+      \tikzstyle{every state}=[]
+
+      \node(text) {$X$};
+      \node(sentiment) [above of=text] {$F$} edge [->] (text);
+      \node(ideology) [right of=sentiment] {$Y$} edge [<-] (sentiment) edge [->] (text);
+      \node(topic) [left of=sentiment] {$T$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
+    \end{tikzpicture}
+    \caption{Causal diagram for article ideology classification.}
+    \label{fig:causal_diagram}
+\end{figure}
+
+Each arrow represents a hypothesized causal direction. The arrow from $Y$ to $X$ reflects that ideology shapes article content and framing. The arrow from $F$ to $X$ reflects that sentiment toward a topic influences how that topic is discussed. The bidirectional dashed arrow between $T$ and $F$ captures the mutual relationship between topics and sentiment: certain topics tend to evoke particular sentiments, while prevailing sentiment patterns influence which topics receive coverage.
+
+In practice, each node expands into many variables. Figure~\ref{fig:causal3} illustrates this: each sentiment node $F$ corresponds to a distinct topic, and sentiment toward one topic ($F_T$, the treatment) may influence sentiment toward other topics ($F_{M_1}, F_{M_2}, \ldots$, the mediators), which in turn affect ideology classification $Y$. The structural relationships \textit{between} variable types remain as in Figure~\ref{fig:causal_diagram}; what changes is the dimensionality \textit{within} each node.
+
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}[->,auto]
+    % Top row: the three F's
+    \node (FT)   at (0,0)   {$F_{T}$};
+    \node (FM1)  at (3,0)   {$F_{M_1}$};
+    \node (FM2)  at (6,0)   {$F_{M_2}$};
+
+    % Bottom row: the three observed variables
+    \node (Xabs) at (0,-2)  {$X$};
+    \node (Y)    at (3,-2)  {$Y$};
+    \node (T)    at (6,-2)  {$T$};
+
+    % Edges from F_T
+    \draw[->]           (FT) -- (Y);
+    \draw[->]  (FT) -- (Xabs);
+    \draw[<->, dashed]  (FT) -- (T);
+
+    % Edges from X_abs and T to Y
+    \draw[<-]           (Xabs) -- (Y);
+    \draw[->]  (T) to (Y);
+
+    % Edges for F_{M_1}
+    \draw[->, red]             (FM1) -- (Y);
+    \draw[->, red]    (FM1) -- (Xabs);
+    \draw[<->, dashed, red]    (FM1) -- (T);
+    \draw[<-, blue]            (FM1) -- (FT);
+
+    % Edges for F_{M_2}
+    \draw[->, red]             (FM2) -- (Y);
+    \draw[->, red]    (FM2) -- (Xabs);
+    \draw[<->, dashed, red]    (FM2) -- (T);
+    \draw[<-, blue, bend right] (FM2) to (FT);
+  \end{tikzpicture}
+  \caption{Experimental setup: sentiment variables as mediators. Blue arrows show treatment-to-mediator paths; red shows mediator-to-outcome paths.}
+  \label{fig:causal3}
+\end{figure}
+
+The roles of each variable in the estimation framework are:
+
+\paragraph{Treatment Variable ($F_T$):} Sentiment toward a specific topic of interest (e.g., sentiment toward ``Immigration'' or ``Healthcare''). This is the variable whose causal effect on ideology we seek to estimate.
+
+\paragraph{Outcome Variable ($Y$):} The ideology label (Left/Center/Right) assigned to the article.
+
+\paragraph{Mediator Variables ($F_{M_1}, F_{M_2}, \ldots$):} Sentiment toward all other topics present in the article. These lie on the causal pathway between treatment sentiment and ideology: sentiment toward one topic may influence sentiment toward related topics, which in turn affects ideology classification. Blue arrows in Figure~\ref{fig:causal3} show these paths.
+
+\paragraph{Confounder Variables:} $T$ (topic presence) is the primary confounder, since the presence of a topic influences both sentiment toward it and the overall ideological character of the article. $X$ (text content) acts as a collider, influenced by both sentiment and ideology.
+
+We restrict the analysis to articles containing the treatment topic, preventing invalid comparisons between articles that discuss a topic and those that do not. This design supports estimation of Average Treatment Effects (ATE), Conditional Average Treatment Effects (CATE), Natural Direct Effects (NDE), and Natural Indirect Effects (NIE).
+
+\subsection{Data Collection}
+We use the AllSides extended dataset described in Section~\ref{sec:dataset}. To extract sentiment variables ($F$), we apply a two-step process to the full article text ($X$):
+
+\begin{enumerate}
+\item \textbf{Entity and Sentiment Analysis:} Named entities and key concepts are extracted from the corpus. The \texttt{llama-3.3-70b-versatile} model assigns sentiment polarity to each entity on a continuous scale from $-1.0$ (strongly negative) to $+1.0$ (strongly positive). This model was chosen for its sensitivity to contextual nuances compared to smaller alternatives.
+
+\item \textbf{Entity-to-Topic Association:} The \texttt{llama3-70b-8192} model quantifies how strongly each extracted entity relates to predefined AllSides topic tags. The model avoids spurious correlations; for example, correctly distinguishing between terrorism as a broad concept and specific incidents like the 2019 Christchurch shooting when assigning the entity ``shooting'' to a topic. Entity sentiment scores are then aggregated by topic tag to produce a per-topic sentiment profile for each article.
+\end{enumerate}
+
+\subsection{Experimental Design}
+\label{sec:experimental-design}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\textwidth]{sections/images/articles.png}
+  \caption{Articles with predicted ideologies, topics, sentiments, and topic clustering.}
+  \label{fig:articles}
+\end{figure}
+
+We perform all analyses on the test set of the AllSides dataset to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Topic Tag} & \textbf{Articles} & \textbf{Community} \\
+    \midrule
+    politics & 756 & 2 \\
+    donald\_trump & 712 & 11 \\
+    world & 503 & 4 \\
+    elections & 451 & 11 \\
+    white\_house & 444 & 2 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Top five topic tags by frequency in the test set.}
+    \label{tab:top-tags}
+\end{table}
+
+We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which provide sufficient statistical power while spanning three distinct communities (Figure~\ref{fig:louvain}): political figures and electoral processes (Community 11: \textit{donald\_trump}, \textit{elections}), institutional politics (Community 2: \textit{politics}, \textit{white\_house}), and international affairs (Community 4: \textit{world}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{sections/images/louvain_communities.png}
+    \caption{Louvain community detection on the topic tag co-occurrence graph for the top five tags.}
+    \label{fig:louvain}
+\end{figure}
+
+Our primary experiment examines the bidirectional relationship between sentiment toward \textit{donald\_trump} and sentiment toward \textit{politics} in shaping ideology classification. We test two competing hypotheses: (1) Trump sentiment drives general political sentiment, which then shapes ideology; versus (2) broader political sentiment shapes Trump-specific framing, with Trump sentiment mediating the path to ideology. We use NIE/NDE decomposition and bidirectional mediation to determine the dominant pathway.
+
+Building on this, we test whether the mediation pattern generalizes: do institutional political topics (Community 2) systematically mediate the effects of political figure sentiment (Community 11) on ideology? We estimate CATEs for different combinations of these sentiment variables, testing whether the Trump--politics dynamic reflects a broader structural relationship between individual figures and institutional framing.
+
+\subsection{Annotation Paradigms}
+\label{sec:annotation-paradigms}
+
+All experiments are conducted across five annotation paradigms:
+
+\begin{enumerate}
+    \item \textbf{Human annotations:} Manual ideology labels from AllSides, serving as ground truth.
+
+    \item \textbf{Fine-tuned RoBERTa:} Predictions from the best-performing fine-tuned classifier from Section~\ref{sec:continued-pretraining}.
+
+    \item \textbf{GPT-4o-mini (baseline):} Zero-shot predictions from GPT-4o-mini without task-specific fine-tuning.
+
+    \item \textbf{Fine-tuned GPT-4o-mini:} Predictions from the fine-tuned GPT model from Section~\ref{sec:llm-finetuning}.
+
+    \item \textbf{Llama-3.3-70B:} Zero-shot predictions from Meta's Llama-3.3-70B-versatile model without task-specific fine-tuning. This model is included to test whether causal patterns generalize across LLM families or are specific to the GPT architecture.
+\end{enumerate}
+
+Table~\ref{tab:llm-causal-performance} summarizes the classification performance of each LLM paradigm on the AllSidesV2 test set.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lc}
+    \toprule
+    \textbf{Paradigm} & \textbf{F1-Macro} \\
+    \midrule
+    Fine-tuned GPT-4o-mini & 72.48 \\
+    Llama-3.3-70B & 54.61 \\
+    GPT-4o-mini (baseline) & 50.07 \\
+    \bottomrule
+    \end{tabular}
+    \caption{LLM classification performance on AllSidesV2 test set. Fine-tuned RoBERTa F1 is reported in Section~\ref{sec:continued-pretraining}.}
+    \label{tab:llm-causal-performance}
+\end{table}
+
+This five-way comparison allows us to examine whether causal relationships are stable across annotation approaches or vary systematically between human judgment, traditional classifiers, and large language models. Critically, comparing the baseline and fine-tuned GPT-4o-mini models, which share the same architecture but differ only in fine-tuning, enables us to isolate the effect of fine-tuning on downstream causal estimates. Including Llama-3.3-70B tests whether patterns observed under GPT-4o-mini generalize to a different model family.
+
+\subsubsection{Double Machine Learning}
+\label{sec:dml}
+
+Ordinary regression of $Y$ on $F_T$ is biased when confounders $W$ predict both $F_T$ and $Y$. For example, articles from right-leaning outlets may mention the FBI more often \emph{and} receive right-leaning labels, creating a spurious positive correlation between FBI sentiment and ideology that is driven by outlet identity rather than sentiment itself.
+
+DML~\cite{chernozhukov2018} removes this bias through two-stage residualization:
+\begin{enumerate}
+  \item Fit $\hat{g}(W)$ to predict $Y$ from $W$ alone; compute residuals $\tilde{Y} = Y - \hat{g}(W)$.
+  \item Fit $\hat{m}(W)$ to predict $F_T$ from $W$ alone; compute residuals $\tilde{F}_T = F_T - \hat{m}(W)$.
+  \item Regress $\tilde{Y}$ on $\tilde{F}_T$ to obtain the ATE.
+\end{enumerate}
+
+After residualization, both $Y$ and $F_T$ have had their confounder-explained variation removed, so the final regression captures only the direct sentiment--ideology relationship that topic presence cannot explain. We use \texttt{LinearDML} from EconML~\citep{econml} with Random Forest base learners (\num{200} trees, maximum depth~5) and $k = 5$-fold cross-fitting.
+
+The ATE is interpreted as: ``holding topic-presence composition constant, a one-unit increase in $F_T$ shifts the expected ideology label by $\widehat{\text{ATE}}$ units on the $[0,2]$ scale.''
+
+\subsubsection{Mediation Analysis}
+\label{sec:mediation-design}
+
+The ATE tells us \emph{whether} a topic's sentiment shifts ideology predictions, but not \emph{through which pathways}. As Figure~\ref{fig:articles} illustrates, each article carries sentiment scores for multiple topics, and these topics cluster into communities (indicated by color). When an article discusses topics from several communities simultaneously, a natural question arises: does sentiment toward one community's topics affect ideology prediction directly, or does it do so indirectly by first shifting sentiment toward another community's topics?
+
+Consider the Khalil arrest coverage in Table~\ref{fig:khalil}. AP and Fox News both tag the article with the same topics (Pro-Palestine Protests, Donald Trump, Israel, Deportations) yet their sentiment toward these topics diverges sharply. A mediation analysis asks: does pro-Palestine sentiment shift the ideology prediction directly (a \textbf{direct effect}), or does it do so by also shifting sentiment toward deportation policy, which in turn influences the ideology label (an \textbf{indirect effect})? Distinguishing these pathways reveals whether ideology classifiers respond to isolated topic framing or to correlated sentiment patterns across topics.
+
+Formally, the Total Effect (TE) decomposes into:
+
+\begin{equation}
+  \underbrace{\text{TE}}_{\text{Total}} =
+  \underbrace{\text{NDE}}_{\substack{\text{Natural Direct}\\ \text{Effect}}} +
+  \underbrace{\text{NIE}}_{\substack{\text{Natural Indirect}\\ \text{Effect}}}
+\end{equation}
+
+\begin{itemize}
+  \item The \textbf{Natural Direct Effect (NDE)} is the portion of the treatment's influence on ideology that operates independently of the mediator: the effect that remains even if the mediator's sentiment were held fixed.
+  \item The \textbf{Natural Indirect Effect (NIE)} captures the portion that routes through the mediator: treatment sentiment shifts the mediator's sentiment ($F_T \to F_M$), which in turn shifts the ideology prediction ($F_M \to Y$).
+\end{itemize}
+
+For example, positive Trump sentiment ($F_T$) may incline an article toward positive Politics framing ($F_M$). If positive Politics sentiment then influences the ideology classifier, the NIE captures that indirect path; the NDE captures all remaining direct pathways. In Figure~\ref{fig:articles}, topics sharing the same color belong to the same Louvain community; when we perform community-level mediation (Section~\ref{sec:community-aggregation}), we aggregate all same-colored topics into a single community sentiment score and ask whether one community's aggregate sentiment affects ideology directly or through its influence on another community's sentiment.
+
+We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals. Because the TE confidence interval consistently includes zero in our results (see Section~\ref{sec:mediation-results}), we suppress the proportional mediation $(\text{NIE}/\text{TE})$ to avoid division-by-near-zero artifacts.
+
+\subsubsection{Treatment Encoding and Contrasts}
+\label{sec:treatment-encoding}
+
+All analyses use a continuous treatment encoding: the raw sentiment score on the $[-100, +100]$ scale, standardized (zero mean, unit variance) before estimation, so that the ATE represents the effect of a one-standard-deviation increase. This preserves fine-grained variation: a score of $+45$ carries more positive framing than $+1$.
+
+For the mediation analysis, treatment contrasts are evaluated at the interquartile range ($Q25 \to Q75$, primary) and the 10th--90th percentile range ($P10 \to P90$, secondary), computed from the empirical distribution of the continuous treatment score in the filtered subsample. For example, a CATE of $-0.21$ for Left-leaning outlets means that increasing Trump sentiment from $Q25$ to $Q75$ is associated with a $-0.21$ shift in ideology on the $[0,2]$ scale.
+
+\subsubsection{Confounder Dimensionality Reduction}
+\label{sec:pca}
+
+The topic-presence indicator matrix $W$ has \num{625} columns, one per AllSides topic tag. We apply PCA to $W$, retaining components that together explain 95\% of the variance (capped at 50 components). This reduces $W$ to between 20 and 45 components depending on the filtered subsample, improving numerical stability without discarding meaningful between-topic variation.
+
+Missing topic-presence values are imputed as 0, reflecting the semantic equivalence of ``topic absent'' and ``indicator = 0.'' Sentiment scores for absent topics are similarly imputed as 0 (neutral).
+
+\subsubsection{Multi-Treatment DML}
+\label{sec:multi-treatment-design}
+
+While mediation analysis fits one model per topic pair $(F_T, F_M)$, a complementary approach fits a \emph{single} model with all qualifying topic sentiments simultaneously as a treatment matrix $\mathbf{T} \in \mathbb{R}^{N \times k}$. This controls for correlations among sentiments and yields one ATE per topic, interpreted as the effect of that topic's sentiment \emph{holding all other topic sentiments constant}.
+
+Topics are included only if they appear in at least 50 articles ($N_\text{topic} \geq 50$). Of the 625 topic columns, 11 meet this threshold: \textbf{Donald Trump}, \textbf{Politics}, \textbf{Media Bias}, \textbf{Race and Racism}, \textbf{FBI}, \textbf{Defense and Security}, \textbf{Hillary Clinton}, \textbf{LGBTQ Issues}, \textbf{Russia Probe}, \textbf{Media Watch}, and \textbf{Economy and Jobs}.
+
+\subsection{Community-Level Aggregation}
+\label{sec:community-aggregation}
+
+In addition to the topic-level analysis above, we perform a community-level analysis that aggregates sentiments within detected topic communities. The community sentiment $F_C$ is the mean sentiment over member topics present in an article, and equals zero when no member topic appears. Let $\mathbf{F}_C = (F_{C_1}, \ldots, F_{C_L})$ be the community-aggregated treatment matrix. The marginal ATE for each community $C_\ell$ is
+
+\begin{equation}
+  ATE_{C_\ell} = E\!\left[\frac{\partial Y}{\partial F_{C_\ell}}\right], \quad \forall\, \ell = 1, \ldots, L,
+  \label{eq:ate_comm}
+\end{equation}
+
+\noindent estimated via a single \texttt{LinearDML} model with $\mathbf{F}_C$ as the treatment matrix and PCA-reduced topic-presence indicators as confounders. Community-level aggregation increases the number of articles per treatment unit and yields more reliable estimates than topic-level analysis, particularly for topics that individually appear in few articles.
+
+For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{11516} articles in the full corpus, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
