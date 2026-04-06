@@ -1,32 +1,11 @@
 \section{Future Research Directions}
 \label{sec:future-directions}
 
-Future research should investigate additional metalinguistic dimensions that may provide complementary supervision signals for political bias detection. Promising candidates include:
+Future research should investigate additional metalinguistic dimensions that may provide complementary supervision signals for political bias detection. Syntactic complexity measures are one promising candidate, as political writing styles may exhibit systematic differences in sentence length distribution and grammatical structure patterns that correlate with ideological orientation. Discourse markers and argumentation patterns---the use of specific rhetorical devices, evidence types, and argumentation strategies---may also provide discriminative signals for ideological classification. Named entity coverage analysis, examining systematic differences in which political figures, organizations, or geographic locations receive coverage, could capture ideological source preferences that complement our thematic and tonal features.
 
-\begin{itemize}
-    \item Syntactic Complexity Measures: Political writing styles may exhibit systematic differences in syntactic complexity, sentence length distribution, and grammatical structure patterns that correlate with ideological orientation.
+Advanced multi-task learning architectures could address the limitations of our current static approach. Cross-task attention mechanisms that explicitly model interactions between auxiliary tasks through attention layers could capture more sophisticated metalinguistic interdependencies. Hierarchical task organization, structuring auxiliary tasks to reflect theoretical relationships between metalinguistic dimensions, could improve learning efficiency and interpretability.
 
-    \item Discourse Markers and Argumentation Patterns: The use of specific rhetorical devices, evidence types, and argumentation strategies may provide discriminative signals for ideological classification.
+The causal analysis framework presented in Chapter~\ref{ch:causal-inference} opens several additional research directions. Our current framework treats each topic sentiment as a separate treatment or mediator; an alternative co-treatment formulation would model multiple topic sentiments jointly, estimating their combined causal effect on ideology classification and capturing interaction effects that the current single-treatment design may miss. The mediation-as-diagnostic framework could be applied beyond political ideology to other annotation tasks where LLM labels are used as silver-standard training data, such as sentiment analysis, stance detection, or toxicity classification. Comparing mediation pathways across human and LLM annotators in these domains would determine whether the sensitivity patterns we find are specific to ideology or reflect a more general tendency of LLMs.
 
-    \item Named Entity Coverage Analysis: Systematic differences in which political figures, organizations, or geographic locations receive coverage may reflect ideological source preferences.
-\end{itemize}
+Broader model coverage would also strengthen the analysis. Our current study covers GPT-4o-mini (baseline and fine-tuned), RoBERTa, and Llama-3.3-70B. Expanding to a wider set of models, particularly those with reported ideological tendencies such as Grok \citep{xai2024grok}, would allow more systematic characterization of how baseline ideological priors interact with fine-tuning to shape causal pathways. Finally, future work could incorporate additional textual features beyond topic-level sentiment---such as framing indicators, rhetorical style, or lexical complexity---as treatment or mediator variables to characterize which dimensions of textual variation drive the human-LLM divergences we observe.
 
-Additionally, advanced multi-task learning architectures could address the limitations of our current static approach through several innovations:
-
-\begin{itemize}
-    \item Cross-Task Attention Mechanisms: Explicit modelling of interactions between auxiliary tasks through attention layers could capture more sophisticated metalinguistic interdependencies.
-
-    \item Hierarchical Task Organization: Organizing auxiliary tasks into hierarchical structures that reflect theoretical relationships between metalinguistic dimensions could improve learning efficiency and interpretability.
-\end{itemize}
-
-The causal analysis framework presented in Chapter~\ref{ch:causal-inference} opens several additional research directions:
-
-\begin{itemize}
-    \item Co-Treatment Modeling: Our framework treats each topic sentiment as a separate treatment or mediator. An alternative formulation would model multiple topic sentiments as co-treatments, jointly estimating their combined causal effect on ideology classification. This could capture interaction effects between topics that the current single-treatment design may miss.
-
-    \item Mediation-as-Diagnostic for Other Tasks: The mediation framework could be applied beyond political ideology to other annotation tasks where LLM labels are used as silver-standard training data, such as sentiment analysis, stance detection, or toxicity classification. Comparing mediation pathways across human and LLM annotators in these domains would determine whether the sensitivity patterns we find are specific to ideology or reflect a more general tendency of LLMs.
-
-    \item Broader Model Coverage: Our current study covers GPT-4o-mini (baseline and fine-tuned) and RoBERTa at the topic level, with community-level analysis for GPT variants. Expanding the investigation to a broader set of models, particularly those with reported ideological tendencies such as Grok \citep{xai2024grok}, would allow a more systematic characterization of how baseline ideological priors interact with fine-tuning to shape causal pathways. Comparing causal profiles across a wider model zoo would help disentangle the contributions of pre-training ideology, instruction tuning, and task-specific fine-tuning.
-
-    \item Additional Textual Features as Treatments: Topic-level sentiment is only one structured projection of article text. Future work could incorporate other interpretable textual features, such as framing indicators, rhetorical style, or lexical complexity, as treatment or mediator variables to characterize which dimensions of textual variation drive the human-LLM divergences we observe.
-\end{itemize}

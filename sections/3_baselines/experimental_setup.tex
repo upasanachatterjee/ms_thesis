@@ -2,13 +2,7 @@
 \section{Experimental Setup and Data Partitioning}
 \label{sec:experimental-setup}
 
-The AllSides dataset provides two distinct partitioning strategies that enable systematic evaluation of source leakage effects in political bias classification:
-
-\begin{itemize}
-    \item \textbf{Media Split}: All articles from the same publication source are assigned to the same partition (train, validation, or test). This configuration ensures that models cannot exploit source-specific stylistic or lexical patterns during evaluation.
-    
-    \item \textbf{Random Split}: Articles from any source may appear across all partitions, allowing systems to leverage source-identifying information during training and potentially memorize source-specific biases rather than learning generalizable content patterns.
-\end{itemize}
+The AllSides dataset provides two distinct partitioning strategies that enable systematic evaluation of source leakage effects in political bias classification. In the \textbf{Media Split}, all articles from the same publication source are assigned to the same partition (train, validation, or test), ensuring that models cannot exploit source-specific stylistic or lexical patterns during evaluation. In the \textbf{Random Split}, articles from any source may appear across all partitions, allowing systems to leverage source-identifying information during training and potentially memorize source-specific biases rather than learning generalizable content patterns.
 
 The Media Split represents our primary evaluation configuration, as it provides the most stringent test of content-based political bias detection capabilities. The Random Split serves as a diagnostic tool for quantifying the extent to which models rely on source leakage versus content analysis.
 
@@ -17,7 +11,7 @@ The Media Split represents our primary evaluation configuration, as it provides 
 \footnotesize
 \begin{tabular}{@{}l|cccc|cccc@{}}
 \toprule
-\textbf{System} & \multicolumn{4}{c|}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{AllSides Random Split}} \\ 
+\textbf{System} & \multicolumn{4}{c|}{\textbf{AllSides Media Split}} & \multicolumn{4}{c}{\textbf{AllSides Random Split}} \\
  & F1-Macro & Left & Center & Right & F1-Macro & Left & Center & Right \\
  \midrule
 \textbf{Human Performance} & 41.94 & 37.31 & 39.09 & 49.41 & - & - & - & -\\
@@ -35,9 +29,10 @@ o3-mini & 56.92 & 46.54 & \textbf{53.46} & \textbf{70.78} & - & - & - & - \\
 \midrule
 \textbf{Zero-shot LLMs (LLaMA Family)} & & & & & & & & \\
 LLaMA-3.1-8B-instant & 29.01 & 41.44 & 30.29 & 15.30 & - & - & - & - \\
-LLaMA-3.3-70B-versatile & 26.01 & 57.26 & 09.86 & 10.93  & - & - & - & - \\ 
+LLaMA-3.3-70B-versatile & 26.01 & 57.26 & 09.86 & 10.93  & - & - & - & - \\
 \bottomrule
 \end{tabular}
-\caption{Baseline system performance on AllSides political bias classification.}
+\caption{Baseline results on the AllSides test set. Bold indicates best result per column among transformer models. For LLM approaches we report only the Media Split, as they require no training.}
 \label{tab:main_baseline}
 \end{table*}
+

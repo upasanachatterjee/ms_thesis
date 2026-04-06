@@ -15,17 +15,7 @@ Figure~\ref{fig:community_ate} shows the community-level ATE estimates across th
     \label{fig:community_ate}
 \end{figure}
 
-The Human, Fine-tuned RoBERTa, and Llama-3.3-70B annotations yield \textbf{no significant results} at any community level, consistent with the topic-level null findings. The Fine-tuned GPT-4o-mini annotations reveal significant effects for three communities, while the baseline GPT-4o-mini shows a significant effect for one community:
-
-\begin{itemize}
-    \item \textbf{Community 1} (Electoral Politics: topics include Bernie Sanders, presidential elections, mail-in voting): Positive sentiment shifts baseline GPT-4o-mini ideology predictions leftward (ATE $= -0.015$; $\approx$1.5\% of one category step toward Left per unit sentiment increase).
-
-    \item \textbf{Community 3} (Social Issues: topics include immigration, LGBTQ, abortion, religion): Positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.023$; $\approx$2.3\% of one category step toward Left).
-
-    \item \textbf{Community 9} (Geopolitics and Foreign Affairs: topics include foreign policy, climate, global affairs): Positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.013$; $\approx$1.3\% of one category step toward Left).
-
-    \item \textbf{Community 11} (Trump Presidency: topics include January 6, Trump, impeachment hearings): Positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions rightward (ATE $= +0.018$; $\approx$1.8\% of one category step toward Right).
-\end{itemize}
+The Human, Fine-tuned RoBERTa, and Llama-3.3-70B annotations yield \textbf{no significant results} at any community level. The Fine-tuned GPT-4o-mini annotations reveal significant effects for three communities, while the baseline GPT-4o-mini shows a significant effect for one community. In \textbf{Community 1} (Electoral Politics: topics include Bernie Sanders, presidential elections, mail-in voting), positive sentiment shifts baseline GPT-4o-mini ideology predictions leftward (ATE $= -0.015$). In \textbf{Community 3} (Social Issues: topics include immigration, LGBTQ, abortion, religion), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.023$). In \textbf{Community 9} (Geopolitics and Foreign Affairs: topics include foreign policy, climate, global affairs), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.013$). In \textbf{Community 11} (Trump Presidency: topics include January 6, Trump, impeachment hearings), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions rightward (ATE $= +0.018$).
 
 Fine-tuned RoBERTa yields no significant community-level ATEs, joining Human and Llama-3.3-70B in the null-finding group. However, its point estimates exhibit a distinctive alignment with human annotations. In Community~9, RoBERTa ($-0.015$) nearly replicates the human estimate ($-0.014$). In Community~11, both RoBERTa ($-0.008$) and Human ($-0.017$) estimate negative effects while all LLMs are positive. In Community~3, RoBERTa ($+0.001$) shares the positive sign of the human estimate ($+0.011$), whereas all LLMs are negative. This pattern suggests that the fine-tuned encoder model captures aspects of human sentiment-ideology judgment that are lost or reversed in the generative LLM paradigms.
 

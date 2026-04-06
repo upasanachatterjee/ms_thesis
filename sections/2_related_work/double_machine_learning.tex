@@ -1,4 +1,1 @@
-\subsection{Double Machine Learning}
-\label{sec:rw-dml}
-
-Our causal estimation in Chapter~\ref{ch:causal-inference} relies on Double Machine Learning (DML), introduced by \citet{chernozhukov2018}, which provides root-$N$ consistent estimates of treatment effects in the presence of high-dimensional confounders by using cross-fitting and Neyman-orthogonal score functions. DML is particularly suited to our setting because it accommodates the high-dimensional topic-presence confounders (625 AllSides topic tags) while allowing flexible first-stage models (Random Forest regressors) for the treatment and outcome nuisance functions. We implement DML via EconML's \texttt{LinearDML} estimator \citep{econml} and extend it with bootstrap-based confidence intervals for mediation effect decomposition.
+% DML details moved to Chapter 7 (Causal Inference), Section sec:dml.
