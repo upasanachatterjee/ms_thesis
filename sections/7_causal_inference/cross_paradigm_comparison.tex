@@ -17,7 +17,7 @@ The pattern of results is consistent with shortcut learning \citep{yuan2024llmso
 Three lines of evidence support this interpretation:
 
 \begin{enumerate}
-    \item \textbf{Fine-tuned GPT-4o-mini achieves the highest classification accuracy (F1 = 72.48) but is the only annotator producing significant causal effects.} Higher classification accuracy does not guarantee preservation of causal structure---a finding structurally invisible to output-level evaluation metrics.
+    \item \textbf{Fine-tuned GPT-4o-mini achieves the highest classification accuracy (F1 = 72.48) but is the only annotator producing significant causal effects.} Higher classification accuracy does not guarantee preservation of causal structure, a finding structurally invisible to output-level evaluation metrics.
 
     \item \textbf{Baseline GPT-4o-mini and Llama-3.3-70B produce markedly different causal profiles without fine-tuning.} Baseline GPT-4o-mini defaults to a moderate prediction strategy with a centrist tendency (Figure~\ref{fig:bias_overall_appendix}), producing a significant effect only for Community~1 (Electoral Politics). Llama-3.3-70B produces null results across all communities despite a leftward prediction skew. Neither has learned the Social Issues shortcut. The divergence between baseline and fine-tuned GPT-4o-mini is therefore attributable entirely to the fine-tuning process.
 
@@ -36,7 +36,7 @@ We conducted topic-level and community-level causal inference analyses across fi
 
   \item \textbf{Sign reversals between human and LLM annotations.} In Communities 3 and 11, the estimated causal direction reverses entirely between human and Fine-tuned GPT-4o-mini annotations, indicating qualitatively different sentiment-ideology mappings.
 
-  \item \textbf{Fine-tuned GPT-4o-mini exhibits shortcut learning.} Despite achieving the highest F1 score, the fine-tuned model is the only annotator producing significant community-level causal effects and mediation pathways---consistent with spurious sentiment-ideology coupling acquired during fine-tuning.
+  \item \textbf{Fine-tuned GPT-4o-mini exhibits shortcut learning.} Despite achieving the highest F1 score, the fine-tuned model is the only annotator producing significant community-level causal effects and mediation pathways, consistent with spurious sentiment-ideology coupling acquired during fine-tuning.
 
   \item \textbf{The Community $9 \to 11$ mediation effect is almost entirely direct.} Under Fine-tuned GPT-4o-mini, 96.8\% of the total effect operates through a direct pathway, with negligible mediation through Community~11 sentiment.
 
@@ -46,5 +46,5 @@ We conducted topic-level and community-level causal inference analyses across fi
 
   \item \textbf{No CATE heterogeneity by outlet ideology.} Within each paradigm, the estimated topic-level causal effect of sentiment on ideology is uniform across Left, Centre, and Right outlet groups.
 
-  \item \textbf{Annotation methodology can reverse estimated causal directions.} The Trump sentiment effect reverses sign between paradigms at the topic level, and community-level sign reversals occur for Communities 3 and 11---underscoring the importance of annotation-model robustness checks in computational social science.
+  \item \textbf{Annotation methodology can reverse estimated causal directions.} The Trump sentiment effect reverses sign between paradigms at the topic level, and community-level sign reversals occur for Communities 3 and 11, underscoring the importance of annotation-model robustness checks in computational social science.
 \end{enumerate}

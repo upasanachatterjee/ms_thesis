@@ -86,7 +86,7 @@ We use the AllSides extended dataset described in Section~\ref{sec:dataset}. To 
 \begin{enumerate}
 \item \textbf{Entity and Sentiment Analysis:} Named entities and key concepts are extracted from the corpus. The \texttt{llama-3.3-70b-versatile} model assigns sentiment polarity to each entity on a continuous scale from $-1.0$ (strongly negative) to $+1.0$ (strongly positive). This model was chosen for its sensitivity to contextual nuances compared to smaller alternatives.
 
-\item \textbf{Entity-to-Topic Association:} The \texttt{llama3-70b-8192} model quantifies how strongly each extracted entity relates to predefined AllSides topic tags. The model avoids spurious correlations---for example, correctly distinguishing between terrorism as a broad concept and specific incidents like the 2019 Christchurch shooting when assigning the entity ``shooting'' to a topic. Entity sentiment scores are then aggregated by topic tag to produce a per-topic sentiment profile for each article.
+\item \textbf{Entity-to-Topic Association:} The \texttt{llama3-70b-8192} model quantifies how strongly each extracted entity relates to predefined AllSides topic tags. The model avoids spurious correlations; for example, correctly distinguishing between terrorism as a broad concept and specific incidents like the 2019 Christchurch shooting when assigning the entity ``shooting'' to a topic. Entity sentiment scores are then aggregated by topic tag to produce a per-topic sentiment profile for each article.
 \end{enumerate}
 
 \subsection{Experimental Design}
@@ -165,7 +165,7 @@ Table~\ref{tab:llm-causal-performance} summarizes the classification performance
     \label{tab:llm-causal-performance}
 \end{table}
 
-This five-way comparison allows us to examine whether causal relationships are stable across annotation approaches or vary systematically between human judgment, traditional classifiers, and large language models. Critically, comparing the baseline and fine-tuned GPT-4o-mini models---which share the same architecture but differ only in fine-tuning---enables us to isolate the effect of fine-tuning on downstream causal estimates. Including Llama-3.3-70B tests whether patterns observed under GPT-4o-mini generalize to a different model family.
+This five-way comparison allows us to examine whether causal relationships are stable across annotation approaches or vary systematically between human judgment, traditional classifiers, and large language models. Critically, comparing the baseline and fine-tuned GPT-4o-mini models, which share the same architecture but differ only in fine-tuning, enables us to isolate the effect of fine-tuning on downstream causal estimates. Including Llama-3.3-70B tests whether patterns observed under GPT-4o-mini generalize to a different model family.
 
 \subsubsection{Double Machine Learning}
 \label{sec:dml}
@@ -188,7 +188,7 @@ The ATE is interpreted as: ``holding topic-presence composition constant, a one-
 
 The ATE tells us \emph{whether} a topic's sentiment shifts ideology predictions, but not \emph{through which pathways}. As Figure~\ref{fig:articles} illustrates, each article carries sentiment scores for multiple topics, and these topics cluster into communities (indicated by color). When an article discusses topics from several communities simultaneously, a natural question arises: does sentiment toward one community's topics affect ideology prediction directly, or does it do so indirectly by first shifting sentiment toward another community's topics?
 
-Consider the Khalil arrest coverage in Table~\ref{fig:khalil}. AP and Fox News both tag the article with the same topics---Pro-Palestine Protests, Donald Trump, Israel, Deportations---yet their sentiment toward these topics diverges sharply. A mediation analysis asks: does pro-Palestine sentiment shift the ideology prediction directly (a \textbf{direct effect}), or does it do so by also shifting sentiment toward deportation policy, which in turn influences the ideology label (an \textbf{indirect effect})? Distinguishing these pathways reveals whether ideology classifiers respond to isolated topic framing or to correlated sentiment patterns across topics.
+Consider the Khalil arrest coverage in Table~\ref{fig:khalil}. AP and Fox News both tag the article with the same topics (Pro-Palestine Protests, Donald Trump, Israel, Deportations) yet their sentiment toward these topics diverges sharply. A mediation analysis asks: does pro-Palestine sentiment shift the ideology prediction directly (a \textbf{direct effect}), or does it do so by also shifting sentiment toward deportation policy, which in turn influences the ideology label (an \textbf{indirect effect})? Distinguishing these pathways reveals whether ideology classifiers respond to isolated topic framing or to correlated sentiment patterns across topics.
 
 Formally, the Total Effect (TE) decomposes into:
 
@@ -199,7 +199,7 @@ Formally, the Total Effect (TE) decomposes into:
 \end{equation}
 
 \begin{itemize}
-  \item The \textbf{Natural Direct Effect (NDE)} is the portion of the treatment's influence on ideology that operates independently of the mediator---the effect that remains even if the mediator's sentiment were held fixed.
+  \item The \textbf{Natural Direct Effect (NDE)} is the portion of the treatment's influence on ideology that operates independently of the mediator: the effect that remains even if the mediator's sentiment were held fixed.
   \item The \textbf{Natural Indirect Effect (NIE)} captures the portion that routes through the mediator: treatment sentiment shifts the mediator's sentiment ($F_T \to F_M$), which in turn shifts the ideology prediction ($F_M \to Y$).
 \end{itemize}
 
@@ -217,7 +217,7 @@ For the mediation analysis, treatment contrasts are evaluated at the interquarti
 \subsubsection{Confounder Dimensionality Reduction}
 \label{sec:pca}
 
-The topic-presence indicator matrix $W$ has \num{625} columns---one per AllSides topic tag. We apply PCA to $W$, retaining components that together explain 95\% of the variance (capped at 50 components). This reduces $W$ to between 20 and 45 components depending on the filtered subsample, improving numerical stability without discarding meaningful between-topic variation.
+The topic-presence indicator matrix $W$ has \num{625} columns, one per AllSides topic tag. We apply PCA to $W$, retaining components that together explain 95\% of the variance (capped at 50 components). This reduces $W$ to between 20 and 45 components depending on the filtered subsample, improving numerical stability without discarding meaningful between-topic variation.
 
 Missing topic-presence values are imputed as 0, reflecting the semantic equivalence of ``topic absent'' and ``indicator = 0.'' Sentiment scores for absent topics are similarly imputed as 0 (neutral).
 
@@ -240,4 +240,4 @@ In addition to the topic-level analysis above, we perform a community-level anal
 
 \noindent estimated via a single \texttt{LinearDML} model with $\mathbf{F}_C$ as the treatment matrix and PCA-reduced topic-presence indicators as confounders. Community-level aggregation increases the number of articles per treatment unit and yields more reliable estimates than topic-level analysis, particularly for topics that individually appear in few articles.
 
-For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors---those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{11516} articles in the full corpus, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
+For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{11516} articles in the full corpus, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
