@@ -92,7 +92,7 @@ We use the AllSides extended dataset described in Section~\ref{sec:dataset}. To 
 \subsection{Experimental Design}
 \label{sec:experimental-design}
 
-We perform all analyses on the test set of the AllSides dataset to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
+We perform all analyses on the test set of the AllSides dataset to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. We filtered the graph to only consider edges of a minimum edge weight of five. This would mean that articles that co-occurred less than five times would not be considered for this algorithm. We chose this edge weight to remove noise that comes from outlier/one-off combinations that may not accurately reflect relationships between topics. Doing so reduced the number of nodes considered from 1775 to 570. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.557 across 15 communities, with community sizes ranging from 1 to 90 tags.
 
 \begin{table}[h]
     \centering
@@ -100,23 +100,23 @@ We perform all analyses on the test set of the AllSides dataset to ensure fair c
     \toprule
     \textbf{Topic Tag} & \textbf{Articles} & \textbf{Community} \\
     \midrule
-    politics & 756 & 2 \\
-    donald\_trump & 712 & 11 \\
-    world & 503 & 4 \\
-    elections & 451 & 11 \\
-    white\_house & 444 & 2 \\
+    politics & 756 & 12 \\
+    donald\_trump & 712 & 12 \\
+    world & 503 & 10 \\
+    elections & 451 & 2 \\
+    white\_house & 444 & 12 \\
     \bottomrule
     \end{tabular}
     \caption{Top five topic tags by frequency in the test set.}
     \label{tab:top-tags}
 \end{table}
 
-We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which provide sufficient statistical power while spanning three distinct communities (Figure~\ref{fig:louvain}): political figures and electoral processes (Community 11: \textit{donald\_trump}, \textit{elections}), institutional politics (Community 2: \textit{politics}, \textit{white\_house}), and international affairs (Community 4: \textit{world}).
+We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which provide sufficient statistical power while spanning three distinct communities (Figure~\ref{fig:louvain}): political figures and institutional politisc (Community 12: , \textit{politics}, \textit{donald\_trump}, \textit{white\_house}), international affairs (Community 10: \textit{world}), and electoral processes (Community 2: \textit{elections}).
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{sections/images/louvain_communities.png}
-    \caption{Louvain community detection on the topic tag co-occurrence graph for the top five tags.}
+    \caption{Louvain community detection on the topic tag co-occurrence graph.}
     \label{fig:louvain}
 \end{figure}
 
