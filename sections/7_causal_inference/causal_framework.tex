@@ -81,7 +81,7 @@ The roles of each variable in the estimation framework are:
 We restrict the analysis to articles containing the treatment topic, preventing invalid comparisons between articles that discuss a topic and those that do not. This design supports estimation of Average Treatment Effects (ATE), Conditional Average Treatment Effects (CATE), Natural Direct Effects (NDE), and Natural Indirect Effects (NIE).
 
 \subsection{Data Collection}
-We use the AllSides extended dataset described in Section~\ref{sec:dataset}. To extract sentiment variables ($F$), we apply a two-step process to the full article text ($X$):
+We use the AllSidesV2 dataset described in Section~\ref{sec:dataset}. All causal analyses are performed on the test set of the AllSidesV2 Media split (\num{11516} articles) to ensure fair comparison across annotation sources and to avoid any overlap with transformer fine-tuning data. To extract sentiment variables ($F$), we apply a two-step process to the full article text ($X$):
 
 \begin{enumerate}
 \item \textbf{Entity and Sentiment Analysis:} Named entities and key concepts are extracted from the corpus. The \texttt{llama-3.3-70b-versatile} model assigns sentiment polarity to each entity on a continuous scale from $-1.0$ (strongly negative) to $+1.0$ (strongly positive). This model was chosen for its sensitivity to contextual nuances compared to smaller alternatives.
@@ -99,7 +99,7 @@ We use the AllSides extended dataset described in Section~\ref{sec:dataset}. To 
   \label{fig:articles}
 \end{figure}
 
-We perform all analyses on the test set of the AllSides dataset to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
+We perform all analyses on the test set of the AllSidesV2 Media split to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
 
 \begin{table}[h]
     \centering
@@ -118,14 +118,14 @@ We perform all analyses on the test set of the AllSides dataset to ensure fair c
     \label{tab:top-tags}
 \end{table}
 
-We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which provide sufficient statistical power while spanning three distinct communities (Figure~\ref{fig:louvain}): political figures and electoral processes (Community 11: \textit{donald\_trump}, \textit{elections}), institutional politics (Community 2: \textit{politics}, \textit{white\_house}), and international affairs (Community 4: \textit{world}).
+We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which provide sufficient statistical power while spanning three distinct communities: political figures and electoral processes (Community 11: \textit{donald\_trump}, \textit{elections}), institutional politics (Community 2: \textit{politics}, \textit{white\_house}), and international affairs (Community 4: \textit{world}).
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{sections/images/louvain_communities.png}
-    \caption{Louvain community detection on the topic tag co-occurrence graph for the top five tags.}
-    \label{fig:louvain}
-\end{figure}
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.7\textwidth]{sections/images/louvain_communities.png}
+%    \caption{Louvain community detection on the topic tag co-occurrence graph for the top five tags.}
+%    \label{fig:louvain}
+%\end{figure}
 
 Our primary experiment examines the bidirectional relationship between sentiment toward \textit{donald\_trump} and sentiment toward \textit{politics} in shaping ideology classification. We test two competing hypotheses: (1) Trump sentiment drives general political sentiment, which then shapes ideology; versus (2) broader political sentiment shapes Trump-specific framing, with Trump sentiment mediating the path to ideology. We use NIE/NDE decomposition and bidirectional mediation to determine the dominant pathway.
 
@@ -134,19 +134,7 @@ Building on this, we test whether the mediation pattern generalizes: do institut
 \subsection{Annotation Paradigms}
 \label{sec:annotation-paradigms}
 
-All experiments are conducted across five annotation paradigms:
-
-\begin{enumerate}
-    \item \textbf{Human annotations:} Manual ideology labels from AllSides, serving as ground truth.
-
-    \item \textbf{Fine-tuned RoBERTa:} Predictions from the best-performing fine-tuned classifier from Section~\ref{sec:continued-pretraining}.
-
-    \item \textbf{GPT-4o-mini (baseline):} Zero-shot predictions from GPT-4o-mini without task-specific fine-tuning.
-
-    \item \textbf{Fine-tuned GPT-4o-mini:} Predictions from the fine-tuned GPT model from Section~\ref{sec:llm-finetuning}.
-
-    \item \textbf{Llama-3.3-70B:} Zero-shot predictions from Meta's Llama-3.3-70B-versatile model without task-specific fine-tuning. This model is included to test whether causal patterns generalize across LLM families or are specific to the GPT architecture.
-\end{enumerate}
+All experiments are conducted across five annotation paradigms. \textbf{Human annotations} are the manual ideology labels from AllSides, serving as ground truth. \textbf{Fine-tuned RoBERTa} uses predictions from the best-performing domain-adapted classifier from Section~\ref{sec:continued-pretraining}. \textbf{GPT-4o-mini (baseline)} provides zero-shot predictions from GPT-4o-mini without task-specific fine-tuning. \textbf{Fine-tuned GPT-4o-mini} uses predictions from the fine-tuned GPT model described in Section~\ref{sec:llm-finetuning}. Finally, \textbf{Llama-3.3-70B} provides zero-shot predictions from Meta's Llama-3.3-70B-versatile model, included to test whether causal patterns generalize across LLM families or are specific to the GPT architecture.
 
 Table~\ref{tab:llm-causal-performance} summarizes the classification performance of each LLM paradigm on the AllSidesV2 test set.
 
@@ -172,14 +160,9 @@ This five-way comparison allows us to examine whether causal relationships are s
 
 Ordinary regression of $Y$ on $F_T$ is biased when confounders $W$ predict both $F_T$ and $Y$. For example, articles from right-leaning outlets may mention the FBI more often \emph{and} receive right-leaning labels, creating a spurious positive correlation between FBI sentiment and ideology that is driven by outlet identity rather than sentiment itself.
 
-DML~\cite{chernozhukov2018} removes this bias through two-stage residualization:
-\begin{enumerate}
-  \item Fit $\hat{g}(W)$ to predict $Y$ from $W$ alone; compute residuals $\tilde{Y} = Y - \hat{g}(W)$.
-  \item Fit $\hat{m}(W)$ to predict $F_T$ from $W$ alone; compute residuals $\tilde{F}_T = F_T - \hat{m}(W)$.
-  \item Regress $\tilde{Y}$ on $\tilde{F}_T$ to obtain the ATE.
-\end{enumerate}
+Double Machine Learning (DML), introduced by \citet{chernozhukov2018}, provides root-$N$ consistent estimates of treatment effects in the presence of high-dimensional confounders by using cross-fitting and Neyman-orthogonal score functions. DML is particularly suited to our setting because it accommodates the high-dimensional topic-presence confounders (625 AllSides topic tags) while allowing flexible first-stage models for the treatment and outcome nuisance functions. The procedure removes confounding bias through two-stage residualization. In the first stage, a model $\hat{g}(W)$ is fit to predict $Y$ from $W$ alone, yielding residuals $\tilde{Y} = Y - \hat{g}(W)$. Simultaneously, a model $\hat{m}(W)$ is fit to predict $F_T$ from $W$ alone, yielding residuals $\tilde{F}_T = F_T - \hat{m}(W)$. In the second stage, $\tilde{Y}$ is regressed on $\tilde{F}_T$ to obtain the ATE. \authortodo{Consider adding a diagram illustrating the two-stage residualization process.}
 
-After residualization, both $Y$ and $F_T$ have had their confounder-explained variation removed, so the final regression captures only the direct sentiment--ideology relationship that topic presence cannot explain. We use \texttt{LinearDML} from EconML~\citep{econml} with Random Forest base learners (\num{200} trees, maximum depth~5) and $k = 5$-fold cross-fitting.
+After residualization, both $Y$ and $F_T$ have had their confounder-explained variation removed, so the final regression captures only the direct sentiment--ideology relationship that topic presence cannot explain. We implement DML via EconML's \texttt{LinearDML} estimator~\citep{econml} with Random Forest base learners (\num{200} trees, maximum depth~5) and $k = 5$-fold cross-fitting, and extend it with bootstrap-based confidence intervals for mediation effect decomposition.
 
 The ATE is interpreted as: ``holding topic-presence composition constant, a one-unit increase in $F_T$ shifts the expected ideology label by $\widehat{\text{ATE}}$ units on the $[0,2]$ scale.''
 
@@ -240,4 +223,4 @@ In addition to the topic-level analysis above, we perform a community-level anal
 
 \noindent estimated via a single \texttt{LinearDML} model with $\mathbf{F}_C$ as the treatment matrix and PCA-reduced topic-presence indicators as confounders. Community-level aggregation increases the number of articles per treatment unit and yields more reliable estimates than topic-level analysis, particularly for topics that individually appear in few articles.
 
-For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{11516} articles in the full corpus, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
+For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{11516} articles in the AllSidesV2 Media test set, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
