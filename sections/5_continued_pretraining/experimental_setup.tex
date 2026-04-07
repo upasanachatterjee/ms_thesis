@@ -1,6 +1,8 @@
 \section{Methodology and Architecture}
 \label{sec:methodology}
 
+We formulate the integration of metalinguistic features as a multi-task learning problem where the primary political bias classification objective is augmented with auxiliary tasks that capture complementary aspects of political discourse. The primary task is political ideology classification using contrastive triplet-loss objectives. This is supplemented by two auxiliary tasks: multi-label topic classification capturing thematic focus, and regression of sentiment polarity reflecting tonal characteristics. This formulation enables the model to learn representations that are sensitive to both explicit ideological content and implicit stylistic markers that correlate with political orientation.
+
 Our technical approach builds upon the RoBERTa transformer architecture enhanced through continued pre-training with multiple supervised objectives. 
 \subsection{Metalinguistic Feature Sources}
 \label{sec:feature-sources}

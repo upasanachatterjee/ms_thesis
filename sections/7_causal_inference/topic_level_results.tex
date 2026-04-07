@@ -1,7 +1,7 @@
 \section{Topic-Level Results}
 \label{sec:topic-level-results}
 
-Having established that community-level aggregation reveals paradigm-specific effects (Section~\ref{sec:community-level-results}), we now present the finer-grained topic-level analysis for completeness. These results are available for four annotation paradigms: Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), and Fine-tuned GPT-4o-mini. \authortodo{Investigate fine-tuned RoBERTa on the AllSidesV2 Random split.}
+Having established that community-level aggregation reveals paradigm-specific effects (Section~\ref{sec:community-level-results}), we now present the finer-grained topic-level analysis for completeness. These results are available for four annotation paradigms: Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), and Fine-tuned GPT-4o-mini.
 
 \subsection{Mediation Analysis Results}
 \label{sec:mediation-results}
@@ -107,7 +107,7 @@ In contrast to the Trump treatment, the Politics treatment yields \textbf{consis
 \label{sec:cate-results}
 % ..............................................................................
 
-To test whether the sentiment--ideology relationship differs by outlet type, we estimate CATEs using a Causal Forest DML~\citep{wager2018forests} and group results by outlet ideology (Left, Centre, Right). Heterogeneity here would indicate that the effect of sentiment on classification is moderated by the outlet's baseline ideology.
+To test whether the sentiment--ideology relationship differs by outlet type, we estimate CATEs using a Causal Forest DML~\citep{wager2018forests} and group results by outlet ideology (Left, Center, Right). Heterogeneity here would indicate that the effect of sentiment on classification is moderated by the outlet's baseline ideology.
 
 Tables~\ref{tab:cate-trump} and~\ref{tab:cate-politics} report mean CATEs within each ideology group.
 
@@ -125,7 +125,7 @@ Tables~\ref{tab:cate-trump} and~\ref{tab:cate-politics} report mean CATEs within
     \toprule
     \textbf{Paradigm}
       & \multicolumn{2}{c}{\textbf{Left ($N$)}}
-      & \multicolumn{2}{c}{\textbf{Centre ($N$)}}
+      & \multicolumn{2}{c}{\textbf{Center ($N$)}}
       & \multicolumn{2}{c}{\textbf{Right ($N$)}} \\
     \midrule
     Human
@@ -153,7 +153,7 @@ Tables~\ref{tab:cate-trump} and~\ref{tab:cate-politics} report mean CATEs within
     \toprule
     \textbf{Paradigm}
       & \multicolumn{2}{c}{\textbf{Left ($N$)}}
-      & \multicolumn{2}{c}{\textbf{Centre ($N$)}}
+      & \multicolumn{2}{c}{\textbf{Center ($N$)}}
       & \multicolumn{2}{c}{\textbf{Right ($N$)}} \\
     \midrule
     Human
@@ -168,7 +168,7 @@ Tables~\ref{tab:cate-trump} and~\ref{tab:cate-politics} report mean CATEs within
   \end{tabular}
 \end{table}
 
-Three observations stand out. There is \textbf{no ideology-based heterogeneity within any paradigm}: for both treatments, the CATE is nearly uniform across Left, Centre, and Right outlet groups, and the causal forest finds no evidence that the sentiment--ideology effect differs by outlet type. However, there is \textbf{large between-paradigm divergence}: the Fine-tuned GPT-4o-mini Politics CATE ($\approx +0.18$) is roughly three times the Fine-tuned RoBERTa CATE ($\approx +0.05$) and nine times the Human CATE ($\approx +0.002$), with GPT-4o-mini (baseline) falling between RoBERTa and Fine-tuned GPT ($\approx +0.07$), forming a clear magnitude gradient that is a property of the labelling models, not the articles. The \textbf{Trump CATE sign flip} is also notable: Human, Fine-tuned RoBERTa, and GPT-4o-mini (baseline) CATEs for Trump are uniformly negative, while Fine-tuned GPT-4o-mini CATEs are uniformly positive, mirroring the TE sign flip in Table~\ref{tab:te-trump}. GPT-4o-mini (baseline) produces the smallest negative CATEs ($\approx -0.06$), intermediate between RoBERTa ($\approx -0.14$) and the fine-tuned model's positive values, and its $N$ distribution is heavily centrist (121 of 233 classified as Centre), consistent with its known centrist prediction tendency.
+Three observations stand out. There is \textbf{no ideology-based heterogeneity within any paradigm}: for both treatments, the CATE is nearly uniform across Left, Center, and Right outlet groups, and the causal forest finds no evidence that the sentiment--ideology effect differs by outlet type. However, there is \textbf{large between-paradigm divergence}: the Fine-tuned GPT-4o-mini Politics CATE ($\approx +0.18$) is roughly three times the Fine-tuned RoBERTa CATE ($\approx +0.05$) and nine times the Human CATE ($\approx +0.002$), with GPT-4o-mini (baseline) falling between RoBERTa and Fine-tuned GPT ($\approx +0.07$), forming a clear magnitude gradient that is a property of the labelling models, not the articles. The \textbf{Trump CATE sign flip} is also notable: Human, Fine-tuned RoBERTa, and GPT-4o-mini (baseline) CATEs for Trump are uniformly negative, while Fine-tuned GPT-4o-mini CATEs are uniformly positive, mirroring the TE sign flip in Table~\ref{tab:te-trump}. GPT-4o-mini (baseline) produces the smallest negative CATEs ($\approx -0.06$), intermediate between RoBERTa ($\approx -0.14$) and the fine-tuned model's positive values, and its $N$ distribution is heavily centrist (121 of 233 classified as Center), consistent with its known centrist prediction tendency.
 
 % ------------------------------------------------------------------------------
 \subsection{Multi-Treatment DML Results}
@@ -190,78 +190,78 @@ Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation inc
   \label{tab:multi-continuous}
   \sisetup{table-format=+1.4}
   \resizebox{\textwidth}{!}{%
-  \begin{tabular}{l
-      S[table-format=+1.4] @{~} l @{~} l c l
-      S[table-format=+1.4] @{~} l @{~} l c
-      S[table-format=+1.4] @{~} l @{~} l c l
-      S[table-format=+1.4] @{~} l @{~} l c}
+  \begin{tabular}{l c
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l}
     \toprule
-    & \multicolumn{5}{c}{\textbf{Human}}
-    & \multicolumn{4}{c}{\textbf{Fine-tuned RoBERTa}}
-    & \multicolumn{5}{c}{\textbf{GPT-4o-mini (baseline)}}
-    & \multicolumn{4}{c}{\textbf{Fine-tuned GPT-4o-mini}} \\
-    \cmidrule(lr){2-6}\cmidrule(lr){7-10}\cmidrule(lr){11-15}\cmidrule(lr){16-19}
-    \textbf{Topic}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} & {\textbf{N}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} & {\textbf{N}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} & {\textbf{N}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} & {\textbf{N}} \\
+    & & \multicolumn{3}{c}{\textbf{Human}}
+    & \multicolumn{3}{c}{\textbf{Fine-tuned RoBERTa}}
+    & \multicolumn{3}{c}{\textbf{GPT-4o-mini (baseline)}}
+    & \multicolumn{3}{c}{\textbf{Fine-tuned GPT-4o-mini}} \\
+    \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(lr){12-14}
+    \textbf{Topic} & {\textbf{N}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} \\
     \midrule
-    Hillary Clinton
-      & +0.0051 & {[}${-0.019}$ & ${+0.018}${]} & 51
-      & +0.0220$^\dagger$ & {[}${+0.001}$ & ${+0.036}${]} & 51
-      & -0.0064 & {[}${-0.020}$ & ${+0.010}${]} & 51
-      & -0.0004 & {[}${-0.015}$ & ${+0.023}${]} & 51 \\
-    Media Bias
-      & +0.0024 & {[}${-0.024}$ & ${+0.015}${]} & 115
-      & +0.0203 & {[}${-0.001}$ & ${+0.034}${]} & 115
-      & -0.0130 & {[}${-0.021}$ & ${+0.010}${]} & 115
-      & -0.0191 & {[}${-0.025}$ & ${+0.010}${]} & 115 \\
-    FBI
-      & +0.0182 & {[}${-0.010}$ & ${+0.029}${]} & 72
-      & -0.0052 & {[}${-0.022}$ & ${+0.013}${]} & 72
-      & -0.0006 & {[}${-0.019}$ & ${+0.009}${]} & 72
-      & +0.0115 & {[}${-0.011}$ & ${+0.032}${]} & 72 \\
-    Donald Trump
-      & -0.0089 & {[}${-0.028}$ & ${+0.010}${]} & 233
-      & -0.0025 & {[}${-0.024}$ & ${+0.012}${]} & 233
-      & -0.0112 & {[}${-0.025}$ & ${+0.004}${]} & 233
-      & +0.0011 & {[}${-0.015}$ & ${+0.022}${]} & 233 \\
-    Media Watch
-      & -0.0032 & {[}${-0.027}$ & ${+0.017}${]} & 58
-      & -0.0079 & {[}${-0.030}$ & ${+0.015}${]} & 58
-      & +0.0093 & {[}${-0.006}$ & ${+0.023}${]} & 58
-      & +0.0078 & {[}${-0.007}$ & ${+0.026}${]} & 58 \\
-    Russia Probe
-      & +0.0011 & {[}${-0.021}$ & ${+0.026}${]} & 57
-      & +0.0045 & {[}${-0.023}$ & ${+0.026}${]} & 57
-      & -0.0002 & {[}${-0.017}$ & ${+0.016}${]} & 57
-      & -0.0210 & {[}${-0.043}$ & ${+0.008}${]} & 57 \\
-    Race and Racism
-      & -0.0013 & {[}${-0.020}$ & ${+0.017}${]} & 104
-      & +0.0040 & {[}${-0.018}$ & ${+0.019}${]} & 104
-      & -0.0041 & {[}${-0.010}$ & ${+0.011}${]} & 104
-      & +0.0050 & {[}${-0.009}$ & ${+0.022}${]} & 104 \\
-    Defense and Security
-      & +0.0017 & {[}${-0.027}$ & ${+0.022}${]} & 76
-      & +0.0034 & {[}${-0.015}$ & ${+0.022}${]} & 76
-      & -0.0076 & {[}${-0.032}$ & ${+0.006}${]} & 76
-      & +0.0112 & {[}${-0.022}$ & ${+0.025}${]} & 76 \\
-    LGBTQ Issues
-      & +0.0027 & {[}${-0.013}$ & ${+0.019}${]} & 73
-      & +0.0021 & {[}${-0.014}$ & ${+0.023}${]} & 73
-      & -0.0045 & {[}${-0.013}$ & ${+0.010}${]} & 73
-      & -0.0144 & {[}${-0.024}$ & ${+0.006}${]} & 73 \\
-    Politics
-      & -0.0035 & {[}${-0.021}$ & ${+0.014}${]} & 594
-      & -0.0023 & {[}${-0.018}$ & ${+0.018}${]} & 594
-      & +0.0098 & {[}${-0.006}$ & ${+0.022}${]} & 594
-      & +0.0217$^\dagger$ & {[}${+0.003}$ & ${+0.034}${]} & 594 \\
-    Economy and Jobs
-      & -0.0001 & {[}${-0.018}$ & ${+0.020}${]} & 56
-      & +0.0019 & {[}${-0.018}$ & ${+0.020}${]} & 56
-      & -0.0096 & {[}${-0.023}$ & ${+0.002}${]} & 56
-      & -0.0095 & {[}${-0.025}$ & ${+0.009}${]} & 56 \\
+    Hillary Clinton & 51
+      & +0.0051 & {[}${-0.019}$ & ${+0.018}${]}
+      & +0.0220$^\dagger$ & {[}${+0.001}$ & ${+0.036}${]}
+      & -0.0064 & {[}${-0.020}$ & ${+0.010}${]}
+      & -0.0004 & {[}${-0.015}$ & ${+0.023}${]} \\
+    Media Bias & 115
+      & +0.0024 & {[}${-0.024}$ & ${+0.015}${]}
+      & +0.0203 & {[}${-0.001}$ & ${+0.034}${]}
+      & -0.0130 & {[}${-0.021}$ & ${+0.010}${]}
+      & -0.0191 & {[}${-0.025}$ & ${+0.010}${]} \\
+    FBI & 72
+      & +0.0182 & {[}${-0.010}$ & ${+0.029}${]}
+      & -0.0052 & {[}${-0.022}$ & ${+0.013}${]}
+      & -0.0006 & {[}${-0.019}$ & ${+0.009}${]}
+      & +0.0115 & {[}${-0.011}$ & ${+0.032}${]} \\
+    Donald Trump & 233
+      & -0.0089 & {[}${-0.028}$ & ${+0.010}${]}
+      & -0.0025 & {[}${-0.024}$ & ${+0.012}${]}
+      & -0.0112 & {[}${-0.025}$ & ${+0.004}${]}
+      & +0.0011 & {[}${-0.015}$ & ${+0.022}${]} \\
+    Media Watch & 58
+      & -0.0032 & {[}${-0.027}$ & ${+0.017}${]}
+      & -0.0079 & {[}${-0.030}$ & ${+0.015}${]}
+      & +0.0093 & {[}${-0.006}$ & ${+0.023}${]}
+      & +0.0078 & {[}${-0.007}$ & ${+0.026}${]} \\
+    Russia Probe & 57
+      & +0.0011 & {[}${-0.021}$ & ${+0.026}${]}
+      & +0.0045 & {[}${-0.023}$ & ${+0.026}${]}
+      & -0.0002 & {[}${-0.017}$ & ${+0.016}${]}
+      & -0.0210 & {[}${-0.043}$ & ${+0.008}${]} \\
+    Race and Racism & 104
+      & -0.0013 & {[}${-0.020}$ & ${+0.017}${]}
+      & +0.0040 & {[}${-0.018}$ & ${+0.019}${]}
+      & -0.0041 & {[}${-0.010}$ & ${+0.011}${]}
+      & +0.0050 & {[}${-0.009}$ & ${+0.022}${]} \\
+    Defense and Security & 76
+      & +0.0017 & {[}${-0.027}$ & ${+0.022}${]}
+      & +0.0034 & {[}${-0.015}$ & ${+0.022}${]}
+      & -0.0076 & {[}${-0.032}$ & ${+0.006}${]}
+      & +0.0112 & {[}${-0.022}$ & ${+0.025}${]} \\
+    LGBTQ Issues & 73
+      & +0.0027 & {[}${-0.013}$ & ${+0.019}${]}
+      & +0.0021 & {[}${-0.014}$ & ${+0.023}${]}
+      & -0.0045 & {[}${-0.013}$ & ${+0.010}${]}
+      & -0.0144 & {[}${-0.024}$ & ${+0.006}${]} \\
+    Politics & 594
+      & -0.0035 & {[}${-0.021}$ & ${+0.014}${]}
+      & -0.0023 & {[}${-0.018}$ & ${+0.018}${]}
+      & +0.0098 & {[}${-0.006}$ & ${+0.022}${]}
+      & +0.0217$^\dagger$ & {[}${+0.003}$ & ${+0.034}${]} \\
+    Economy and Jobs & 56
+      & -0.0001 & {[}${-0.018}$ & ${+0.020}${]}
+      & +0.0019 & {[}${-0.018}$ & ${+0.020}${]}
+      & -0.0096 & {[}${-0.023}$ & ${+0.002}${]}
+      & -0.0095 & {[}${-0.025}$ & ${+0.009}${]} \\
     \bottomrule
   \end{tabular}%
   }

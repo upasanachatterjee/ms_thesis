@@ -7,7 +7,7 @@ Our experimental evaluation reveals distinct performance profiles and operationa
 
 The best-performing specialized transformer configuration ($T_{id}(32) + T_h$) achieved 62.19 F1-Macro on the AllSides Media split through continued pre-training with metalinguistic objectives. This performance substantially exceeds zero-shot GPT-4o-mini at 51.86 F1-Macro, demonstrating the value of task-specific architectural adaptation and training strategies. The specialized model required no labeled training data beyond the contrastive triplets derived from source-level annotations, representing superior data efficiency for deployment scenarios with limited supervision.
 
-Fine-tuned GPT-4o-mini with 2,000 labeled examples achieved 69.37 F1-Macro, surpassing our best specialized transformer by 7.18 points. However, this performance improvement introduces several methodological concerns and practical limitations. First, the fine-tuned LLM requires substantial labeled training data. Second, the opaque pre-training corpus raises potential data contamination concerns that do not affect our controlled transformer pre-training process.
+Fine-tuned GPT-4o-mini with 2,000 labeled examples achieved 72.48 F1-Macro, surpassing our best specialized transformer by 7.18 points. However, this performance improvement introduces several methodological concerns and practical limitations. First, the fine-tuned LLM requires substantial labeled training data. Second, the opaque pre-training corpus raises potential data contamination concerns that do not affect our controlled transformer pre-training process.
 
 \subsection{Classification Performance Asymmetries}
 

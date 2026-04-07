@@ -8,14 +8,21 @@ This section presents results from the community-level causal analysis. By aggre
 
 Figure~\ref{fig:community_ate} shows the community-level ATE estimates across the three available annotation paradigms. The complete ATE table for all nine communities is provided in Appendix~\ref{sec:appendix-community-ate}.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.85\textwidth]{sections/images/community_analysis/ate_communities.png}
+    \includegraphics[width=0.5\textwidth]{sections/images/community_analysis/ate_communities.png}
     \caption{Community-level ATE (continuous sentiment). Filled markers indicate statistical significance at $\alpha = 0.05$.}
     \label{fig:community_ate}
 \end{figure}
 
-The Human, Fine-tuned RoBERTa, and Llama-3.3-70B annotations yield \textbf{no significant results} at any community level. The Fine-tuned GPT-4o-mini annotations reveal significant effects for three communities, while the baseline GPT-4o-mini shows a significant effect for one community. In \textbf{Community 1} (Electoral Politics: topics include Bernie Sanders, presidential elections, mail-in voting), positive sentiment shifts baseline GPT-4o-mini ideology predictions leftward (ATE $= -0.015$). In \textbf{Community 3} (Social Issues: topics include immigration, LGBTQ, abortion, religion), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.023$). In \textbf{Community 9} (Geopolitics and Foreign Affairs: topics include foreign policy, climate, global affairs), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.013$). In \textbf{Community 11} (Trump Presidency: topics include January 6, Trump, impeachment hearings), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions rightward (ATE $= +0.018$).
+The Human, Fine-tuned RoBERTa, and Llama-3.3-70B annotations yield \textbf{no significant results} at any community level. The Fine-tuned GPT-4o-mini annotations reveal significant effects for three communities, while the baseline GPT-4o-mini shows a significant effect for one community:
+
+\begin{itemize}
+    \item \textbf{Community 1} (Electoral Politics: topics include Bernie Sanders, presidential elections, mail-in voting), positive sentiment shifts baseline GPT-4o-mini ideology predictions leftward (ATE $= -0.015$).
+    \item \textbf{Community 3} (Social Issues: topics include immigration, LGBTQ, abortion, religion), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.023$).
+    \item \textbf{Community 9} (Geopolitics and Foreign Affairs: topics include foreign policy, climate, global affairs), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions leftward (ATE $= -0.013$).
+    \item \textbf{Community 11} (Trump Presidency: topics include January 6, Trump, impeachment hearings), positive sentiment shifts Fine-tuned GPT-4o-mini ideology predictions rightward (ATE $= +0.018$).
+\end{itemize}
 
 Fine-tuned RoBERTa yields no significant community-level ATEs, joining Human and Llama-3.3-70B in the null-finding group. However, its point estimates exhibit a distinctive alignment with human annotations. In Community~9, RoBERTa ($-0.015$) nearly replicates the human estimate ($-0.014$). In Community~11, both RoBERTa ($-0.008$) and Human ($-0.017$) estimate negative effects while all LLMs are positive. In Community~3, RoBERTa ($+0.001$) shares the positive sign of the human estimate ($+0.011$), whereas all LLMs are negative. This pattern suggests that the fine-tuned encoder model captures aspects of human sentiment-ideology judgment that are lost or reversed in the generative LLM paradigms.
 
@@ -42,9 +49,9 @@ Of the communities with significant ATEs (Communities 3, 9, and 11), six treatme
 
 Figure~\ref{fig:mediation_9_11} shows mediation results for Community~9 (Geopolitics and Foreign Affairs) as treatment and Community~11 (Trump Presidency) as mediator ($N = 139$ articles, $Q_{25} \to Q_{75}$ contrast from sentiment $-0.3$ to $0.0$).
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{sections/images/community_analysis/mediation_community_9_11.png}
+    \includegraphics[width=0.5\textwidth]{sections/images/community_analysis/mediation_community_9_11.png}
     \caption{Community $9 \to 11$ mediation results ($Q_{25} \to Q_{75}$ contrast, $N=139$). Error bars show 95\% bootstrap CIs; filled markers indicate significance.}
     \label{fig:mediation_9_11}
 \end{figure}
@@ -59,9 +66,9 @@ The per-unit effect magnitude within the engaged subpopulation is substantially 
 
 Figure~\ref{fig:mediation_11_9} shows the reverse pathway: Community~11 as treatment ($N = 772$ articles, $Q_{25} \to Q_{75}$ contrast from sentiment $-0.4$ to $0.1$).
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{sections/images/community_analysis/mediation_community_11_9.png}
+    \includegraphics[width=0.5\textwidth]{sections/images/community_analysis/mediation_community_11_9.png}
     \caption{Community $11 \to 9$ mediation results ($Q_{25} \to Q_{75}$ contrast, $N=772$). Error bars show 95\% bootstrap CIs; filled markers indicate significance.}
     \label{fig:mediation_11_9}
 \end{figure}
