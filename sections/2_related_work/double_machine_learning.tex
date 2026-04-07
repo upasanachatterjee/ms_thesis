@@ -1,1 +1,6 @@
-% DML details moved to Chapter 7 (Causal Inference), Section sec:dml.
+\section{Double Machine Learning}
+\label{sec:dml-related-work}
+
+Double Machine Learning (DML), introduced by \citet{chernozhukov2018}, is a causal inference framework for estimating treatment effects when the number of potential confounders is large relative to sample size. Standard regression of an outcome on a treatment is biased when confounders predict both, and conditioning on every observed covariate becomes statistically unstable as covariate dimensionality grows. DML resolves this by residualizing both the treatment and the outcome against flexible (typically machine-learned) nuisance models of the confounders, and then regressing the residualized outcome on the residualized treatment via cross-fitting and Neyman-orthogonal score functions. The result is a root-$N$ consistent estimate of the treatment effect that remains valid even when the nuisance models are themselves high-dimensional and only converge at slower rates.
+
+DML is well suited to the setting in Chapter~\ref{sec:causal-inference}, where the treatment is a continuous topic-level sentiment score, the outcome is an article-level ideology label, and the confounder set is the high-dimensional topic-presence indicator over hundreds of AllSides topic tags. Methodological details of how we instantiate DML, including the choice of base learners, the cross-fitting protocol, and the extension to mediation analysis, are deferred to Section~\ref{sec:dml}.

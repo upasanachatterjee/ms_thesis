@@ -2,7 +2,7 @@
 \section{Human Performance Baseline}
 \label{sec:human-baseline}
 
-To establish empirical bounds on the difficulty of article-level political bias classification, we conducted a human annotation study. This baseline offers insights into the cognitive challenges faced by layman annotators in this domain.
+To establish empirical bounds on the difficulty of article-level political bias classification, we conducted a human annotation study. This baseline offers insights into the cognitive challenges faced by lay annotators in this domain.
 
 \subsection{Annotation Protocol}
 
@@ -12,7 +12,7 @@ The annotation study employed a random sample of 102 articles from the AllSides 
 
 \subsection{Human Performance Results}
 
-Human performance proved modest across all metrics, with an average F1-Macro score of 41.94 and individual annotator performance ranging from 35.46 to 46.57. Inter-annotator agreement analysis revealed low agreement (Krippendorff's $\alpha = 0.241$), indicating significant subjectivity in political bias perception even among demographically similar annotators.
+Human performance proved modest across all metrics, with an average F1-Macro score of 41.94 and individual annotator performance ranging from 35.46 to 46.57. Inter-annotator agreement analysis revealed low agreement (Krippendorff's $\alpha = 0.241$), indicating significant subjectivity in political bias perception even among demographically similar annotators. This value is low by general NLP standards, where $\alpha > 0.6$ is typically treated as the ``acceptable'' threshold, but it is consistent with prior bias-annotation studies on directional or fine-grained labels: MBIC \citep{spinde2021mbic} reports Fleiss's $\kappa \approx 0.21$ from crowdworkers and BABE \citep{spinde2021babe} reports Krippendorff's $\alpha \approx 0.39$ even with trained expert annotators. Our $\alpha = 0.241$ should therefore be read not as a failure of the annotators but as a typical task-difficulty signature for directional ideology labeling.
 
 Performance varied notably across ideological categories, with annotators achieving higher accuracy on right-leaning content (F1 = 49.41) compared to center (F1 = 39.09) and left-leaning (F1 = 37.31) articles. Post-annotation interviews revealed that annotators experienced particular difficulty with non-hyperpartisan content and expressed that access to source information would have substantially increased their classification confidence.
 

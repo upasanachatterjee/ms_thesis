@@ -113,97 +113,36 @@ Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation inc
 \begin{table}[ht]
   \centering
   \sisetup{table-format=+1.4}
-  \resizebox{\textwidth}{!}{%
+  \setlength{\tabcolsep}{4pt}
+  \small
   \begin{tabular}{l c
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l}
+      S[table-format=+1.4]
+      S[table-format=+1.4]
+      S[table-format=+1.4]
+      S[table-format=+1.4]
+      S[table-format=+1.4]}
     \toprule
-    & & \multicolumn{3}{c}{\textbf{Human}}
-    & \multicolumn{3}{c}{\textbf{Fine-tuned RoBERTa}}
-    & \multicolumn{3}{c}{\textbf{GPT-4o-mini (baseline)}}
-    & \multicolumn{3}{c}{\textbf{Fine-tuned GPT-4o-mini}}
-    & \multicolumn{3}{c}{\textbf{Llama-3.3-70B}} \\
-    \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(lr){12-14}\cmidrule(lr){15-17}
     \textbf{Topic} & {\textbf{N}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} \\
+      & {\textbf{Human}}
+      & {\textbf{FT RoBERTa}}
+      & {\textbf{GPT (base.)}}
+      & {\textbf{FT GPT}}
+      & {\textbf{Llama-3.3}} \\
     \midrule
-    Hillary Clinton & 51
-      & +0.0051 & {[}${-0.019}$ & ${+0.018}${]}
-      & \textbf{+0.0220} & {[}${+0.001}$ & ${+0.036}${]}
-      & -0.0064 & {[}${-0.020}$ & ${+0.010}${]}
-      & -0.0004 & {[}${-0.015}$ & ${+0.023}${]}
-      & -0.0034 & {[}${-0.013}$ & ${+0.020}${]} \\
-    Media Bias & 115
-      & +0.0024 & {[}${-0.024}$ & ${+0.015}${]}
-      & +0.0203 & {[}${-0.001}$ & ${+0.034}${]}
-      & -0.0130 & {[}${-0.021}$ & ${+0.010}${]}
-      & -0.0191 & {[}${-0.025}$ & ${+0.010}${]}
-      & +0.0057 & {[}${-0.011}$ & ${+0.026}${]} \\
-    FBI & 72
-      & +0.0182 & {[}${-0.010}$ & ${+0.029}${]}
-      & -0.0052 & {[}${-0.022}$ & ${+0.013}${]}
-      & -0.0006 & {[}${-0.019}$ & ${+0.009}${]}
-      & +0.0115 & {[}${-0.011}$ & ${+0.032}${]}
-      & -0.0077 & {[}${-0.023}$ & ${+0.012}${]} \\
-    Donald Trump & 233
-      & -0.0089 & {[}${-0.028}$ & ${+0.010}${]}
-      & -0.0025 & {[}${-0.024}$ & ${+0.012}${]}
-      & -0.0112 & {[}${-0.025}$ & ${+0.004}${]}
-      & +0.0011 & {[}${-0.015}$ & ${+0.022}${]}
-      & -0.0087 & {[}${-0.025}$ & ${+0.009}${]} \\
-    Media Watch & 58
-      & -0.0032 & {[}${-0.027}$ & ${+0.017}${]}
-      & -0.0079 & {[}${-0.030}$ & ${+0.015}${]}
-      & +0.0093 & {[}${-0.006}$ & ${+0.023}${]}
-      & +0.0078 & {[}${-0.007}$ & ${+0.026}${]}
-      & -0.0104 & {[}${-0.024}$ & ${+0.006}${]} \\
-    Russia Probe & 57
-      & +0.0011 & {[}${-0.021}$ & ${+0.026}${]}
-      & +0.0045 & {[}${-0.023}$ & ${+0.026}${]}
-      & -0.0002 & {[}${-0.017}$ & ${+0.016}${]}
-      & -0.0210 & {[}${-0.043}$ & ${+0.008}${]}
-      & +0.0100 & {[}${-0.018}$ & ${+0.030}${]} \\
-    Race and Racism & 104
-      & -0.0013 & {[}${-0.020}$ & ${+0.017}${]}
-      & +0.0040 & {[}${-0.018}$ & ${+0.019}${]}
-      & -0.0041 & {[}${-0.010}$ & ${+0.011}${]}
-      & +0.0050 & {[}${-0.009}$ & ${+0.022}${]}
-      & +0.0067 & {[}${-0.004}$ & ${+0.021}${]} \\
-    Defense and Security & 76
-      & +0.0017 & {[}${-0.027}$ & ${+0.022}${]}
-      & +0.0034 & {[}${-0.015}$ & ${+0.022}${]}
-      & -0.0076 & {[}${-0.032}$ & ${+0.006}${]}
-      & +0.0112 & {[}${-0.022}$ & ${+0.025}${]}
-      & +0.0068 & {[}${-0.022}$ & ${+0.021}${]} \\
-    LGBTQ Issues & 73
-      & +0.0027 & {[}${-0.013}$ & ${+0.019}${]}
-      & +0.0021 & {[}${-0.014}$ & ${+0.023}${]}
-      & -0.0045 & {[}${-0.013}$ & ${+0.010}${]}
-      & -0.0144 & {[}${-0.024}$ & ${+0.006}${]}
-      & -0.0063 & {[}${-0.022}$ & ${+0.008}${]} \\
-    Politics & 594
-      & -0.0035 & {[}${-0.021}$ & ${+0.014}${]}
-      & -0.0023 & {[}${-0.018}$ & ${+0.018}${]}
-      & +0.0098 & {[}${-0.006}$ & ${+0.022}${]}
-      & \textbf{+0.0217} & {[}${+0.003}$ & ${+0.034}${]}
-      & +0.0017 & {[}${-0.013}$ & ${+0.019}${]} \\
-    Economy and Jobs & 56
-      & -0.0001 & {[}${-0.018}$ & ${+0.020}${]}
-      & +0.0019 & {[}${-0.018}$ & ${+0.020}${]}
-      & -0.0096 & {[}${-0.023}$ & ${+0.002}${]}
-      & -0.0095 & {[}${-0.025}$ & ${+0.009}${]}
-      & +0.0083 & {[}${-0.013}$ & ${+0.024}${]} \\
+    Hillary Clinton & 51 & +0.0051 & \cellcolor{blue!25}+0.0220 & -0.0064 & -0.0004 & -0.0034 \\
+    Media Bias & 115 & +0.0024 & +0.0203 & -0.0130 & -0.0191 & +0.0057 \\
+    FBI & 72 & +0.0182 & -0.0052 & -0.0006 & +0.0115 & -0.0077 \\
+    Donald Trump & 233 & -0.0089 & -0.0025 & -0.0112 & +0.0011 & -0.0087 \\
+    Media Watch & 58 & -0.0032 & -0.0079 & +0.0093 & +0.0078 & -0.0104 \\
+    Russia Probe & 57 & +0.0011 & +0.0045 & -0.0002 & -0.0210 & +0.0100 \\
+    Race and Racism & 104 & -0.0013 & +0.0040 & -0.0041 & +0.0050 & +0.0067 \\
+    Defense and Security & 76 & +0.0017 & +0.0034 & -0.0076 & +0.0112 & +0.0068 \\
+    LGBTQ Issues & 73 & +0.0027 & +0.0021 & -0.0045 & -0.0144 & -0.0063 \\
+    Politics & 594 & -0.0035 & -0.0023 & +0.0098 & \cellcolor{blue!25}+0.0217 & +0.0017 \\
+    Economy and Jobs & 56 & -0.0001 & +0.0019 & -0.0096 & -0.0095 & +0.0083 \\
     \bottomrule
-  \end{tabular}%
-  }
-  \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score).  95\% bootstrap CIs ($B = \num{2000}$). Significant results (bolded) have CIs that exclude zero. Each paradigm identifies a different significant topic: Fine-tuned RoBERTa finds Hillary Clinton significant; Fine-tuned GPT-4o-mini finds Politics significant; Human and GPT-4o-mini (baseline) find none.}
+  \end{tabular}
+  \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score). Cells shaded in blue denote statistically significant results (95\% bootstrap CI excludes zero; $B = \num{2000}$). The full table with 95\% confidence intervals for every estimate is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.}
   \label{tab:multi-continuous}
 \end{table}
 
@@ -266,6 +205,6 @@ Second, each fine-tuned model finds a \textbf{different significant topic} in th
 \label{sec:causal-summary-topic}
 % ------------------------------------------------------------------------------
 
-Across the topic-level analyses, no topic sentiment produces a statistically significant effect that is consistent across all annotation paradigms. Human, GPT-4o-mini (baseline), and Llama-3.3-70B annotations produce no significant effects across any analysis. Fine-tuned RoBERTa's only significant finding is an isolated Hillary Clinton result in the multi-treatment analysis that does not replicate under any other paradigm. The Donald Trump treatment direction is annotation-model dependent: negative under Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), and Llama-3.3-70B, but positive under Fine-tuned GPT-4o-mini. These results suggest that topic-level sentiment, as measured by current annotation models, is not a strong independent driver of ideology classification once topic presence is controlled for.
+The summary statement ``no topic produces a statistically significant effect that is consistent across annotation paradigms'' actually conflates two distinct empirical failures, and they are worth separating. The first is a within-paradigm null: \emph{within} most individual paradigms, no topic clears the significance threshold at all (Human, GPT-4o-mini baseline, and Llama-3.3-70B return no significant topic-level effects under any analysis). The second is a cross-paradigm disagreement: the few topics that \emph{do} reach significance in some paradigm fail to replicate in any other paradigm, and in some cases reverse direction (Fine-tuned RoBERTa's isolated Hillary Clinton result in the multi-treatment analysis is not recovered by any other paradigm; Fine-tuned GPT-4o-mini's positive Trump effect is the opposite sign of every other paradigm). The first failure is about statistical power and signal magnitude at the topic level; the second is about paradigm-dependence and is the structurally interesting finding. Across the topic-level analyses, then, no topic sentiment produces a statistically significant effect that is consistent across all annotation paradigms. Human, GPT-4o-mini (baseline), and Llama-3.3-70B annotations produce no significant effects across any analysis. Fine-tuned RoBERTa's only significant finding is an isolated Hillary Clinton result in the multi-treatment analysis that does not replicate under any other paradigm. The Donald Trump treatment direction is annotation-model dependent: negative under Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), and Llama-3.3-70B, but positive under Fine-tuned GPT-4o-mini. These results suggest that topic-level sentiment, as measured by current annotation models, is not a strong independent driver of ideology classification once topic presence is controlled for.
 
 The primary value of the topic-level analysis lies in demonstrating that identical causal analyses applied to labels from different annotation systems can produce qualitatively different conclusions. As shown in the preceding community-level analysis (Section~\ref{sec:community-level-results}), aggregation across related topics does reveal more robust patterns, but these patterns remain paradigm-specific rather than universal.

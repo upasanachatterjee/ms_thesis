@@ -1,9 +1,7 @@
 \chapter{AllSides Dataset Augmentation}
 \label{sec:dataset}
 
-This chapter presents our systematic extension of the AllSides political bias classification dataset, which increases training data by 2.5× while maintaining source consistency and improving class balance. Our augmentation methodology and empirical analysis reveal important insights about data limitations versus inherent task complexity in political bias detection.
-
-To improve the scale of the original AllSides dataset \citep{baly2020we}, we expanded the corpus by collecting additional articles from the same news sources present in the original dataset. This approach maintains source consistency while substantially increasing training data volume, allowing us to evaluate whether the performance limitations observed in prior work were primarily attributable to data scarcity rather than inherent task difficulty.
+This chapter presents our systematic extension of the AllSides political bias classification dataset \citep{baly2020we}. We collect additional articles from the same news sources present in the original dataset, holding the source set fixed so that we can evaluate whether the performance limitations observed in prior work were primarily attributable to data scarcity rather than inherent task difficulty.
 
 AllSidesV2 adds 10,184 samples to the training split and 10,216 samples to the test split based on the sources seen in the original AllSides dataset. The validation set remained unchanged at 2,356 samples to ensure consistent evaluation metrics. This expansion represents approximately a $2.5\times$ increase in training data and a $8.5\times$ increase in test data compared to the original dataset. The distribution of political ideology labels remained roughly balanced across the extended samples. Appendix~\ref{appendix:extended_dataset} provides details about our data collection methodology and source-level statistics.  
 
@@ -33,6 +31,8 @@ $^\dagger$The fine-tuned LLM is not directly comparable to transformer models du
 \label{tab:extended_main}
 \end{table}
 
-Re-evaluating transformer baselines on AllSidesV2 (Table~\ref{tab:extended_main}) reveals substantial but uneven gains: left F1 improves markedly for BERT and RoBERTa (12+ points), with more modest center gains, while right stagnates or declines across all models, consistent with right-leaning content being more lexically heterogeneous. Despite near-parity in left and right sample counts, the POLITICS model still shows a 12+ point F1 gap between the two classes (77.94 vs.\ 65.30), reinforcing that class balance alone does not resolve the challenge.
+Re-evaluating transformer baselines on AllSidesV2 (Table~\ref{tab:extended_main}) reveals substantial but uneven gains: left F1 improves markedly for BERT and RoBERTa (12+ points), with more modest center gains, while right stagnates or declines across all models. Despite near-parity in left and right sample counts, the POLITICS model still shows a 12+ point F1 gap between the two classes (77.94 vs.\ 65.30), reinforcing that class balance alone does not resolve the challenge.
 
-General-purpose transformers gain 2--12 points with additional data (with BART gaining the most), whereas POLITICS gains only 3 points, suggesting contrastive pre-training alone is approaching a ceiling and motivating the metalinguistic objectives explored in Section~\ref{sec:continued-pretraining}.
+General-purpose transformers gain 2--12 points with additional data (with BART gaining the most), whereas POLITICS gains only 3 points, suggesting contrastive pre-training alone is approaching a ceiling. This motivates the specific design choice explored in Chapter~\ref{sec:continued-pretraining}: rather than scaling contrastive pre-training further, we add explicit metalinguistic auxiliary objectives (theme prediction and tone regression) on top of the contrastive backbone, so that the encoder is supervised on the structural cues that human annotators rely on rather than only on ideology-based positive/negative pairs.
+
+\authortodo{Add an error-typology paragraph here: where does the data-augmented baseline still fail (which classes, which topics, which outlet types)?}

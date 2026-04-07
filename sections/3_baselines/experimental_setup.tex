@@ -4,7 +4,7 @@
 
 The AllSides dataset provides two distinct partitioning strategies that enable systematic evaluation of source leakage effects in political bias classification. In the \textbf{Media Split}, all articles from the same publication source are assigned to the same partition (train, validation, or test), ensuring that models cannot exploit source-specific stylistic or lexical patterns during evaluation. In the \textbf{Random Split}, articles from any source may appear across all partitions, allowing systems to leverage source-identifying information during training and potentially memorize source-specific biases rather than learning generalizable content patterns.
 
-The Media Split represents our primary evaluation configuration, as it provides the most stringent test of content-based political bias detection capabilities. The Random Split serves as a diagnostic tool for quantifying the extent to which models rely on source leakage versus content analysis.
+The Media Split represents our primary evaluation configuration, as it provides the most stringent test of content-based political bias detection capabilities. The Random Split serves as a diagnostic tool for quantifying the extent to which models rely on source leakage versus content analysis. The two splits are not redundant: the magnitude of the Media-vs-Random gap is itself the source-leakage measurement, quantifying how much of each model's headline F1 comes from exploiting memorizable source patterns rather than from content-based ideology. A model whose Random F1 substantially exceeds its Media F1 is, by construction, leaning on outlet identity to make its predictions.
 
 \begin{table*}
 \centering
@@ -32,7 +32,7 @@ LLaMA-3.1-8B-instant & 29.01 & 41.44 & 30.29 & 15.30 & - & - & - & - \\
 LLaMA-3.3-70B-versatile & 26.01 & 57.26 & 09.86 & 10.93  & - & - & - & - \\
 \bottomrule
 \end{tabular}
-\caption{Baseline results on the AllSides test set. Bold indicates best result per column among transformer models. For LLM approaches we report only the Media Split, as they require no training.}
+\caption{Baseline results on the AllSides test set. Bold indicates best result per column among transformer models. LLMs are evaluated only on the Media split because, lacking task-specific training, the partitioning has no effect on their predictions and a separate Random-split column would be vacuous.}
 \label{tab:main_baseline}
 \end{table*}
 

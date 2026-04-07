@@ -5,7 +5,7 @@ This appendix provides the full community-level ATE breakdown and ideology predi
 
 \section{Ideology Prediction Distributions}
 
-Figure~\ref{fig:bias_overall_appendix} shows the overall prediction distribution across the full dataset. GPT-4o-mini (baseline) exhibits a pronounced centrist tendency, Fine-tuned GPT-4o-mini and Llama-3.3-70B both skew leftward, and human annotations are the most right-leaning overall, reflecting the ideological composition of the AllSidesV2 corpus.
+Figure~\ref{fig:bias_overall_appendix} shows the overall prediction distribution across the full dataset. GPT-4o-mini (baseline) exhibits a pronounced centrist tendency, Fine-tuned GPT-4o-mini and Llama-3.3-70B both skew leftward, and human annotations are the most right-leaning overall, reflecting the ideological composition of the AllSidesV2 corpus. The leftward shift of Fine-tuned GPT-4o-mini relative to its zero-shot baseline is best read as a calibration artifact of fine-tuning rather than as a substantive ideological commitment of the model: the AllSidesV2 training distribution is itself imbalanced toward left-leaning articles (roughly 43\% Left versus 34\% Right), and supervised fine-tuning calibrates the model's output prior to that empirical class frequency, dragging its predicted distribution leftward in lockstep. The same mechanism explains why the baseline GPT, which has not been calibrated to AllSidesV2's class prior, instead defaults to a centrist prediction strategy.
 
 \begin{figure}[h]
     \centering

@@ -5,15 +5,18 @@ This appendix provides the full community-level mediation results referenced in 
 
 \section{Pathway Selection}
 
-Six treatment-mediator pairs were evaluated across communities $\{3, 9, 11\}$, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. The remaining four pairs degenerated for two distinct reasons:
+Six treatment-mediator pairs were evaluated across communities $\{3, 9, 11\}$, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. The per-pathway outcome is:
 
 \begin{itemize}
-    \item \textbf{Community 3 as treatment} ($N=132$): All confounder and mediator candidates were eliminated by the minimum topic co-occurrence filter ($\geq 50$ articles), reducing the model to an intercept-only specification with no mediation output.
-
-    \item \textbf{Community 3 as mediator} (pairs $11 \to 3$ and $9 \to 3$): Community~3 failed the co-occurrence filter with both treatment communities. The $9 \to 3$ pathway collapsed to Community~11 as the sole surviving mediator (duplicating $9 \to 11$), while $11 \to 3$ substituted unrelated mediators rather than testing the intended pathway.
+    \item $3 \to 9$: 0 articles co-occur, pathway eliminated.
+    \item $3 \to 11$: 0 articles co-occur, pathway eliminated.
+    \item $9 \to 3$: $< 50$ co-occurring articles, drops below the minimum-presence threshold.
+    \item $11 \to 3$: $< 50$ co-occurring articles, drops below the minimum-presence threshold.
+    \item $9 \to 11$: 139 articles co-occur, pathway retained.
+    \item $11 \to 9$: 772 articles co-occur, pathway retained.
 \end{itemize}
 
-The six-pair matrix therefore reduces to two unique, well-specified analyses.
+The six-pair matrix therefore reduces to two unique, well-specified analyses, both gated by the topic co-occurrence filter rather than by any modelling failure.
 
 \section{Full Mediation Results}
 
@@ -50,6 +53,106 @@ Llama-3.3-70B      & $+0.008$ & $[-0.114,\ +0.130]$ & $+0.012$ & $[-0.046,\ +0.0
 For the $9 \to 11$ pathway, Fine-tuned GPT-4o-mini is the only annotator to produce a significant total effect (TE $= -0.108$), with nearly all of it attributable to the direct pathway (3.2\% mediated). Human and baseline GPT annotators show point estimates in the same negative direction but with wide, zero-crossing intervals. Fine-tuned RoBERTa (TE $= -0.069$) ranks second in magnitude after Fine-tuned GPT-4o-mini, further supporting the directional consensus. Llama-3.3-70B produces a near-zero TE ($-0.007$) with the widest confidence interval, consistent with its general attenuation pattern observed in the ATE analysis. All five annotators are directionally consistent (negative), suggesting the non-significance of human, RoBERTa, baseline GPT, and Llama reflects power limitations at $N=139$ rather than directional disagreement.
 
 For the $11 \to 9$ pathway, no annotator reaches significance. The Fine-tuned GPT-4o-mini effect reverses sign relative to the $9 \to 11$ direction ($+0.056$ vs.\ $-0.108$), reinforcing the asymmetry interpretation: Community~9's effect on ideology is concentrated and direct, while Community~11's influence is diffuse across many mediators. Llama-3.3-70B produces a small positive TE ($+0.008$), again attenuated relative to other paradigms. Human and Fine-tuned RoBERTa are the only annotators to produce negative TEs for this pathway ($-0.045$ and $-0.016$, respectively), while all three LLM-based paradigms estimate positive effects, reinforcing the pattern of RoBERTa tracking human directional tendencies.
+
+\section{Full Multi-Treatment DML Results (Continuous Encoding)}
+
+Table~\ref{tab:multi-continuous-full} reports the complete multi-treatment DML results summarized in Table~\ref{tab:multi-continuous} of Chapter~\ref{ch:causal-inference}, including the 95\% bootstrap confidence interval ($B = \num{2000}$) accompanying every ATE estimate.
+
+\begin{sidewaystable}
+  \centering
+  \sisetup{table-format=+1.4}
+  \small
+  \begin{tabular}{l c
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l}
+    \toprule
+    & & \multicolumn{3}{c}{\textbf{Human}}
+    & \multicolumn{3}{c}{\textbf{Fine-tuned RoBERTa}}
+    & \multicolumn{3}{c}{\textbf{GPT-4o-mini (baseline)}}
+    & \multicolumn{3}{c}{\textbf{Fine-tuned GPT-4o-mini}}
+    & \multicolumn{3}{c}{\textbf{Llama-3.3-70B}} \\
+    \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(lr){12-14}\cmidrule(lr){15-17}
+    \textbf{Topic} & {\textbf{N}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} \\
+    \midrule
+    Hillary Clinton & 51
+      & +0.0051 & {[}${-0.019}$ & ${+0.018}${]}
+      & \textbf{+0.0220} & {[}${+0.001}$ & ${+0.036}${]}
+      & -0.0064 & {[}${-0.020}$ & ${+0.010}${]}
+      & -0.0004 & {[}${-0.015}$ & ${+0.023}${]}
+      & -0.0034 & {[}${-0.013}$ & ${+0.020}${]} \\
+    Media Bias & 115
+      & +0.0024 & {[}${-0.024}$ & ${+0.015}${]}
+      & +0.0203 & {[}${-0.001}$ & ${+0.034}${]}
+      & -0.0130 & {[}${-0.021}$ & ${+0.010}${]}
+      & -0.0191 & {[}${-0.025}$ & ${+0.010}${]}
+      & +0.0057 & {[}${-0.011}$ & ${+0.026}${]} \\
+    FBI & 72
+      & +0.0182 & {[}${-0.010}$ & ${+0.029}${]}
+      & -0.0052 & {[}${-0.022}$ & ${+0.013}${]}
+      & -0.0006 & {[}${-0.019}$ & ${+0.009}${]}
+      & +0.0115 & {[}${-0.011}$ & ${+0.032}${]}
+      & -0.0077 & {[}${-0.023}$ & ${+0.012}${]} \\
+    Donald Trump & 233
+      & -0.0089 & {[}${-0.028}$ & ${+0.010}${]}
+      & -0.0025 & {[}${-0.024}$ & ${+0.012}${]}
+      & -0.0112 & {[}${-0.025}$ & ${+0.004}${]}
+      & +0.0011 & {[}${-0.015}$ & ${+0.022}${]}
+      & -0.0087 & {[}${-0.025}$ & ${+0.009}${]} \\
+    Media Watch & 58
+      & -0.0032 & {[}${-0.027}$ & ${+0.017}${]}
+      & -0.0079 & {[}${-0.030}$ & ${+0.015}${]}
+      & +0.0093 & {[}${-0.006}$ & ${+0.023}${]}
+      & +0.0078 & {[}${-0.007}$ & ${+0.026}${]}
+      & -0.0104 & {[}${-0.024}$ & ${+0.006}${]} \\
+    Russia Probe & 57
+      & +0.0011 & {[}${-0.021}$ & ${+0.026}${]}
+      & +0.0045 & {[}${-0.023}$ & ${+0.026}${]}
+      & -0.0002 & {[}${-0.017}$ & ${+0.016}${]}
+      & -0.0210 & {[}${-0.043}$ & ${+0.008}${]}
+      & +0.0100 & {[}${-0.018}$ & ${+0.030}${]} \\
+    Race and Racism & 104
+      & -0.0013 & {[}${-0.020}$ & ${+0.017}${]}
+      & +0.0040 & {[}${-0.018}$ & ${+0.019}${]}
+      & -0.0041 & {[}${-0.010}$ & ${+0.011}${]}
+      & +0.0050 & {[}${-0.009}$ & ${+0.022}${]}
+      & +0.0067 & {[}${-0.004}$ & ${+0.021}${]} \\
+    Defense and Security & 76
+      & +0.0017 & {[}${-0.027}$ & ${+0.022}${]}
+      & +0.0034 & {[}${-0.015}$ & ${+0.022}${]}
+      & -0.0076 & {[}${-0.032}$ & ${+0.006}${]}
+      & +0.0112 & {[}${-0.022}$ & ${+0.025}${]}
+      & +0.0068 & {[}${-0.022}$ & ${+0.021}${]} \\
+    LGBTQ Issues & 73
+      & +0.0027 & {[}${-0.013}$ & ${+0.019}${]}
+      & +0.0021 & {[}${-0.014}$ & ${+0.023}${]}
+      & -0.0045 & {[}${-0.013}$ & ${+0.010}${]}
+      & -0.0144 & {[}${-0.024}$ & ${+0.006}${]}
+      & -0.0063 & {[}${-0.022}$ & ${+0.008}${]} \\
+    Politics & 594
+      & -0.0035 & {[}${-0.021}$ & ${+0.014}${]}
+      & -0.0023 & {[}${-0.018}$ & ${+0.018}${]}
+      & +0.0098 & {[}${-0.006}$ & ${+0.022}${]}
+      & \textbf{+0.0217} & {[}${+0.003}$ & ${+0.034}${]}
+      & +0.0017 & {[}${-0.013}$ & ${+0.019}${]} \\
+    Economy and Jobs & 56
+      & -0.0001 & {[}${-0.018}$ & ${+0.020}${]}
+      & +0.0019 & {[}${-0.018}$ & ${+0.020}${]}
+      & -0.0096 & {[}${-0.023}$ & ${+0.002}${]}
+      & -0.0095 & {[}${-0.025}$ & ${+0.009}${]}
+      & +0.0083 & {[}${-0.013}$ & ${+0.024}${]} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Full multi-treatment DML results: ATE per topic under continuous encoding (one-SD increase in sentiment score) with 95\% bootstrap CIs ($B = \num{2000}$). Bolded ATEs have CIs that exclude zero.}
+  \label{tab:multi-continuous-full}
+\end{sidewaystable}
 
 \section{Confounder Reduction Details}
 

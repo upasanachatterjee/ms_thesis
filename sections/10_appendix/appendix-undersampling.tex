@@ -9,7 +9,7 @@ Where undersampling does help, the gains tend to accrue to classes that are alre
 
 The outsized benefit of undersampling for POLITICS is notable given that it is otherwise the strongest transformer baseline. One plausible explanation is that POLITICS uses a story-level contrastive objective during pre-training, which may make it more sensitive to class imbalance during fine-tuning: when center articles are underrepresented, the story objective may learn to associate topic clusters with majority-class labels, and undersampling could mitigate this. Whether the story objective genuinely induces this sensitivity, and whether our metalinguistic objectives share or avoid it, is an open question that warrants future investigation.
 
-Given the inconsistent pattern of gains and the specific risk of degrading Center and Right performance, we opt not to use undersampling in our main experiments.
+Given the inconsistent pattern of gains and the specific risk of degrading Center and Right performance, we opt not to use undersampling in our main experiments. We state this conclusion conditionally rather than absolutely: undersampling improves Center for our model in some configurations ($+10.03$) and degrades it for POLITICS in others ($-12.77$), so the right global default is to omit it, but practitioners whose deployment specifically prioritizes Center-class detection might benefit from per-task undersampling on a case-by-case basis.
 
 \begin{table*}[ht]
 \centering

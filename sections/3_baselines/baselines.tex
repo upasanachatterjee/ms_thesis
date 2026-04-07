@@ -1,7 +1,7 @@
 \chapter{Experimental Baselines}
 \label{sec:baselines}
 
-This chapter establishes baseline performance of three distinct classes of systems on the AllSides political bias classification task: human annotators, fine-tuned transformer architectures, and large language models in zero-shot configuration. Our transformer experiments design addresses the challenge of source leakage by employing a data split where all articles from the same source are contained within a single partition. As no fine-tuning is performed for LLMs, they are evaluated only on this source-controlled split to ensure consistency, and the human baseline study is conducted on a subset of this split as well.
+This chapter establishes baseline performance of three distinct classes of systems on the AllSides political bias classification task: human annotators, fine-tuned transformer architectures, and large language models in zero-shot configuration. Our transformer experiments address the challenge of source leakage by employing a \emph{source-controlled} (Media) split, in which all articles from the same outlet remain entirely within a single partition (train, validation, or test) rather than being randomly distributed across partitions. LLMs receive no task-specific training, so partitioning has no effect on their predictions; we therefore evaluate them only on the Media split, which enables direct comparison with the transformer Media-split numbers under matched test conditions. The human baseline study is conducted on a subset of the same Media test split.
 
 \input{sections/3_baselines/experimental_setup.tex}
 \input{sections/3_baselines/human_baselines.tex}

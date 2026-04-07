@@ -11,13 +11,15 @@ All models employed identical training procedures to ensure fair comparison. Fin
 
 \subsection{Domain-Adapted Architecture: POLITICS Model}
 
-We include the current state-of-the-art system for article-level political bias classification, the POLITICS model developed by \citet{liu2022politics}. This system represents a RoBERTa-based encoder enhanced through continued pre-training using a contrastive triplet-loss framework, where $\langle$anchor, positive, negative$\rangle$ triplets generated with the following example sampling procedure:
+We include the current state-of-the-art system for article-level political bias classification, the POLITICS model developed by \citet{liu2022politics}. POLITICS is a RoBERTa-based encoder enhanced through continued pre-training using a contrastive triplet-loss framework. The intuition behind the design is straightforward in plain language: by repeatedly pulling together ideologically similar articles drawn from \emph{different} sources, the contrastive objective denies the encoder the ability to use outlet identity as a shortcut, forcing it to recover ideology from content. This is precisely the mechanism by which contrastive pre-training defeats source leakage. Triplets are generated with the following sampling procedure:
 
 \begin{itemize}
     \item \textbf{Anchor}: Article $a$ with political label $l \in \{\text{left}, \text{right}\}$
     \item \textbf{Positive}: Article $p$ with identical label $l$ from any source
     \item \textbf{Negative}: Article $n$ with different label $m \neq l$ from any source
 \end{itemize}
+
+Note that anchors are sampled only from $\{\text{left}, \text{right}\}$, never from the center class. Center articles are not used as anchors but are still learned: by being repeatedly pushed away from both left and right anchors during contrastive training, the center class is shaped as the region of embedding space that is jointly distant from both partisan poles, rather than as a class with its own positive supervision signal.
 
 The triplet loss objective encourages the model to produce representations where ideologically similar articles from different sources are closer in embedding space than ideologically different articles:
 
@@ -26,4 +28,4 @@ The triplet loss objective encourages the model to produce representations where
     \label{eqn:triplet_loss}
 \end{equation}
 
-where $f(\cdot)$ denotes the model's [CLS] token representation, and $\delta$ is a margin hyperparameter. The POLITICS model incorporates both story-level objectives (positive samples discuss the same event) and ideology-level objectives (positive samples share political orientation, as in the example above) during continued pre-training.
+where $f(\cdot)$ denotes the model's [CLS] token representation, and $\delta$ is a margin hyperparameter. The POLITICS model incorporates both \emph{story-level} and \emph{ideology-level} objectives during continued pre-training, and the two play distinct roles. The story-level objective treats articles covering the same underlying event as positive pairs, which encourages the encoder to abstract over topical surface (the same event reported by different outlets should land near each other regardless of word choice) and prevents topic from being memorized as a stand-in for ideology. The ideology-level objective treats articles sharing a political orientation as positive pairs, which encourages clustering on ideological orientation specifically. Together they prevent the most pernicious shortcut available to a naive classifier, using \emph{topic} as a proxy for ideology, by forcing topic-invariance and ideology-clustering to coexist in the same representation space.
