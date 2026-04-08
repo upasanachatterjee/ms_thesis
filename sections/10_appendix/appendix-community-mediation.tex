@@ -5,18 +5,7 @@ This appendix provides the full community-level mediation results referenced in 
 
 \section{Pathway Selection}
 
-Six treatment-mediator pairs were evaluated across communities $\{3, 9, 11\}$, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. The per-pathway outcome is:
-
-\begin{itemize}
-    \item $3 \to 9$: 0 articles co-occur, pathway eliminated.
-    \item $3 \to 11$: 0 articles co-occur, pathway eliminated.
-    \item $9 \to 3$: $< 50$ co-occurring articles, drops below the minimum-presence threshold.
-    \item $11 \to 3$: $< 50$ co-occurring articles, drops below the minimum-presence threshold.
-    \item $9 \to 11$: 139 articles co-occur, pathway retained.
-    \item $11 \to 9$: 772 articles co-occur, pathway retained.
-\end{itemize}
-
-The six-pair matrix therefore reduces to two unique, well-specified analyses, both gated by the topic co-occurrence filter rather than by any modelling failure.
+All treatment-mediator pairs were evaluated across communities the significant communities, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. All others failed the minimum presence test (fewer than 50 articles tagged with both the treatment and mediator community) and were therefore dropped from analysis.
 
 \section{Full Mediation Results}
 
@@ -33,30 +22,30 @@ Annotator & TE & 95\% CI & NDE & 95\% CI & NIE & \% med. \\
 \midrule
 Human              & $-0.045$ & $[-0.164,\ +0.075]$ & $-0.059$ & $[-0.151,\ +0.045]$ & $+0.015$ & --- \\
 Fine-tuned RoBERTa & $-0.069$ & $[-0.181,\ +0.043]$ & $-0.080$ & $[-0.147,\ +0.031]$ & $+0.011$ & --- \\
-Fine-tuned GPT     & $\mathbf{-0.108^*}$ & $\mathbf{[-0.208,\ -0.008]}$ & $\mathbf{-0.105^*}$ & $\mathbf{[-0.170,\ 0.000]}$ & $-0.003$ & 3.2\% \\
-GPT (baseline)     & $-0.059$ & $[-0.141,\ +0.023]$ & $-0.032$ & $[-0.102,\ +0.033]$ & $-0.026$ & --- \\
-Llama-3.3-70B      & $-0.007$ & $[-0.148,\ +0.134]$ & $+0.023$ & $[-0.080,\ +0.099]$ & $-0.030$ & --- \\
+Fine-tuned GPT     & $+0.003$ & $[-0.120,\ +0.126]$ & $-0.035$ & $[-0.111,\ +0.063]$ & $+0.038$ & --- \\
+GPT (baseline)     & $-0.064$ & $[-0.183,\ +0.054]$ & $\mathbf{-0.093^*}$ & $\mathbf{[-0.174,\ -0.002]}$ & $+0.029$ & --- \\
+Llama-3.3-70B      & $-0.050$ & $[-0.207,\ +0.108]$ & $-0.088$ & $[-0.187,\ +0.031]$ & $+0.038$ & --- \\
 \midrule
 \multicolumn{7}{l}{\textit{Community $11 \to 9$ ($N=772$, sentiment contrast $-0.4$ to $0.1$)}} \\
 \midrule
 Human              & $-0.045$ & $[-0.162,\ +0.071]$ & $-0.049$ & $[-0.100,\ +0.012]$ & $+0.004$ & --- \\
 Fine-tuned RoBERTa & $-0.016$ & $[-0.133,\ +0.102]$ & $-0.015$ & $[-0.079,\ +0.034]$ & $-0.000$ & --- \\
-Fine-tuned GPT     & $+0.056$ & $[-0.069,\ +0.181]$ & $+0.069$ & $[0.000,\ +0.116]$  & $-0.013$ & --- \\
-GPT (baseline)     & $+0.007$ & $[-0.097,\ +0.111]$ & $+0.009$ & $[-0.042,\ +0.059]$ & $-0.002$ & --- \\
-Llama-3.3-70B      & $+0.008$ & $[-0.114,\ +0.130]$ & $+0.012$ & $[-0.046,\ +0.075]$ & $-0.004$ & --- \\
+Fine-tuned GPT     & $-0.040$ & $[-0.161,\ +0.081]$ & $-0.030$ & $[-0.082,\ +0.027]$ & $-0.009$ & --- \\
+GPT (baseline)     & $-0.027$ & $[-0.141,\ +0.087]$ & $-0.020$ & $[-0.073,\ +0.030]$ & $-0.007$ & --- \\
+Llama-3.3-70B      & $-0.081$ & $[-0.220,\ +0.059]$ & $\mathbf{-0.057^*}$ & $\mathbf{[-0.126,\ -0.003]}$ & $-0.024$ & --- \\
 \bottomrule
 \end{tabular}
 \caption{Community-level mediation results ($Q_{25} \to Q_{75}$ contrast). $^*$Significant at 95\% (CI excludes zero).}
 \label{tab:mediation_full}
 \end{table}
 
-For the $9 \to 11$ pathway, Fine-tuned GPT-4o-mini is the only annotator to produce a significant total effect (TE $= -0.108$), with nearly all of it attributable to the direct pathway (3.2\% mediated). Human and baseline GPT annotators show point estimates in the same negative direction but with wide, zero-crossing intervals. Fine-tuned RoBERTa (TE $= -0.069$) ranks second in magnitude after Fine-tuned GPT-4o-mini, further supporting the directional consensus. Llama-3.3-70B produces a near-zero TE ($-0.007$) with the widest confidence interval, consistent with its general attenuation pattern observed in the ATE analysis. All five annotators are directionally consistent (negative), suggesting the non-significance of human, RoBERTa, baseline GPT, and Llama reflects power limitations at $N=139$ rather than directional disagreement.
+For the $9 \to 11$ pathway, no annotator produces a significant Total Effect. The only significant cell is the Natural Direct Effect under baseline GPT-4o-mini (NDE $= -0.093$, 95\% CI $[-0.174, -0.002]$): when Community~11 sentiment is held at its $Q_{25}$ level, increasing Community~9 sentiment from $Q_{25}$ to $Q_{75}$ shifts the predicted ideology label leftward in the baseline GPT-4o-mini paradigm, even though the corresponding TE ($-0.064$) does not itself reach significance. Four of the five paradigms estimate a negative Total Effect (Human $-0.045$, Fine-tuned RoBERTa $-0.069$, baseline GPT $-0.064$, Llama-3.3-70B $-0.050$); Fine-tuned GPT-4o-mini is the lone directional outlier with TE $= +0.003$, the only paradigm whose point estimate is positive in this pathway. Among the four agreeing paradigms, Fine-tuned RoBERTa carries the largest negative magnitude.
 
-For the $11 \to 9$ pathway, no annotator reaches significance. The Fine-tuned GPT-4o-mini effect reverses sign relative to the $9 \to 11$ direction ($+0.056$ vs.\ $-0.108$), reinforcing the asymmetry interpretation: Community~9's effect on ideology is concentrated and direct, while Community~11's influence is diffuse across many mediators. Llama-3.3-70B produces a small positive TE ($+0.008$), again attenuated relative to other paradigms. Human and Fine-tuned RoBERTa are the only annotators to produce negative TEs for this pathway ($-0.045$ and $-0.016$, respectively), while all three LLM-based paradigms estimate positive effects, reinforcing the pattern of RoBERTa tracking human directional tendencies.
+For the $11 \to 9$ pathway, no annotator reaches significance on the Total Effect, but Llama-3.3-70B's Natural Direct Effect crosses the 95\% threshold (NDE $= -0.057$, 95\% CI $[-0.126, -0.003]$), and Llama also carries the largest-magnitude TE ($-0.081$) of any paradigm in this pathway. All five paradigms now estimate a negative Total Effect (Human $-0.045$, Fine-tuned RoBERTa $-0.016$, baseline GPT $-0.027$, Fine-tuned GPT $-0.040$, Llama $-0.081$); the directional consensus in $11 \to 9$ is therefore complete, while the $9 \to 11$ pathway contains a single directional outlier (Fine-tuned GPT). The asymmetry between the two pathways now lies primarily in \emph{which} paradigm carries the significant direct channel (baseline GPT in $9 \to 11$, Llama in $11 \to 9$) and in directional homogeneity (4/5 in $9 \to 11$ vs 5/5 in $11 \to 9$), rather than in whether either pathway is significant on the Total Effect.
 
 \section{Full Multi-Treatment DML Results (Continuous Encoding)}
 
-Table~\ref{tab:multi-continuous-full} reports the complete multi-treatment DML results summarized in Table~\ref{tab:multi-continuous} of Chapter~\ref{ch:causal-inference}, including the 95\% bootstrap confidence interval ($B = \num{2000}$) accompanying every ATE estimate.
+Table~\ref{tab:multi-continuous-full} reports the complete multi-treatment DML results summarized in Table~\ref{tab:multi-continuous} of Chapter~\ref{sec:causal-inference}, including the 95\% bootstrap confidence interval ($B = \num{2000}$) accompanying every ATE estimate.
 
 \begin{sidewaystable}
   \centering
@@ -84,70 +73,70 @@ Table~\ref{tab:multi-continuous-full} reports the complete multi-treatment DML r
     \midrule
     Hillary Clinton & 51
       & +0.0051 & {[}${-0.019}$ & ${+0.018}${]}
-      & \textbf{+0.0220} & {[}${+0.001}$ & ${+0.036}${]}
-      & -0.0064 & {[}${-0.020}$ & ${+0.010}${]}
-      & -0.0004 & {[}${-0.015}$ & ${+0.023}${]}
-      & -0.0034 & {[}${-0.013}$ & ${+0.020}${]} \\
+      & \textbf{+0.0220} & {[}${+0.000}$ & ${+0.035}${]}
+      & +0.0025 & {[}${-0.016}$ & ${+0.018}${]}
+      & +0.0055 & {[}${-0.016}$ & ${+0.018}${]}
+      & -0.0053 & {[}${-0.023}$ & ${+0.018}${]} \\
     Media Bias & 115
       & +0.0024 & {[}${-0.024}$ & ${+0.015}${]}
       & +0.0203 & {[}${-0.001}$ & ${+0.034}${]}
-      & -0.0130 & {[}${-0.021}$ & ${+0.010}${]}
-      & -0.0191 & {[}${-0.025}$ & ${+0.010}${]}
-      & +0.0057 & {[}${-0.011}$ & ${+0.026}${]} \\
+      & -0.0039 & {[}${-0.019}$ & ${+0.017}${]}
+      & +0.0080 & {[}${-0.015}$ & ${+0.020}${]}
+      & -0.0092 & {[}${-0.027}$ & ${+0.014}${]} \\
     FBI & 72
       & +0.0182 & {[}${-0.010}$ & ${+0.029}${]}
-      & -0.0052 & {[}${-0.022}$ & ${+0.013}${]}
-      & -0.0006 & {[}${-0.019}$ & ${+0.009}${]}
-      & +0.0115 & {[}${-0.011}$ & ${+0.032}${]}
-      & -0.0077 & {[}${-0.023}$ & ${+0.012}${]} \\
+      & -0.0052 & {[}${-0.021}$ & ${+0.014}${]}
+      & -0.0028 & {[}${-0.025}$ & ${+0.010}${]}
+      & +0.0008 & {[}${-0.019}$ & ${+0.018}${]}
+      & -0.0097 & {[}${-0.033}$ & ${+0.005}${]} \\
     Donald Trump & 233
       & -0.0089 & {[}${-0.028}$ & ${+0.010}${]}
-      & -0.0025 & {[}${-0.024}$ & ${+0.012}${]}
-      & -0.0112 & {[}${-0.025}$ & ${+0.004}${]}
-      & +0.0011 & {[}${-0.015}$ & ${+0.022}${]}
-      & -0.0087 & {[}${-0.025}$ & ${+0.009}${]} \\
+      & -0.0025 & {[}${-0.023}$ & ${+0.011}${]}
+      & -0.0007 & {[}${-0.020}$ & ${+0.016}${]}
+      & -0.0194 & {[}${-0.035}$ & ${+0.001}${]}
+      & -0.0016 & {[}${-0.025}$ & ${+0.019}${]} \\
     Media Watch & 58
       & -0.0032 & {[}${-0.027}$ & ${+0.017}${]}
-      & -0.0079 & {[}${-0.030}$ & ${+0.015}${]}
-      & +0.0093 & {[}${-0.006}$ & ${+0.023}${]}
-      & +0.0078 & {[}${-0.007}$ & ${+0.026}${]}
-      & -0.0104 & {[}${-0.024}$ & ${+0.006}${]} \\
+      & -0.0079 & {[}${-0.030}$ & ${+0.013}${]}
+      & -0.0063 & {[}${-0.027}$ & ${+0.017}${]}
+      & -0.0064 & {[}${-0.028}$ & ${+0.013}${]}
+      & +0.0019 & {[}${-0.028}$ & ${+0.020}${]} \\
     Russia Probe & 57
       & +0.0011 & {[}${-0.021}$ & ${+0.026}${]}
-      & +0.0045 & {[}${-0.023}$ & ${+0.026}${]}
-      & -0.0002 & {[}${-0.017}$ & ${+0.016}${]}
-      & -0.0210 & {[}${-0.043}$ & ${+0.008}${]}
-      & +0.0100 & {[}${-0.018}$ & ${+0.030}${]} \\
+      & +0.0045 & {[}${-0.023}$ & ${+0.025}${]}
+      & -0.0046 & {[}${-0.029}$ & ${+0.014}${]}
+      & -0.0031 & {[}${-0.031}$ & ${+0.019}${]}
+      & -0.0041 & {[}${-0.031}$ & ${+0.020}${]} \\
     Race and Racism & 104
       & -0.0013 & {[}${-0.020}$ & ${+0.017}${]}
-      & +0.0040 & {[}${-0.018}$ & ${+0.019}${]}
-      & -0.0041 & {[}${-0.010}$ & ${+0.011}${]}
-      & +0.0050 & {[}${-0.009}$ & ${+0.022}${]}
-      & +0.0067 & {[}${-0.004}$ & ${+0.021}${]} \\
+      & +0.0040 & {[}${-0.018}$ & ${+0.020}${]}
+      & +0.0030 & {[}${-0.011}$ & ${+0.017}${]}
+      & +0.0061 & {[}${-0.018}$ & ${+0.021}${]}
+      & +0.0031 & {[}${-0.010}$ & ${+0.024}${]} \\
     Defense and Security & 76
-      & +0.0017 & {[}${-0.027}$ & ${+0.022}${]}
-      & +0.0034 & {[}${-0.015}$ & ${+0.022}${]}
-      & -0.0076 & {[}${-0.032}$ & ${+0.006}${]}
-      & +0.0112 & {[}${-0.022}$ & ${+0.025}${]}
-      & +0.0068 & {[}${-0.022}$ & ${+0.021}${]} \\
+      & +0.0017 & {[}${-0.014}$ & ${+0.022}${]}
+      & +0.0034 & {[}${-0.014}$ & ${+0.022}${]}
+      & +0.0038 & {[}${-0.027}$ & ${+0.022}${]}
+      & -0.0022 & {[}${-0.015}$ & ${+0.021}${]}
+      & -0.0005 & {[}${-0.031}$ & ${+0.018}${]} \\
     LGBTQ Issues & 73
       & +0.0027 & {[}${-0.013}$ & ${+0.019}${]}
-      & +0.0021 & {[}${-0.014}$ & ${+0.023}${]}
-      & -0.0045 & {[}${-0.013}$ & ${+0.010}${]}
-      & -0.0144 & {[}${-0.024}$ & ${+0.006}${]}
-      & -0.0063 & {[}${-0.022}$ & ${+0.008}${]} \\
+      & +0.0021 & {[}${-0.014}$ & ${+0.024}${]}
+      & -0.0006 & {[}${-0.016}$ & ${+0.018}${]}
+      & +0.0142 & {[}${-0.006}$ & ${+0.028}${]}
+      & -0.0009 & {[}${-0.019}$ & ${+0.019}${]} \\
     Politics & 594
       & -0.0035 & {[}${-0.021}$ & ${+0.014}${]}
-      & -0.0023 & {[}${-0.018}$ & ${+0.018}${]}
-      & +0.0098 & {[}${-0.006}$ & ${+0.022}${]}
-      & \textbf{+0.0217} & {[}${+0.003}$ & ${+0.034}${]}
-      & +0.0017 & {[}${-0.013}$ & ${+0.019}${]} \\
+      & -0.0023 & {[}${-0.017}$ & ${+0.016}${]}
+      & +0.0020 & {[}${-0.013}$ & ${+0.017}${]}
+      & +0.0102 & {[}${-0.007}$ & ${+0.030}${]}
+      & -0.0072 & {[}${-0.025}$ & ${+0.010}${]} \\
     Economy and Jobs & 56
       & -0.0001 & {[}${-0.018}$ & ${+0.020}${]}
       & +0.0019 & {[}${-0.018}$ & ${+0.020}${]}
-      & -0.0096 & {[}${-0.023}$ & ${+0.002}${]}
-      & -0.0095 & {[}${-0.025}$ & ${+0.009}${]}
-      & +0.0083 & {[}${-0.013}$ & ${+0.024}${]} \\
+      & -0.0064 & {[}${-0.026}$ & ${+0.015}${]}
+      & -0.0064 & {[}${-0.026}$ & ${+0.015}${]}
+      & -0.0069 & {[}${-0.023}$ & ${+0.010}${]} \\
     \bottomrule
   \end{tabular}
   \caption{Full multi-treatment DML results: ATE per topic under continuous encoding (one-SD increase in sentiment score) with 95\% bootstrap CIs ($B = \num{2000}$). Bolded ATEs have CIs that exclude zero.}
