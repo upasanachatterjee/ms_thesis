@@ -14,14 +14,15 @@ We define the following variables:
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=3cm]
-      \tikzstyle{every state}=[]
+    % \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=3cm]
+    %   \tikzstyle{every state}=[]
 
-      \node(text) {$\text{Text } (X)$};
-      \node(sentiment) [above of=text] {$\text{Sentiment } (F)$} edge [->] (text);
-      \node(ideology) [below right of=sentiment] {$\text{Pred. Ideology } (Y)$} edge [<-] (sentiment) edge [<-] (text);
-      \node(topic) [below left of=sentiment] {$\text{Topic } (T)$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
-    \end{tikzpicture}
+    %   \node(text) {$\text{Text } (X)$};
+    %   \node(sentiment) [above of=text] {$\text{Sentiment } (F)$} edge [->] (text);
+    %   \node(ideology) [below right of=sentiment] {$\text{Pred. Ideology } (Y)$} edge [<-] (sentiment) edge [<-] (text);
+    %   \node(topic) [below left of=sentiment] {$\text{Topic } (T)$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
+    % \end{tikzpicture}
+    \includegraphics[width=0.6\textwidth]{sections/images/causal_diagram.png}
     \caption{Complete causal diagram for article ideology classification. Note, we do not include article text in our investigations.}
     \label{fig:causal_diagram}
 \end{figure}
