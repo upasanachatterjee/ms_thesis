@@ -7,22 +7,22 @@ We model the relationships between article content, sentiment, and ideology usin
 We define the following variables:
 \begin{itemize}
     \item $X$: (text) the full article text parsed from the publishing source.
-    \item $T$: (topic tags) AllSides-assigned topic tags (e.g.\ Politics, Government Efficiency, Foreign Affairs).
+    \item $T$: (topic tags) AllSidesV2 topic tags (e.g.\ Politics, Government Efficiency, Foreign Affairs).
     \item $F$: (sentiment) sentiment toward each topic, inferred from article text using an LLM.
-    \item $Y$: (ideology) the political ideology label assigned by AllSides.
+    \item $Y$: (perceived ideology) the ideology label assigned by the annotator (human and LLM).
 \end{itemize}
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=2cm]
+    \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=3cm]
       \tikzstyle{every state}=[]
 
-      \node(text) {$X$};
-      \node(sentiment) [above of=text] {$F$} edge [->] (text);
-      \node(ideology) [right of=sentiment] {$Y$} edge [<-] (sentiment) edge [->] (text);
-      \node(topic) [left of=sentiment] {$T$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
+      \node(text) {$\text{Text } (X)$};
+      \node(sentiment) [above of=text] {$\text{Sentiment } (F)$} edge [->] (text);
+      \node(ideology) [below right of=sentiment] {$\text{Pred. Ideology } (Y)$} edge [<-] (sentiment) edge [<-] (text);
+      \node(topic) [below left of=sentiment] {$\text{Topic } (T)$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
     \end{tikzpicture}
-    \caption{Causal diagram for article ideology classification.}
+    \caption{Complete causal diagram for article ideology classification. Note, we do not include article text in our investigations.}
     \label{fig:causal_diagram}
 \end{figure}
 
@@ -49,7 +49,7 @@ In practice, each node expands into many variables. Figure~\ref{fig:causal3} ill
     \draw[<->, dashed]  (FT) -- (T);
 
     % Edges from X_abs and T to Y
-    \draw[<-]           (Xabs) -- (Y);
+    \draw[->]           (Xabs) -- (Y);
     \draw[->]  (T) to (Y);
 
     % Edges for F_{M_1}
@@ -64,7 +64,7 @@ In practice, each node expands into many variables. Figure~\ref{fig:causal3} ill
     \draw[<->, dashed, red]    (FM2) -- (T);
     \draw[<-, blue, bend right] (FM2) to (FT);
   \end{tikzpicture}
-  \caption{Experimental setup: sentiment variables as mediators. Blue arrows show treatment-to-mediator paths; red shows mediator-to-outcome paths.}
+  \caption{Expanded setup: sentiment variables as mediators. Blue arrows show treatment-to-mediator paths; red shows mediator-to-outcome paths.}
   \label{fig:causal3}
 \end{figure}
 
