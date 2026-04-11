@@ -14,16 +14,25 @@ We define the following variables:
 
 \begin{figure}[h]
     \centering
-    % \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=3cm]
-    %   \tikzstyle{every state}=[]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{sections/images/causal_diagram.png}
+        \subcaption{Illustrated representation}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[->,shorten >=1pt,auto,node distance=3cm]
+          \tikzstyle{every state}=[]
 
-    %   \node(text) {$\text{Text } (X)$};
-    %   \node(sentiment) [above of=text] {$\text{Sentiment } (F)$} edge [->] (text);
-    %   \node(ideology) [below right of=sentiment] {$\text{Pred. Ideology } (Y)$} edge [<-] (sentiment) edge [<-] (text);
-    %   \node(topic) [below left of=sentiment] {$\text{Topic } (T)$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
-    % \end{tikzpicture}
-    \includegraphics[width=0.6\textwidth]{sections/images/causal_diagram.png}
-    \caption{Complete causal diagram for article ideology classification. Note, we do not include article text in our investigations.}
+          \node(text) {$\text{Text } (X)$};
+          \node(sentiment) [above of=text] {$\text{Sentiment } (F)$} edge [->] (text);
+          \node(ideology) [below right of=sentiment] {$\text{Pred. Ideology } (Y)$} edge [<-] (sentiment) edge [<-] (text);
+          \node(topic) [below left of=sentiment] {$\text{Topic } (T)$} edge [->] (text) edge [->, bend left] (ideology) edge [<->, dashed] (sentiment);
+        \end{tikzpicture}
+        \subcaption{Simplified graph}
+    \end{subfigure}
+    \caption{Complete causal diagram for article ideology classification. The topics serve as indicator variables to represent the presence or absence of specific topics. Each sentiment is a continuous variable and is topic-specific. The predicted ideology is a categorical variable. Each article may have multiple topics. Note, we do not include article text in our investigations.}
     \label{fig:causal_diagram}
 \end{figure}
 
@@ -35,37 +44,44 @@ In practice, each node expands into many variables. Figure~\ref{fig:causal3} ill
   \centering
   \begin{tikzpicture}[->,auto]
     % Top row: the three F's
-    \node (FT)   at (0,0)   {$F_{T}$};
-    \node (FM1)  at (3,0)   {$F_{M_1}$};
-    \node (FM2)  at (6,0)   {$F_{M_2}$};
+    \node (FT)   at (0,0)   {$\text{Treatment Sentiment } (F_{T})$};
+    \node (FM1)  at (-3,-2)   {$\text{Mediator Sentiment } (F_{M_1})$};
+    \node (FM2)  at (3,-2)   {$\text{Mediator Sentiment } (F_{M_2})$};
 
     % Bottom row: the three observed variables
-    \node (Xabs) at (0,-2)  {$X$};
-    \node (Y)    at (3,-2)  {$Y$};
-    \node (T)    at (6,-2)  {$T$};
+    % \node (Xabs) at (1.5,-2)  {$X$};
+    \node (Y)    at (0,-4)  {$\text{Predicted Ideology } (Y)$};
+    % \node (TT)    at (-2,1)  {$T_{T}$};
+    % \node (TM1)    at (-2,0)  {$T_{M_1}$};
+
 
     % Edges from F_T
     \draw[->]           (FT) -- (Y);
-    \draw[->]  (FT) -- (Xabs);
-    \draw[<->, dashed]  (FT) -- (T);
+    % \draw[->]  (FT) -- (Xabs);
+    % \draw[<->, dashed]  (FT) -- (TT);
 
     % Edges from X_abs and T to Y
-    \draw[->]           (Xabs) -- (Y);
-    \draw[->]  (T) to (Y);
+    % \draw[->]  (Xabs) -- (Y);
+    % \draw[->]  (TT) to (Y);
+    % \draw[->]  (TM1) to (Y);
+
+    % % Edges from TT and TM1 to X_abs
+    % \draw[->]  (TT) to (Xabs);
+    % \draw[->]  (TM1) to (Xabs);
 
     % Edges for F_{M_1}
     \draw[->, red]             (FM1) -- (Y);
-    \draw[->, red]    (FM1) -- (Xabs);
-    \draw[<->, dashed, red]    (FM1) -- (T);
+    % \draw[->, red]    (FM1) -- (Xabs);
+    % \draw[<->, dashed, red]    (FM1) -- (TM1);
     \draw[<-, blue]            (FM1) -- (FT);
 
-    % Edges for F_{M_2}
+    % % Edges for F_{M_2}
     \draw[->, red]             (FM2) -- (Y);
-    \draw[->, red]    (FM2) -- (Xabs);
-    \draw[<->, dashed, red]    (FM2) -- (T);
-    \draw[<-, blue, bend right] (FM2) to (FT);
+    % \draw[->, red]    (FM2) -- (Xabs);
+    % \draw[<->, dashed, red]    (FM2) -- (TM1);
+    \draw[<-, blue] (FM2) to (FT);
   \end{tikzpicture}
-  \caption{Expanded setup: sentiment variables as mediators. Blue arrows show treatment-to-mediator paths; red shows mediator-to-outcome paths.}
+  \caption{Expanded setup: sentiment variables as mediators. Blue arrows show treatment-to-mediator paths; red shows mediator-to-outcome paths. For our investigations, we focus on a single treatment-mediator pair at a time, but the same framework can be extended to support multiple mediators. We omit the text variable $X$ and the topic variable $T$ for visual clarity, as they do not directly participate in the causal relationships of interest.}
   \label{fig:causal3}
 \end{figure}
 
@@ -96,33 +112,55 @@ We use the AllSidesV2 dataset described in Section~\ref{sec:dataset}. All causal
 \subsection{Experimental Design}
 \label{sec:experimental-design}
 
-\begin{figure}
+
+
+We perform all analyses on the test set of the AllSidesV2 Media split to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
+
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.8\textwidth]{sections/images/articles.png}
   \caption{Articles with predicted ideologies, topics, sentiments, and topic clustering. To the left of each article we see coloured boxes that represent a topic and topic-specific sentiment. The distinct colours represent distinct communities. To the right we see different annotators and their predicted ideologies for the article.}
   \label{fig:articles}
 \end{figure}
 
-We perform all analyses on the test set of the AllSidesV2 Media split to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
+The final representation of an article can be seen in Figure~\ref{fig:articles}. We note that the presence of multiple topics and sentiments within a single article creates a complex web of potential causal pathways to ideology, which motivates our use of community aggregation to disentangle direct and indirect effects at a higher level. 
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{lcc}
-    \toprule
-    \textbf{Topic Tag} & \textbf{Articles} & \textbf{Community} \\
-    \midrule
-    politics & 756 & 2 \\
-    donald\_trump & 712 & 11 \\
-    world & 503 & 4 \\
-    elections & 451 & 11 \\
-    white\_house & 444 & 2 \\
-    \bottomrule
-    \end{tabular}
-    \caption{Top five topic tags by frequency in the test set.}
-    \label{tab:top-tags}
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \small
+        \begin{tabular}{lcc}
+        \toprule
+        \textbf{Comm.} & \textbf{Articles}  & \textbf{Theme} \\
+        \midrule
+        11 & 772  & Trump Administration \\
+        4 & 229  & Media and Big Tech \\
+        1 & 220 & Elections and Campaigns \\
+        7 & 218  & Foreign Policy \\
+        5 & 193  & Policing and Social Justice \\
+        \bottomrule
+        \end{tabular}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \small
+        \begin{tabular}{lcc}
+        \toprule
+        \textbf{Topic Tag} & \textbf{Articles} & \textbf{Comm.} \\
+        \midrule
+        Politics & 594 & 11 \\
+        Donald Trump & 233 & 11 \\
+        world & 503 & 9 \\
+        elections & 451 & 1 \\
+        white\_house & 444 & 11 \\
+        \bottomrule
+        \end{tabular}
+    \end{minipage}
+    \caption{Top five communities and topic tags in the AllsidesV2 media split test set. Total article count is 11,516. The full community structure with all 15 communities and their constituent topics is provided in Appendix~\ref{appendix:community-structure}.}
+    \label{tab:topical-summary}
 \end{table}
-
-We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which provide sufficient statistical power while spanning three distinct communities: Trump presidency (Community 11: \textit{donald\_trump}, \textit{elections}), institutional politics (Community 2: \textit{politics}, \textit{white\_house}), and international affairs (Community 4: \textit{world}).
 
 %\begin{figure}[h!]
 %    \centering
@@ -131,9 +169,9 @@ We focus on the five most frequent topic tags (Table~\ref{tab:top-tags}), which 
 %    \label{fig:louvain}
 %\end{figure}
 
-Our primary experiment examines the bidirectional relationship between sentiment toward \textit{donald\_trump} and sentiment toward \textit{politics} in shaping ideology classification. We test two competing hypotheses: (1) Trump sentiment drives general political sentiment, which then shapes ideology; versus (2) broader political sentiment shapes Trump-specific framing, with Trump sentiment mediating the path to ideology. We use NIE/NDE decomposition and bidirectional mediation to determine the dominant pathway.
+Our primary experiments operate at the community level, where aggregating semantically related topics yields larger sample sizes and more robust causal estimates. We estimate ATEs for each community's aggregate sentiment on ideology classification, and conduct mediation analysis to test whether institutional political topics (Community 3) systematically mediate the effects of Trump Administration sentiment (Community 11) on ideology. We estimate CATEs for different combinations of these community-level sentiment variables, testing whether the relationship between individual figures and institutional framing reflects a stable structural pattern.
 
-Building on this, we test whether the mediation pattern generalizes: do institutional political topics (Community 2) systematically mediate the effects of political figure sentiment (Community 11) on ideology? We estimate CATEs for different combinations of these sentiment variables, testing whether the Trump--politics dynamic reflects a broader structural relationship between individual figures and institutional framing.
+For completeness, we also perform topic-level mediation analysis on the two most prominent individual tags (top five topics can be seen in Table~\ref{tab:topical-summary}), \textit{donald\_trump} and \textit{politics}, examining their bidirectional relationship in shaping ideology classification. We test two competing hypotheses: (1) Trump sentiment drives general political sentiment, which then shapes ideology; versus (2) broader political sentiment shapes Trump-specific framing, with Trump sentiment mediating the path to ideology. We use NIE/NDE decomposition and bidirectional mediation to determine the dominant pathway.
 
 \subsection{Annotation Paradigms}
 \label{sec:annotation-paradigms}
@@ -195,6 +233,51 @@ For example, positive Trump sentiment ($F_T$) may incline an article toward posi
 
 We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals. Because the TE confidence interval consistently includes zero in our results (see Section~\ref{sec:mediation-results}), we suppress the proportional mediation $(\text{NIE}/\text{TE})$ to avoid division-by-near-zero artifacts.
 
+
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}[
+      >=latex,
+      procnode/.style={
+          rectangle, rounded corners,
+          draw, thick,
+          minimum width=2.8cm, minimum height=2cm,
+          align=center, inner sep=3pt
+      },
+      edgelabel/.style={
+          font=\footnotesize, align=center
+      }
+  ]
+    % (a) Annotator dataset
+    \node[procnode] (a) at (0,0) {Annotator Dataset\\$N = 9{,}830$};
+
+    % (e) Topic-level mediation (to the right of (a))
+    \node[procnode] (e) at (8,0) {Topic-Level Mediation\\(NIE, NDE)};
+
+    % (b) Community detection (below (a))
+    \node[procnode] (b) at (0,-4) {Community Detection};
+
+    % (c) Community-level ATE (below (b))
+    \node[procnode] (c) at (0,-8) {Community-Level ATE};
+
+    % (d) Community-level mediation (below (c))
+    \node[procnode] (d) at (0,-12) {Community-Level Mediation\\(NIE, NDE)};
+
+    % Edges
+    \draw[->, thick] (a) -- node[edgelabel, above, text width=4.8cm]
+        {Topic-level mediation on the most co-occurring topic pair (\textit{Donald Trump}, \textit{Politics})} (e);
+    \draw[->, thick] (a) -- node[edgelabel, right, text width=5cm]
+        {Full corpus (train, validation, and test splits) used for community detection} (b);
+    \draw[->, thick] (b) -- node[edgelabel, right, text width=5cm]
+        {Estimate ATE for each detected community} (c);
+    \draw[->, thick] (c) -- node[edgelabel, right, text width=5cm]
+        {Mediation analysis on community pairs with significant ATEs} (d);
+  \end{tikzpicture}
+  \caption{Overview of the full experimental procedure of Chapter~\ref{sec:causal-inference}. The annotator dataset feeds two parallel analyses: a community-level pipeline (community detection, followed by ATE estimation and then mediation on community pairs with significant effects) and a topic-level mediation analysis on the most frequently co-occurring topic pair.}
+  \label{fig:experimental-procedure}
+\end{figure}
+
+
 \subsubsection{Treatment Encoding and Contrasts}
 \label{sec:treatment-encoding}
 
@@ -228,6 +311,9 @@ In addition to the topic-level analysis above, we perform a community-level anal
 
 \noindent estimated via a single \texttt{LinearDML} model with $\mathbf{F}_C$ as the treatment matrix and PCA-reduced topic-presence indicators as confounders. Community-level aggregation increases the number of articles per treatment unit and yields more reliable estimates than topic-level analysis, particularly for topics that individually appear in few articles.
 
-For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{11516} articles in the AllSidesV2 Media test set, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
+For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, those where the treatment community's sentiment and the mediator community's sentiment are both observable. This subsetting can substantially reduce the sample size: of the \num{9830} articles in the AllSidesV2 Media test set with sentiment annotations, only 139 contain topics from both Community~9 (Geopolitics and Foreign Affairs) and Community~11 (Trump Presidency). However, this focused subpopulation reveals much larger per-unit effects than the global ATE, because the global estimate averages a concentrated subgroup effect across the majority of articles where the treatment community's topics are absent entirely (see Section~\ref{sec:community-mediation} for detailed results).
 
-\paragraph{Two-level analysis strategy: roadmap into the results.} Sections~\ref{sec:community-level-results} and~\ref{sec:topic-level-results} present the empirical analysis at two levels of granularity. We lead with \emph{community-level} results because they are the more robust analysis: aggregating sentiments within Louvain-detected topic communities pools many low-frequency topics into a smaller number of high-frequency treatments, which increases per-treatment sample size, stabilizes the nuisance-model fits, and supports tighter confidence intervals. The \emph{topic-level} results that follow are presented as a finer-grained robustness check on the same data, asking whether the community-level picture holds when we look at individual topics with much smaller per-treatment $N$. The structural finding of the chapter (that paradigm-dependent shortcut learning is detectable at the community level) becomes weaker at the topic level because the topic-level analysis is statistically underpowered, not because the underlying phenomenon disappears, and we will return to that distinction explicitly when interpreting the topic-level numbers.
+Sections~\ref{sec:community-level-results} and~\ref{sec:topic-level-results} present the empirical analysis at two levels of granularity. We lead with \emph{community-level} results because they are the more robust analysis: aggregating sentiments within Louvain-detected topic communities pools many low-frequency topics into a smaller number of high-frequency treatments, which increases per-treatment sample size, stabilizes the nuisance-model fits, and supports tighter confidence intervals. The \emph{topic-level} results that follow are presented as a finer-grained robustness check on the same data, asking whether the community-level picture holds when we look at individual topics with much smaller per-treatment $N$. The structural finding of the chapter (that paradigm-dependent shortcut learning is detectable at the community level) becomes weaker at the topic level because the topic-level analysis is statistically underpowered, not because the underlying phenomenon disappears, and we will return to that distinction explicitly when interpreting the topic-level numbers.
+
+Figure~\ref{fig:experimental-procedure} summarises the full experimental pipeline of this chapter, showing how the annotator dataset feeds the community-level chain of analyses (community detection, ATE estimation, mediation) and, in parallel, the topic-level mediation analysis on the most frequently co-occurring topic pair.
+

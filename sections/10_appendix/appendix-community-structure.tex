@@ -1,0 +1,72 @@
+\chapter{Community Structure}
+\label{appendix:community-structure}
+
+Table~\ref{tab:community-structure} presents the full community structure obtained from Louvain community detection on the topic tag co-occurrence graph described in Section~\ref{sec:experimental-design}. Each community groups semantically related topic tags that frequently co-occur within articles. The 15 detected communities range from single-topic clusters (e.g., Community~8: LGBT Rights) to large thematic groupings containing over 80 tags (e.g., Community~9: International Affairs and Climate).
+
+\begin{small}
+\begin{longtable}{c p{0.55\textwidth} c p{0.15\textwidth}}
+\caption{Full community structure from Louvain community detection on the topic tag co-occurrence graph. Communities are ordered by ID. Article counts reflect the number of articles in the AllSidesV2 test set whose primary community assignment matches that community.}
+\label{tab:community-structure} \\
+\toprule
+\textbf{ID} & \textbf{Topics Included} & \textbf{Articles} & \textbf{Theme} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{ID} & \textbf{Topics Included} & \textbf{Articles} & \textbf{Theme} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{4}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+0 & budget, stock\_market, banking\_and\_finance, john\_boehner, middle\_class, federal\_reserve, minimum\_wage, economy\_and\_jobs, coronavirus\_recovery, gas\_prices, jobless\_claims, fiscal\_cliff, wall\_street, people\_and\_profit, janet\_yellen, capitalism, interest\_rates, federal\_budget, jobs, federal\_spending, workers'\_rights, debt\_ceiling, business, income\_inequality, unemployment\_benefits, jerome\_powell, inequality, labor, poverty, recession, housing\_and\_homelessness, treasury, supply\_chains, federal\_debt, jobs\_report, housing\_market, unions, starbucks, unemployment, agriculture, corporations, economic\_policy, wages, inflation, deficit, debt, irs & 95 & \\
+\midrule
+
+1 & michael\_bloomberg, bernie\_sanders, bill\_clinton, kamala\_harris, ted\_cruz, debates, rand\_paul, cory\_booker, midterm\_elections, decision\_2020, battleground\_states, tulsi\_gabbard, democratic\_debates, alabama, william\_weld, gerrymandering, marco\_rubio, presidential\_elections, ohio, latinos, roy\_moore, campaigns, delegates, election\_2016, arizona, ben\_carson, election\_2020, michigan, pete\_buttigieg, women, 2020\_election, carly\_fiorina, dnc, jeb\_bush, socialism, gop\_convention, campaign\_rhetoric, iowa\_caucus, polls, black\_voters, emails, voting, rnc, progressives, pennsylvania, election\_2014, new\_hampshire, democratic\_convention, elections, south\_carolina, georgia, mail-in\_voting, scott\_walker, wisconsin, libertarian, campaign\_finance, elizabeth\_warren, nevada, democratic\_party, tara\_reade, gary\_johnson, joe\_biden, endorsements, john\_kasich, gop, north\_carolina, hillary\_clinton, virginia, election\_2012, iowa, 2020\_election\_fact\_checking, beto\_o'rourke, electoral\_college, mitt\_romney, wikileaks, voting\_rights\_and\_voter\_fraud, libertarian\_party & 220 & \\
+\midrule
+
+2 & coronavirus\_vaccine, quarantine, schools, vaccine, betsy\_devos, freedom\_convoy, reopening\_america, common\_core, marijuana, texas, education, affordable\_care\_act, mental\_health, vaping, marijuana\_legalization, life\_during\_covid-19, facts\_and\_fact\_checking, cdc, coronavirus\_testing, who, wuhan\_lab, andrew\_cuomo, coronavirus, student\_loans, medicare, role\_of\_government, family\_and\_marriage, obesity\_and\_malnutrition, science, disease, safety\_and\_sanity\_during\_covid-19, anthony\_fauci, vaccine\_mandates, drugs, social\_distancing, fda, booster\_shots, public\_health, fake\_news, healthcare, health\_insurance, pandemic, domestic\_policy, new\_york\_city, states, covid-19\_misinformation, pfizer, new\_york, food, opioid\_crisis, reopening\_business, health, obamacare, misinformation\_and\_disinformation, harvard, healthcare\_reform & 108 & \\
+\midrule
+
+3 & sexual\_assault, christine\_blasey\_ford, dreamers, pride\_month, brett\_kavanaugh, freedom\_of\_religion, transgender\_issues, pope\_francis, vatican, lgbtq\_issues, daca, catholic\_church, ice, neil\_gorsuch, immigration, asylum, sexual\_misconduct, pro-life, christianity, border\_crisis, pope, planned\_parenthood, culture\_war, religious\_freedom, antonin\_scalia, religion\_and\_faith, same-sex\_marriage, deportations, supreme\_court, biden\_administration, central\_america, travel\_ban, christians, abortion, illegal\_immigration, roe\_v\_wade, unauthorized\_immigration, border\_security, border\_separations, sanctuary\_cities, asylum\_seekers, refugees & 132 & \\
+\midrule
+
+4 & amazon, 1st\_amendment, twitter, cancel\_culture, polarization, surveillance, technology, mark\_zuckerberg, media\_watch, internet, google, social\_media, big\_tech, cnn, journalism, censorship, privacy, megyn\_kelly, msnbc, instagram, political\_polarization, julian\_assange, civility, freedom\_of\_the\_press, tiktok, jussie\_smollett, elon\_musk, higher\_education, tucker\_carlson, media\_bias, cybersecurity, free\_speech, media\_industry, fox\_news, culture, entertainment, facebook, online\_censorship, arts\_and\_entertainment, net\_neutrality, hacking & 229 & \\
+\midrule
+
+5 & red\_flag\_laws, shooting, george\_floyd, attorney\_general, jeff\_sessions, violence\_in\_america, police, police\_brutality, roger\_stone, hunter\_biden, justice\_department, federal\_courts, corruption, uvalde\_shooting, police\_reform, background\_checks, william\_barr, gun\_violence, minneapolis, criminal\_justice, police\_shooting, courts, eric\_holder, seattle, gun\_control\_and\_gun\_rights, mass\_shootings, jeffrey\_epstein, nra, florida\_school\_shooting, ferguson, portland\_protests, gavin\_newsom, 2nd\_amendment, california, george\_floyd\_protests, charlottesville, assault\_weapons, church\_shooting, race\_and\_racism, rod\_rosenstein, capital\_punishment\_and\_death\_penalty, violence, school\_shootings, civil\_rights, crime, black\_lives\_matter, baltimore\_riots, merrick\_garland, justice & 193 & \\
+\midrule
+
+6 & hurricane\_florence, easter, animal\_welfare, disaster, merry\_christmas, puerto\_rico, transportation, ron\_desantis, ebola, infrastructure, general\_news, florida, california\_wildfires, hurricane\_irma, women's\_issues, hurricane\_harvey, holidays, thanksgiving, fourth\_of\_july, boeing & 11 & \\
+\midrule
+
+7 & pentagon, drone\_strikes, us\_military, spying, isis, mueller\_report, egypt, hamas, defense\_and\_security, dhs, defense\_department, paul\_manafort, nsa, gaza, taliban, hezbollah, yemen, national\_security, islamic\_state, michael\_flynn, military, palestinians, north\_korea\_summit, cia, qasem\_soleimani, drones, qatar, war\_on\_terror, boston\_bombing, us\_navy, edward\_snowden, national\_defense, afghanistan, terrorism, israel\_hamas\_violence, iran\_nuclear\_deal, iraq, jordan, robert\_mueller, russia\_probe, iran\_negotiations, paris, syria, iran, fbi, jamal\_khashoggi, benjamin\_netanyahu, palestine, mohammed\_bin\_salman, middle\_east, hostages, israel, saudi\_arabia, defense, ceasefire & 218 & \\
+\midrule
+
+8 & lgbt\_rights & 0 & \\
+\midrule
+
+9 & india, pakistan, nigeria, vladimir\_putin, china, mexico, volodymyr\_zelenskyy, pollution, royal\_family, justin\_trudeau, chinese\_communist\_party, climate\_change, nato, germany, kim\_jong\_un, global\_markets, foreign\_affairs, water\_and\_oceans, food\_crisis, brexit, turkey, coronavirus\_lockdowns, tariffs, human\_rights, green\_new\_deal, european\_union, sanctions, missiles, genocide, environment, world, cuba, antony\_blinken, venezuela, liz\_truss, islam, theresa\_may, democracy, king\_charles, france, asia, andres\_manuel\_lopez\_obrador, carbon\_emissions, united\_nations, ukraine, emmanuel\_macron, europe, taiwan, mariupol, oil, japan, heat\_waves, boris\_johnson, trade\_war, united\_states, united\_kingdom, hong\_kong, eastern\_europe, great\_britain, nuclear\_weapons, alexei\_navalny, foreign\_policy, war, epa, kyiv, conservation, global\_warming, wildfires, denuclearization, war\_crimes, threats\_to\_democracy, canada, protests, jerusalem, trade, muslims, electric\_vehicles, north\_korea, nafta, xi\_jinping, uighur\_muslims, africa, south\_korea, russia, australia, ukraine\_war, brazil, queen\_elizabeth, sustainability, energy & 139 & \\
+\midrule
+
+10 & super\_bowl, soccer, sports, national\_anthem, nfl & 9 & \\
+\midrule
+
+11 & white\_house, michael\_cohen, stormy\_daniels, house\_judiciary\_committee, house\_republicans, hope\_hicks, capitol\_chaos, mike\_pompeo, tax\_reform, antisemitism, robert\_f\_kennedy\_jr, alexandria\_ocasio-cortez, mike\_pence, paul\_ryan, veterans, impeachment\_hearings, house\_democrats, barack\_obama, 2024\_presidential\_election, donald\_trump\_jr., kevin\_mccarthy, state\_of\_the\_union, veterans\_affairs, senate\_democrats, john\_mccain, conservatives, us\_constitution, 2024\_elections, benghazi, lindsey\_graham, liberals, jared\_kushner, cabinet, senate, 2022\_elections, congress, chuck\_schumer, james\_comey, trump\_administration, donald\_trump, us\_senate, john\_bolton, alvin\_bragg, bipartisanship, mitch\_mcconnell, rudy\_giuliani, chris\_christie, trump\_indictments, new\_york\_times, us\_house, public\_opinion, nikki\_haley, the\_americas, adam\_schiff, don\_mcgahn, election\_integrity, us\_congress, independent\_party, republican\_party, presidential\_debates, border\_wall, articles\_of\_impeachment, nancy\_pelosi, whistleblower, government\_shutdown, rex\_tillerson, january\_6, politics, secretary\_of\_state, secret\_service, national\_emergency, trump\_tax\_returns, taxes, impeachment, executive\_orders, tax\_cuts, tea\_party, state\_department, approval\_rating, steve\_bannon, senate\_gop & 772 & \\
+\midrule
+
+12 & infowars, alex\_jones & 0 & \\
+\midrule
+
+13 & citizenship\_question, us\_census & 1 & \\
+\midrule
+
+14 & d-day, normandy & 0 & \\
+
+\end{longtable}
+\end{small}
