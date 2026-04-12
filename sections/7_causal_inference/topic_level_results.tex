@@ -2,77 +2,16 @@
 \label{sec:topic-level-results}
 
 Having established that community-level aggregation reveals paradigm-specific effects (Section~\ref{sec:community-level-results}), we now present the finer-grained topic-level analysis for completeness. These results are also available for five annotation paradigms: Human, Fine-tuned RoBERTa, GPT-4o-mini (baseline), Fine-tuned GPT-4o-mini, and Llama-3.3-70B-versatile.
-
-\subsection{Mediation Analysis Results}
-\label{sec:mediation-results}
-
-We evaluate \textbf{Donald Trump sentiment as treatment} with Politics sentiment as mediator ($N = 233$ articles); the relatively small $N$ reflects the sparsity of Trump-tagged articles in the corpus.
-
-Table~\ref{tab:te-trump} reports Total Effect estimates for both percentile contrasts across the five annotation paradigms. The treatment window is identical across all four datasets ($Q25 = -0.7$, $Q75 = +0.1$; $P10 = -1.1$, $P90 = +0.3$), so differences across paradigms arise entirely from differences in ideology labels $Y$.
-
-\begin{table}[ht]
-  \centering
-  \sisetup{table-format=+1.3}
-  \begin{tabular}{llS[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]}
-    \toprule
-    \textbf{Paradigm} & \textbf{Contrast} &
-      {\textbf{TE}} &
-      {\textbf{CI lower}} & {\textbf{CI upper}} &
-      {\textbf{NDE}} & {\textbf{NIE}} \\
-    \midrule
-    Human
-      & $Q25 \to Q75$  & -0.199 & -0.426 & +0.027 & -0.077 & -0.123 \\
-    Human
-      & $P10 \to P90$  & -0.344 & -0.735 & +0.047 & -0.120 & -0.223 \\
-    \addlinespace
-    Fine-tuned RoBERTa
-      & $Q25 \to Q75$  & -0.103 & -0.323 & +0.117 & -0.034 & -0.069 \\
-    Fine-tuned RoBERTa
-      & $P10 \to P90$  & -0.177 & -0.557 & +0.202 & -0.047 & -0.130 \\
-    \addlinespace
-    GPT-4o-mini (baseline)
-      & $Q25 \to Q75$  & -0.078 & -0.298 & +0.143 & +0.003 & -0.080 \\
-    GPT-4o-mini (baseline)
-      & $P10 \to P90$  & -0.134 & -0.515 & +0.247 & -0.003 & -0.131 \\
-    \addlinespace
-    Fine-tuned GPT-4o-mini
-      & $Q25 \to Q75$  & {$\mathbf{-0.249^{*}}$} & {$\mathbf{-0.465}$} & {$\mathbf{-0.033}$} & -0.101 & -0.148 \\
-    Fine-tuned GPT-4o-mini
-      & $P10 \to P90$  & {$\mathbf{-0.430^{*}}$} & {$\mathbf{-0.802}$} & {$\mathbf{-0.058}$} & -0.168 & -0.262 \\
-    \addlinespace
-    Llama-3.3-70B
-      & $Q25 \to Q75$  & -0.091 & -0.338 & +0.157 & -0.021 & -0.070 \\
-    Llama-3.3-70B
-      & $P10 \to P90$  & -0.156 & -0.583 & +0.270 & -0.041 & -0.116 \\
-    \bottomrule
-  \end{tabular}
-  \caption{Total Effect (TE) of Donald Trump sentiment on ideology label for
-    two percentile contrasts. $N = 233$ articles. All five paradigms agree on a
-    negative direction; only Fine-tuned GPT-4o-mini's Total Effect reaches 95\%
-    significance under either contrast (marked $^*$). The proportion mediated
-    through Politics sentiment is reliable for Fine-tuned GPT-4o-mini at
-    $\approx 0.60$.}
-  \label{tab:te-trump}
-\end{table}
-
-All five paradigms agree on the direction of the Trump-sentiment effect: more positive Trump sentiment is associated with a leftward shift in ideology classification. Fine-tuned GPT-4o-mini is the only paradigm whose Total Effect reaches 95\% significance, doing so under both percentile contrasts ($\widehat{\text{TE}} = -0.249$, 95\% CI $[-0.465, -0.033]$ for $Q25 \to Q75$; $\widehat{\text{TE}} = -0.430$, 95\% CI $[-0.802, -0.058]$ for $P10 \to P90$). The other four paradigms produce wide intervals that span zero. Ordering the paradigms by $|\text{TE}|$ on the $Q25 \to Q75$ contrast yields Fine-tuned GPT-4o-mini ($-0.249$) > Human ($-0.199$) > Fine-tuned RoBERTa ($-0.103$) > Llama-3.3-70B ($-0.091$) > GPT-4o-mini baseline ($-0.078$). Holding the architecture constant, fine-tuning therefore amplifies the Total Effect in GPT-4o-mini by roughly $3.2\times$ relative to its zero-shot baseline; this magnitude amplification, rather than a directional disagreement, is the distinguishing causal footprint of fine-tuning at the topic level.
-
-\authortodo{Do the dataset analysis on articles tagged with Trump/Politics -- are they generally mislabelled?}
-
-
-In every paradigm, the indirect channel through Politics sentiment carries a larger share of the Total Effect than the direct channel: $|\text{NIE}| > |\text{NDE}|$ for all five annotators on both percentile contrasts. For Fine-tuned GPT-4o-mini, the proportion mediated through Politics is reliable at $\approx 0.60$ under both contrasts, and the bootstrap NIE point estimates ($-0.148$ and $-0.262$) are also the largest in absolute value across paradigms. Together with the significant Total Effect, this places the bulk of Fine-tuned GPT-4o-mini's Trump-sentiment signature inside the Politics-mediator pathway, a structural pattern the chapter returns to in Section~\ref{sec:cross-paradigm}.
-
-% ------------------------------------------------------------------------------
 \subsection{Multi-Treatment DML Results}
 \label{sec:multi-treatment-results}
 % ------------------------------------------------------------------------------
 
-The multi-treatment sweep fits a single \texttt{LinearDML} model per dataset with all $k = 11$ qualifying topic sentiments as simultaneous treatments, controlling for topic-presence confounders via PCA-compressed $W$. ATEs are estimated on the full corpus ($N = \num{9830}$), providing substantially higher statistical power than the mediation subsample.
+The multi-treatment sweep fits a single \texttt{LinearDML} model per dataset with with the top 20 topic sentiments (determined by number of articles), treating them as separate treatments, controlling for topic-presence confounders via PCA-compressed $W$. ATEs are estimated on the full corpus, providing substantially higher statistical power than the mediation subsample.
 
 \subsubsection{Continuous Treatment Mode}
 \label{sec:continuous-mode}
 
-Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation increase in each topic's sentiment score, holding all other topic sentiments constant.
+Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation increase in each topic's sentiment score, holding all other topic sentiments constant. Of the top 20 topics, nine produce at least one significant effect across the five annotation paradigms; Table~\ref{tab:multi-continuous} presents these nine topics. The full table with all 20 topics and 95\% confidence intervals is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.
 
 \begin{table}[ht]
   \centering
@@ -93,86 +32,133 @@ Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation inc
       & {\textbf{FT GPT}}
       & {\textbf{Llama-3.3}} \\
     \midrule
-    Hillary Clinton & 51 & +0.0051 & \cellcolor{blue!25}+0.0220 & +0.0025 & +0.0055 & -0.0053 \\
-    Media Bias & 115 & +0.0024 & +0.0203 & -0.0039 & +0.0080 & -0.0092 \\
-    FBI & 72 & +0.0182 & -0.0052 & -0.0028 & +0.0008 & -0.0097 \\
-    Donald Trump & 233 & -0.0089 & -0.0025 & -0.0007 & -0.0194 & -0.0016 \\
-    Media Watch & 58 & -0.0032 & -0.0079 & -0.0063 & -0.0064 & +0.0019 \\
-    Russia Probe & 57 & +0.0011 & +0.0045 & -0.0046 & -0.0031 & -0.0041 \\
-    Race and Racism & 104 & -0.0013 & +0.0040 & +0.0030 & +0.0061 & +0.0031 \\
-    Defense and Security & 76 & +0.0017 & +0.0034 & +0.0038 & -0.0022 & -0.0005 \\
-    LGBTQ Issues & 73 & +0.0027 & +0.0021 & -0.0006 & +0.0142 & -0.0009 \\
-    Politics & 594 & -0.0035 & -0.0023 & +0.0020 & +0.0102 & -0.0072 \\
-    Economy and Jobs & 56 & -0.0001 & +0.0019 & -0.0064 & -0.0064 & -0.0069 \\
+    Donald Trump & 1424 & +0.0427 & +0.0449 & +0.0862 & +0.0448 & +0.1055 \\
+    White House & 701 & \cellcolor{blue!25}-0.0143 & \cellcolor{blue!25}-0.0059 & \cellcolor{blue!25}\textbf{+0.0129} & \cellcolor{blue!25}-0.0043 & \textbf{+0.0186} \\
+    Healthcare & 373 & -0.0288 & -0.0219 & -0.0315 & -0.0308 & -0.0424 \\
+    Defense and Security & 352 & \cellcolor{blue!25}\textbf{-0.0013} & \cellcolor{blue!25}+0.0035 & \cellcolor{blue!25}+0.0148 & \cellcolor{blue!25}\textbf{-0.0076} & +0.0248 \\
+    Republican Party & 293 & +0.0367 & +0.0274 & +0.0464 & +0.0277 & +0.0504 \\
+    Joe Biden & 288 & \cellcolor{blue!25}-0.0143 & -0.0192 & -0.0244 & -0.0217 & -0.0291 \\
+    Barack Obama & 286 & -0.0385 & -0.0317 & -0.0494 & -0.0378 & -0.0575 \\
+    Hillary Clinton & 279 & -0.0444 & -0.0529 & -0.0603 & -0.0478 & -0.0632 \\
+    Democratic Party & 261 & -0.0458 & -0.0403 & -0.0538 & -0.0471 & -0.0508 \\
     \bottomrule
   \end{tabular}
-  \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score). Cells shaded in blue denote statistically significant results (95\% bootstrap CI excludes zero; $B = \num{2000}$). The full table with 95\% confidence intervals for every estimate is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.}
+  \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score), showing topics from the 20 qualifying topics where at least one paradigm produces a significant result. \colorbox{blue!15}{Highlighted} cells denote statistically insignificant results. Bolded cells indicate paradigms whose ATE sign diverges from the majority direction for that topic. The full table with 95\% confidence intervals is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.}
   \label{tab:multi-continuous}
 \end{table}
 
-\subsubsection{The Hillary Clinton Signal}
-\label{sec:hillary-signal}
+\subsubsection{Cross-Paradigm Agreement and Divergence}
+\label{sec:cross-paradigm-agreement}
 
-Only one cell in the multi-treatment continuous sweep reaches significance: Hillary Clinton sentiment under Fine-tuned RoBERTa, whose ATE narrowly excludes zero ($\widehat{\text{ATE}} = +0.0220$, 95\% CI $[+0.000, +0.035]$). This is the only significant topic-level effect produced by Fine-tuned RoBERTa across any of the topic-level analyses, and it is not recovered by any other paradigm. Outside this isolated finding, no topic is significant under any other annotation paradigm in the multi-treatment continuous analysis.
+Seven of the nine significant topics in Table~\ref{tab:multi-continuous} show complete directional agreement across all five paradigms: Donald Trump and Republican Party carry uniformly positive ATEs, while Healthcare, Joe Biden, Barack Obama, Hillary Clinton, and Democratic Party carry uniformly negative ATEs. The directional pattern is interpretable: topics associated with Democratic figures and positions produce negative effects (more positive sentiment $\to$ leftward ideology shift), while topics associated with Republican figures produce positive effects (more positive sentiment $\to$ rightward shift). This partisan alignment holds across all five annotation paradigms.
 
-\authortodo{Do the dataset analysis on articles tagged with Clinton -- are they generally mislabelled?}
+The remaining two significant topics, White House and Defense and Security, show directional disagreement. For White House, the majority direction is positive (GPT baseline, Llama), but Human, Fine-tuned RoBERTa, and Fine-tuned GPT-4o-mini estimate negative effects; only Llama reaches significance. For Defense and Security, the majority direction is positive (Fine-tuned RoBERTa, GPT baseline, Llama), but Human and Fine-tuned GPT-4o-mini estimate negative effects; again only Llama reaches significance. In both cases, significance is confined to a single paradigm, unlike the partisan-figure topics where significance replicates across all or nearly all paradigms.
 
-% The Hillary Clinton direction under Fine-tuned RoBERTa is counterintuitive: \emph{more positive} Clinton sentiment is associated with \emph{more right-leaning} ideology classification. A plausible explanation is selection bias: the 51 Clinton-tagged articles are disproportionately from 2016--2017, where outlets discuss her in a political-foil context (e.g., framing ``deep state'' criticism via Clinton references). The effect is small and non-significant under every other paradigm (Human $+0.0051$, baseline GPT $+0.0025$, Fine-tuned GPT $+0.0055$, Llama $-0.0053$), and the four LLM-based paradigms cluster within $\pm 0.006$ of zero. The fact that the only significant result comes from a single annotation paradigm strongly suggests the Fine-tuned RoBERTa signal is driven by labelling idiosyncrasies rather than a genuine causal relationship.
+Article count does not correlate with effect significance. The three largest topics by article count, Elections ($N = \num{1709}$), Politics ($N = \num{1520}$), and Presidential Elections ($N = \num{1331}$), produce no significant effects under any paradigm, whereas smaller topics such as Democratic Party ($N = 261$) and Hillary Clinton ($N = 279$) are significant across all five. Instead, significance appears to track the polarising quality of the topic: explicitly partisan topics (named political figures and parties) carry large, replicable effects, while broader governance and process topics do not, regardless of sample size.
+
+\begin{table}[ht]
+  \centering
+  \sisetup{table-format=+1.4}
+  \setlength{\tabcolsep}{4pt}
+  \small
+  \begin{tabular}{l c
+      S[table-format=+1.4]
+      S[table-format=+1.4]
+      S[table-format=+1.4]
+      S[table-format=+1.4]
+      S[table-format=+1.4]}
+    \toprule
+    \textbf{Topic} & {\textbf{N}}
+      & {\textbf{Human}}
+      & {\textbf{FT RoBERTa}}
+      & {\textbf{GPT (base.)}}
+      & {\textbf{FT GPT}}
+      & {\textbf{Llama-3.3}} \\
+    \midrule
+    Elections & 1709 & -0.0066 & -0.0198 & -0.0050 & -0.0131 & \textbf{+0.0027} \\
+    Politics & 1520 & -0.0056 & -0.0092 & \textbf{+0.0069} & -0.0121 & \textbf{+0.0058} \\
+    Presidential Elections & 1331 & +0.0039 & +0.0019 & +0.0085 & +0.0030 & +0.0080 \\
+    Russia & 270 & \textbf{-0.0008} & +0.0044 & \textbf{-0.0044} & +0.0036 & +0.0144 \\
+    Violence in America & 260 & -0.0072 & -0.0015 & -0.0004 & -0.0016 & -0.0053 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Multi-treatment DML: ATE for selected non-significant topics. No cell reaches significance under any paradigm. Bolded cells indicate paradigms whose ATE sign diverges from the majority direction for that topic.}
+  \label{tab:multi-nonsig}
+\end{table}
+
+Table~\ref{tab:multi-nonsig} illustrates this pattern with five representative non-significant topics. All five are among the largest or most thematically salient topics, yet none produces a single significant cell. The contrast with Table~\ref{tab:multi-continuous} is instructive: annotators tend to agree on both direction and significance when a topic is inherently polarising, but disagree on direction when it is not. Presidential Elections and Violence in America show full directional consensus (all positive and all negative, respectively), but with uniformly small magnitudes. Elections and Politics show mixed directionality, with GPT-4o-mini (baseline) and Llama-3.3-70B diverging from the majority negative direction. Russia illustrates a subtler form of disagreement: positive sentiment toward Russia shifts predicted ideology leftward under Human and GPT-4o-mini (baseline) annotations, but rightward under Fine-tuned RoBERTa, Fine-tuned GPT-4o-mini, and Llama-3.3-70B. Because none of these effects reaches significance, it remains unclear whether the split reflects a genuine signal in the data or merely noise amplified by small sample size ($n = 270$). Notably, fine-tuning reversed the direction for GPT-4o-mini, shifting it from a negative to a positive estimate, suggesting that task-specific supervision can alter not only the magnitude but also the sign of downstream causal estimates even when neither estimate is individually significant.
+
+% ------------------------------------------------------------------------------
+
+\subsection{Mediation Analysis Results}
+\label{sec:mediation-results}
+
+We evaluate \textbf{Donald Trump sentiment as treatment} with Politics sentiment as mediator ($N = \num{1424}$ articles).
+
+Table~\ref{tab:te-trump} reports Total Effect estimates for both percentile contrasts across the five annotation paradigms. The treatment window is identical across all five datasets ($Q25 = -0.4$, $Q75 = +0.2$; $P10 = -0.9$, $P90 = +0.5$), so differences across paradigms arise entirely from differences in ideology labels $Y$.
+
+\begin{table}[ht]
+  \centering
+  \sisetup{table-format=+1.3}
+  \begin{tabular}{llS[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]}
+    \toprule
+    \textbf{Paradigm} & \textbf{Contrast} &
+      {\textbf{TE}} &
+      {\textbf{CI lower}} & {\textbf{CI upper}} &
+      {\textbf{NDE}} & {\textbf{NIE}} \\
+    \midrule
+    Human
+      & $Q25 \to Q75$  & +0.135 & -0.001 & +0.270 & +0.124 & +0.010 \\
+    Human
+      & $P10 \to P90$  & +0.314 & -0.002 & +0.630 & +0.300 & +0.014 \\
+    \addlinespace
+    Fine-tuned RoBERTa
+      & $Q25 \to Q75$  & {$\mathbf{+0.154^{*}}$} & {$\mathbf{+0.016}$} & {$\mathbf{+0.292}$} & +0.135 & +0.019 \\
+    Fine-tuned RoBERTa
+      & $P10 \to P90$  & {$\mathbf{+0.359^{*}}$} & {$\mathbf{+0.038}$} & {$\mathbf{+0.681}$} & +0.320 & +0.040 \\
+    \addlinespace
+    GPT-4o-mini (baseline)
+      & $Q25 \to Q75$  & {$\mathbf{+0.255^{*}}$} & {$\mathbf{+0.155}$} & {$\mathbf{+0.355}$} & +0.249 & +0.006 \\
+    GPT-4o-mini (baseline)
+      & $P10 \to P90$  & {$\mathbf{+0.595^{*}}$} & {$\mathbf{+0.362}$} & {$\mathbf{+0.828}$} & +0.585 & +0.010 \\
+    \addlinespace
+    Fine-tuned GPT-4o-mini
+      & $Q25 \to Q75$  & {$\mathbf{+0.158^{*}}$} & {$\mathbf{+0.022}$} & {$\mathbf{+0.293}$} & +0.141 & +0.017 \\
+    Fine-tuned GPT-4o-mini
+      & $P10 \to P90$  & {$\mathbf{+0.368^{*}}$} & {$\mathbf{+0.052}$} & {$\mathbf{+0.684}$} & +0.335 & +0.032 \\
+    \addlinespace
+    Llama-3.3-70B
+      & $Q25 \to Q75$  & {$\mathbf{+0.316^{*}}$} & {$\mathbf{+0.187}$} & {$\mathbf{+0.445}$} & +0.316 & -0.000 \\
+    Llama-3.3-70B
+      & $P10 \to P90$  & {$\mathbf{+0.737^{*}}$} & {$\mathbf{+0.437}$} & {$\mathbf{+1.037}$} & +0.741 & -0.004 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Total Effect (TE) of Donald Trump sentiment on ideology label for
+    two percentile contrasts. $N = \num{1424}$ articles. All five paradigms agree on a
+    positive direction; four of five reach 95\%
+    significance under both contrasts (marked $^*$), with Human narrowly missing. The direct channel (NDE) dominates the indirect channel (NIE) in all paradigms.}
+  \label{tab:te-trump}
+\end{table}
+
+All five paradigms agree on the direction of the Trump-sentiment effect: more positive Trump sentiment is associated with a rightward shift in ideology classification. Four of five paradigms reach 95\% significance under both percentile contrasts; only Human narrowly misses ($\widehat{\text{TE}} = +0.135$, 95\% CI $[-0.001, +0.270]$ for $Q25 \to Q75$). Ordering the paradigms by $|\text{TE}|$ on the $Q25 \to Q75$ contrast yields Llama-3.3-70B ($+0.316$) > GPT-4o-mini baseline ($+0.255$) > Fine-tuned GPT-4o-mini ($+0.158$) > Fine-tuned RoBERTa ($+0.154$) > Human ($+0.135$). The two zero-shot LLM paradigms (Llama and GPT baseline) produce the largest Total Effects, while fine-tuning GPT-4o-mini slightly reduces the effect relative to its baseline ($+0.158$ vs $+0.255$), suggesting that task-specific fine-tuning attenuates, rather than amplifies, the Trump-sentiment signal.
+
+In every paradigm, the direct channel (NDE) carries the dominant share of the Total Effect: $|\text{NDE}| \gg |\text{NIE}|$ for all five annotators on both percentile contrasts. The proportion mediated through Politics sentiment is small where reliable: 12.4\% for Fine-tuned RoBERTa, 10.8\% for Fine-tuned GPT-4o-mini, and 2.4\% for GPT-4o-mini baseline. For Llama-3.3-70B, the NIE is essentially zero ($-0.000$ on $Q25 \to Q75$), indicating that the Trump-sentiment effect operates almost entirely through the direct pathway. This structural pattern, in which the direct channel dominates, is consistent across all paradigms and both percentile contrasts.
 
 % ------------------------------------------------------------------------------
 \subsection{Topic-Level Cross-Paradigm Comparison}
 \label{sec:cross-paradigm}
 % ------------------------------------------------------------------------------
 
-\subsubsection{Agreement Across Paradigms}
+The multi-treatment results in Tables~\ref{tab:multi-continuous} and~\ref{tab:multi-nonsig} reveal a sharp dichotomy in cross-paradigm behaviour. When a topic produces significant effects, annotators tend to agree: seven of nine significant topics show complete directional consensus, and the two exceptions (White House, Defense and Security) involve significance in only a single paradigm (Llama-3.3-70B). When a topic does not produce significant effects, annotators frequently disagree on direction: Politics, Elections, and Russia all exhibit mixed directionality, with baseline zero-shot models (GPT-4o-mini baseline, Llama-3.3-70B) often diverging from the fine-tuned and human paradigms.
 
-Table~\ref{tab:cross-paradigm-summary} consolidates the directional agreement and significance of key causal estimates across all completed paradigm runs.
-
-\begin{table}[ht]
-  \centering
-  \resizebox{\textwidth}{!}{%
-  \begin{tabular}{llcccccccccc}
-    \toprule
-    \textbf{Analysis} & \textbf{Topic} &
-      \multicolumn{2}{c}{\textbf{Human}} &
-      \multicolumn{2}{c}{\textbf{FT RoBERTa}} &
-      \multicolumn{2}{c}{\textbf{GPT (baseline)}} &
-      \multicolumn{2}{c}{\textbf{FT GPT-4o-mini}} &
-      \multicolumn{2}{c}{\textbf{Llama-3.3-70B}} \\
-    \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}\cmidrule(lr){11-12}
-    & & Dir. & Sig. & Dir. & Sig. & Dir. & Sig. & Dir. & Sig. & Dir. & Sig. \\
-    \midrule
-    Mediation (DT trt.)  & Trump $\to$ ideology
-      & $-$ & No & $-$ & No & $-$ & No & $-$ & \textbf{Yes} & $-$ & No \\
-    Multi-trt.  & Hillary Clinton
-      & $+$ & No & $+$ & \textbf{Yes} & $+$ & No & $+$ & No & $-$ & No \\
-    Multi-trt.  & Donald Trump
-      & $-$ & No & $-$ & No & $-$ & No & $-$ & No & $-$ & No \\
-    Multi-trt.  & Politics
-      & $-$ & No & $-$ & No & $+$ & No & $+$ & No & $-$ & No \\
-    \bottomrule
-  \end{tabular}%
-  }
-  \caption{Summary of cross-paradigm agreement for key ATE estimates.
-    ``Dir.'' = direction of ATE (positive/negative).
-    ``Sig.'' = statistically significant at $\alpha = 0.05$.
-    ``$\sim 0$'' = ATE indistinguishable from zero.}
-  \label{tab:cross-paradigm-summary}
-\end{table}
-
-\subsubsection{Divergence Analysis}
-
-Two patterns stand out. First, the topic-level Trump-mediation analysis exhibits \textbf{full directional agreement under fine-tuning amplification}: all five paradigms estimate a negative Total Effect on identical articles, but only Fine-tuned GPT-4o-mini's interval excludes zero, and its TE magnitude ($-0.249$) is roughly $3.2\times$ that of the zero-shot GPT-4o-mini baseline ($-0.078$) on the same article subset. Holding architecture constant, fine-tuning therefore alters the magnitude of the causal effect that the labelling model encodes without changing its direction. This is the cleanest topic-level signature attributable to the fine-tuning process.
-
-Second, the multi-treatment continuous analysis produces a single significant cell: Hillary Clinton sentiment under Fine-tuned RoBERTa. No other paradigm recovers this finding, and Fine-tuned RoBERTa recovers no other significant topic. Combined with the fact that the multi-treatment Politics and Trump topics are non-significant under every paradigm, this isolated significance is a strong indicator that the Hillary Clinton signal is an annotation-model artifact rather than a robust causal finding.
+This pattern is consistent with the Trump-mediation results, where all five paradigms agree on a positive Total Effect direction and four of five reach significance. The multi-treatment sweep corroborates this with five-of-five significance on Donald Trump, confirming that the Trump-sentiment signal is the most robust cross-paradigm finding in the topic-level analysis. The magnitude ordering across paradigms is also consistent: Llama-3.3-70B and GPT-4o-mini (baseline) tend to produce the largest effect sizes, while Human annotations produce the smallest, a pattern that holds across all significant topics in Table~\ref{tab:multi-continuous}.
 
 % ------------------------------------------------------------------------------
 \subsection{Topic-Level Summary}
 \label{sec:causal-summary-topic}
 % ------------------------------------------------------------------------------
 
-The topic-level analyses produce a narrow but coherent set of significant findings. In the Donald-Trump-as-treatment mediation analysis, all five paradigms agree on a negative direction, but only Fine-tuned GPT-4o-mini reaches significance, with a Total Effect roughly $3.2\times$ the magnitude of the zero-shot GPT-4o-mini baseline on the same article subset. In the multi-treatment continuous analysis, only Hillary Clinton sentiment under Fine-tuned RoBERTa reaches significance, and that finding is not recovered by any other annotation paradigm. Human, GPT-4o-mini (baseline), and Llama-3.3-70B annotations produce no significant topic-level effects across any analysis.
+The topic-level analyses produce a broad and consistent set of significant findings. In the multi-treatment continuous analysis, the directional structure of these effects is interpretable: topics associated with Democratic figures and positions carry consistently negative ATEs (more positive sentiment $\to$ leftward ideology shift), while topics associated with Republican figures carry positive ATEs. This partisan alignment holds across all five annotation paradigms, indicating that the causal relationship between topic sentiment and ideology classification reflects genuine partisan structure in the corpus rather than annotation artifacts. Notably, article count does not predict significance: the three largest topics by article count (Elections, Politics, Presidential Elections) produce no significant effects, while smaller but more polarising topics such as Democratic Party and Hillary Clinton are significant across all paradigms.
 
-Two distinct empirical patterns are worth separating. The first is a magnitude effect under directional agreement: in the Trump-mediation pathway, fine-tuning a generative LLM amplifies an effect that every other paradigm encodes in the same direction, sharpening it into significance without changing its sign. The second is paradigm-specific isolated significance: in the multi-treatment analysis, no topic produces a statistically significant effect that is consistent across more than one annotation paradigm, and the few significant cells (one per fine-tuned paradigm in the multi-treatment sweep) fail to replicate elsewhere. The first pattern points to fine-tuning as a magnitude amplifier of an underlying shared signal; the second points to paradigm-dependent labelling artefacts at the multi-treatment level.
+Two further patterns are notable. First, the zero-shot LLM paradigms (Llama-3.3-70B and GPT-4o-mini baseline) consistently produce the largest effect magnitudes, while Human annotations produce the smallest. This suggests that LLM-based ideology labels amplify the partisan signal embedded in topic sentiment relative to human judgments. Second, annotators agree on direction when effects are significant but frequently disagree when they are not (Table~\ref{tab:multi-nonsig}), suggesting that the underlying causal signal is strong enough to override annotation-paradigm differences for inherently polarising topics, while non-polarising topics expose the idiosyncratic feature reliance of each annotation paradigm.
 
-The primary value of the topic-level analysis lies in demonstrating that identical causal analyses applied to labels from different annotation systems can produce qualitatively different conclusions, both in the magnitude of significant effects (Trump mediation, where fine-tuning amplifies a shared direction) and in the location of multi-treatment signal (where Fine-tuned RoBERTa alone finds Hillary Clinton). As shown in the preceding community-level analysis (Section~\ref{sec:community-level-results}), aggregation across related topics does reveal further paradigm-specific patterns, but these too remain narrow rather than universal.

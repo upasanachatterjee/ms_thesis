@@ -561,7 +561,8 @@ pages={152-162}
   number={3},
   pages={296--313},
   year={2017},
-  publisher={SAGE Publications Sage UK: London, England}
+  publisher={SAGE Publications Sage UK: London, England},
+  abstract={This article continues the line of research that combines the paradigm of Critical Discourse Analysis (CDA) with quantitative methods. We propose that Linguistic Inquiry and Word Count (LIWC), a software for automated text analysis widely used in social sciences, can enrich the CDA toolkit. The methodological advantage of LIWC is that its semantic categorization was developed and validated independently, which addresses the concerns about subjectivity. In two case studies we use LIWC to analyze the construction and representation of the ‘Other’ in mass media. Study 1 focuses on the representation of Russia in The New York Times (NYT) before and after its annexation of Crimea; Study 2 analyzes the change in sentiment toward Islam in NYT before and after 9/11. We find that in both cases the change in attitude is driven by an increase in negative emotion words rather than by a decrease in positive words.}
 }
 
 @article{rubin1974,
@@ -819,6 +820,7 @@ pages={152-162}
   eprint={2410.13343},
   archivePrefix={arXiv},
   primaryClass={cs.CL},
+  abstract={Large Language Models (LLMs) have shown remarkable capabilities in various natural language processing tasks. However, LLMs may rely on dataset biases as shortcuts for prediction, which can significantly impair their robustness and generalization capabilities. This paper presents Shortcut Suite, a comprehensive test suite designed to evaluate the impact of shortcuts on LLMs' performance, incorporating six shortcut types, five evaluation metrics, and four prompting strategies. Our extensive experiments yield several key findings: 1) LLMs demonstrate varying reliance on shortcuts for downstream tasks, significantly impairing their performance. 2) Larger LLMs are more likely to utilize shortcuts under zero-shot and few-shot in-context learning prompts. 3) Chain-of-thought prompting notably reduces shortcut reliance and outperforms other prompting strategies, while few-shot prompts generally underperform compared to zero-shot prompts. 4) LLMs often exhibit overconfidence in their predictions, especially when dealing with datasets that contain shortcuts. 5) LLMs generally have a lower explanation quality in shortcut-laden datasets, with errors falling into three types: distraction, disguised comprehension, and logical fallacy. Our findings offer new insights for evaluating robustness and generalization in LLMs and suggest potential directions for mitigating the reliance on shortcuts.}
 }
 
 @misc{zhou2024explorespuriouscorrelationsconcept,
@@ -935,4 +937,27 @@ address={San Francisco, CA}
   year = {2007},
   publisher = {Routledge},
   doi = {10.1080/02702710701260615}
+}
+@inproceedings{sun-etal-2024-exploring,
+    title = "Exploring and Mitigating Shortcut Learning for Generative Large Language Models",
+    author = "Sun, Zechen  and
+      Xiao, Yisheng  and
+      Li, Juntao  and
+      Ji, Yixin  and
+      Chen, Wenliang  and
+      Zhang, Min",
+    editor = "Calzolari, Nicoletta  and
+      Kan, Min-Yen  and
+      Hoste, Veronique  and
+      Lenci, Alessandro  and
+      Sakti, Sakriani  and
+      Xue, Nianwen",
+    booktitle = "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)",
+    month = may,
+    year = "2024",
+    address = "Torino, Italia",
+    publisher = "ELRA and ICCL",
+    url = "https://aclanthology.org/2024.lrec-main.602/",
+    pages = "6883--6893",
+    abstract = "Recent generative large language models (LLMs) have exhibited incredible instruction-following capabilities while keeping strong task completion ability, even without task-specific fine-tuning. Some works attribute this to the bonus of the new scaling law, in which the continuous improvement of model capacity yields emergent capabilities, e.g., reasoning and universal generalization. However, we point out that recent LLMs still show shortcut learning behavior, where the models tend to exploit spurious correlations between non-robust features and labels for prediction, which might lead to overestimating model capabilities. LLMs memorize more complex spurious correlations (i.e., task $\leftrightarrow$ feature $\leftrightarrow$ label) compared with that learned from previous pre-training and task-specific fine-tuning paradigm (i.e., feature $\leftrightarrow$ label). Based on our findings, we propose FSLI, a framework for encouraging LLMs to \textbf{F}orget \textbf{S}purious correlations and \textbf{L}earn from \textbf{I}n-context information. Experiments on three tasks show that FSFI can effectively mitigate shortcut learning. Besides, we argue not to overestimate the capabilities of LLMs and conduct evaluations in more challenging and complete test scenarios."
 }
