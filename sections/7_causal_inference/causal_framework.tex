@@ -114,7 +114,7 @@ We use the AllSidesV2 dataset described in Section~\ref{sec:dataset}. All causal
 
 
 
-We perform all analyses on the test set of the AllSidesV2 Media split to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 12 communities, with community sizes ranging from 1 to 199 tags.
+We perform all analyses on the test set of the AllSidesV2 Media split to ensure fair comparison across annotation sources. To identify the topical structure of this set, we apply the Louvain community detection algorithm to a co-occurrence graph of topic tags, where nodes are tags and edge weights reflect how often two tags appear together in the same article. Self-loops allow single-tag articles to form their own communities. This yields a modularity score of 0.498 across 14 communities, with community sizes ranging from 1 to 199 tags.
 
 \begin{figure}[h]
   \centering
@@ -134,11 +134,11 @@ The final representation of an article can be seen in Figure~\ref{fig:articles}.
         \toprule
         \textbf{Comm.} & \textbf{Articles}  & \textbf{Theme} \\
         \midrule
-        11 & 772  & Trump Administration \\
-        4 & 229  & Media and Big Tech \\
-        1 & 220 & Elections and Campaigns \\
-        7 & 218  & Foreign Policy \\
-        5 & 193  & Policing and Social Justice \\
+        1 & 3628  & Elections and Campaigns \\
+        8 & 2679  & Foreign Policy \\
+        0 & 2473  & White House and Congress \\
+        5 & 1480  & Env.\ and Fiscal Policy \\
+        9 & 1364  & Criminal Justice \\
         \bottomrule
         \end{tabular}
     \end{minipage}
@@ -150,26 +150,19 @@ The final representation of an article can be seen in Figure~\ref{fig:articles}.
         \toprule
         \textbf{Topic Tag} & \textbf{Articles} & \textbf{Comm.} \\
         \midrule
-        Politics & 594 & 11 \\
-        Donald Trump & 233 & 11 \\
-        world & 503 & 9 \\
-        elections & 451 & 1 \\
-        white\_house & 444 & 11 \\
+        Elections & 1709 & 1 \\
+        Politics & 1520 & 0 \\
+        Donald Trump & 1424 & 1 \\
+        Presidential Elections & 1331 & 1 \\
+        White House & 701 & 0 \\
         \bottomrule
         \end{tabular}
     \end{minipage}
-    \caption{Top five communities and topic tags in the AllsidesV2 media split test set. Total article count is 9,830. The full community structure with all 15 communities and their constituent topics is provided in Appendix~\ref{appendix:community-structure}.}
+    \caption{Top five communities and topic tags in the AllSidesV2 media split test set. Total article count is 9,830. The full community structure with all 14 communities and their constituent topics is provided in Appendix~\ref{appendix:community-structure}.}
     \label{tab:topical-summary}
 \end{table}
 
-%\begin{figure}[h!]
-%    \centering
-%    \includegraphics[width=0.7\textwidth]{sections/images/louvain_communities.png}
-%    \caption{Louvain community detection on the topic tag co-occurrence graph for the top five tags.}
-%    \label{fig:louvain}
-%\end{figure}
-
-Our primary experiments operate at the community level, where aggregating semantically related topics yields larger sample sizes and more robust causal estimates. We estimate ATEs for each community's aggregate sentiment on ideology classification, and conduct mediation analysis to test whether institutional political topics (Community 3) systematically mediate the effects of Trump Administration sentiment (Community 11) on ideology. We estimate CATEs for different combinations of these community-level sentiment variables, testing whether the relationship between individual figures and institutional framing reflects a stable structural pattern.
+Our primary experiments operate at the community level, where aggregating semantically related topics yields larger sample sizes and more robust causal estimates. We estimate ATEs for each community's aggregate sentiment on ideology classification across all nine qualifying communities. For completeness, we also conduct community-level mediation analysis on communities with sufficient co-occurrence to support non-degenerate pathway decompositions (Appendix~\ref{sec:appendix-community-mediation}).
 
 For completeness, we also perform topic-level mediation analysis on the two most prominent individual tags (top five topics can be seen in Table~\ref{tab:topical-summary}), \textit{donald\_trump} and \textit{politics}, examining their bidirectional relationship in shaping ideology classification. We test two competing hypotheses: (1) Trump sentiment drives general political sentiment, which then shapes ideology; versus (2) broader political sentiment shapes Trump-specific framing, with Trump sentiment mediating the path to ideology. We use NIE/NDE decomposition and bidirectional mediation to determine the dominant pathway.
 
