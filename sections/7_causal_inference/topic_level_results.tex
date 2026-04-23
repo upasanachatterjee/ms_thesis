@@ -8,9 +8,6 @@ Having established that community-level aggregation reveals paradigm-specific ef
 
 The multi-treatment sweep fits a single \texttt{LinearDML} model per dataset with with the top 20 topic sentiments (determined by number of articles), treating them as separate treatments, controlling for topic-presence confounders via PCA-compressed $W$. ATEs are estimated on the full corpus, providing substantially higher statistical power than the mediation subsample.
 
-\subsubsection{Continuous Treatment Mode}
-\label{sec:continuous-mode}
-
 Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation increase in each topic's sentiment score, holding all other topic sentiments constant. Of the top 20 topics, nine produce at least one significant effect across the five annotation paradigms; Table~\ref{tab:multi-continuous} presents these nine topics. The full table with all 20 topics and 95\% confidence intervals is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.
 
 \begin{table}[ht]
@@ -46,9 +43,6 @@ Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation inc
   \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score), showing topics from the 20 qualifying topics where at least one paradigm produces a significant result. \colorbox{blue!15}{Highlighted} cells denote statistically insignificant results. Bolded cells indicate paradigms whose ATE sign diverges from the majority direction for that topic. The full table with 95\% confidence intervals is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.}
   \label{tab:multi-continuous}
 \end{table}
-
-\subsubsection{Cross-Paradigm Agreement and Divergence}
-\label{sec:cross-paradigm-agreement}
 
 Seven of the nine significant topics in Table~\ref{tab:multi-continuous} show complete directional agreement across all five paradigms: Donald Trump and Republican Party carry uniformly positive ATEs, while Healthcare, Joe Biden, Barack Obama, Hillary Clinton, and Democratic Party carry uniformly negative ATEs. The directional pattern is interpretable: topics associated with Democratic figures and positions produce negative effects (more positive sentiment $\to$ leftward ideology shift), while topics associated with Republican figures produce positive effects (more positive sentiment $\to$ rightward shift). This partisan alignment holds across all five annotation paradigms.
 
@@ -91,63 +85,22 @@ Table~\ref{tab:multi-nonsig} illustrates this pattern with five representative n
 % ------------------------------------------------------------------------------
 
 \subsection{Mediation Analysis Results}
-\label{sec:mediation-results}
+\label{sec:topic-mediation-results}
 
 We evaluate \textbf{Donald Trump sentiment as treatment} with Politics sentiment as mediator ($N = \num{1424}$ articles).
 
-Table~\ref{tab:te-trump} reports Total Effect estimates for both percentile contrasts across the five annotation paradigms. The treatment window is identical across all five datasets ($Q25 = -0.4$, $Q75 = +0.2$; $P10 = -0.9$, $P90 = +0.5$), so differences across paradigms arise entirely from differences in ideology labels $Y$.
+Figure~\ref{fig:media_trump_mediation} reports Total Effect estimates for both percentile contrasts across the five annotation paradigms. The treatment window is identical across all five datasets ($Q25 = -0.4$, $Q75 = +0.2$; $P10 = -0.9$, $P90 = +0.5$), so differences across paradigms arise entirely from differences in ideology labels $Y$. The full tabular breakdown can be found in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:te-trump}.
 
-\begin{table}[ht]
+\begin{figure}[h!]
   \centering
-  \sisetup{table-format=+1.3}
-  \begin{tabular}{llS[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]}
-    \toprule
-    \textbf{Paradigm} & \textbf{Contrast} &
-      {\textbf{TE}} &
-      {\textbf{CI lower}} & {\textbf{CI upper}} &
-      {\textbf{NDE}} & {\textbf{NIE}} \\
-    \midrule
-    Human
-      & $Q25 \to Q75$  & +0.135 & -0.001 & +0.270 & +0.124 & +0.010 \\
-    Human
-      & $P10 \to P90$  & +0.314 & -0.002 & +0.630 & +0.300 & +0.014 \\
-    \addlinespace
-    Fine-tuned RoBERTa
-      & $Q25 \to Q75$  & {$\mathbf{+0.154^{*}}$} & {$\mathbf{+0.016}$} & {$\mathbf{+0.292}$} & +0.135 & +0.019 \\
-    Fine-tuned RoBERTa
-      & $P10 \to P90$  & {$\mathbf{+0.359^{*}}$} & {$\mathbf{+0.038}$} & {$\mathbf{+0.681}$} & +0.320 & +0.040 \\
-    \addlinespace
-    GPT-4o-mini (baseline)
-      & $Q25 \to Q75$  & {$\mathbf{+0.255^{*}}$} & {$\mathbf{+0.155}$} & {$\mathbf{+0.355}$} & +0.249 & +0.006 \\
-    GPT-4o-mini (baseline)
-      & $P10 \to P90$  & {$\mathbf{+0.595^{*}}$} & {$\mathbf{+0.362}$} & {$\mathbf{+0.828}$} & +0.585 & +0.010 \\
-    \addlinespace
-    Fine-tuned GPT-4o-mini
-      & $Q25 \to Q75$  & {$\mathbf{+0.158^{*}}$} & {$\mathbf{+0.022}$} & {$\mathbf{+0.293}$} & +0.141 & +0.017 \\
-    Fine-tuned GPT-4o-mini
-      & $P10 \to P90$  & {$\mathbf{+0.368^{*}}$} & {$\mathbf{+0.052}$} & {$\mathbf{+0.684}$} & +0.335 & +0.032 \\
-    \addlinespace
-    Llama-3.3-70B
-      & $Q25 \to Q75$  & {$\mathbf{+0.316^{*}}$} & {$\mathbf{+0.187}$} & {$\mathbf{+0.445}$} & +0.316 & -0.000 \\
-    Llama-3.3-70B
-      & $P10 \to P90$  & {$\mathbf{+0.737^{*}}$} & {$\mathbf{+0.437}$} & {$\mathbf{+1.037}$} & +0.741 & -0.004 \\
-    \bottomrule
-  \end{tabular}
-  \caption{Total Effect (TE) of Donald Trump sentiment on ideology label for
-    two percentile contrasts. $N = \num{1424}$ articles. All five paradigms agree on a
-    positive direction; four of five reach 95\%
-    significance under both contrasts (marked $^*$), with Human narrowly missing. The direct channel (NDE) dominates the indirect channel (NIE) in all paradigms.}
-  \label{tab:te-trump}
-\end{table}
+  \includegraphics[width=0.7\textwidth]{sections/images/causal_analysis/media_split/mediation_topic_Donald_Trump_m_Politics.png}
+  \caption{Mediation decomposition for Donald Trump sentiment as treatment and Politics sentiment as mediator under the AllSidesV2 random split ($N = 572$). Total Effect (TE), Natural Direct Effect (NDE), and Natural Indirect Effect (NIE) shown for the $Q_{25} \to Q_{75}$ contrast across all annotation paradigms.}
+  \label{fig:media_trump_mediation}
+\end{figure}
 
 All five paradigms agree on the direction of the Trump-sentiment effect: more positive Trump sentiment is associated with a rightward shift in ideology classification. Four of five paradigms reach 95\% significance under both percentile contrasts; only Human narrowly misses ($\widehat{\text{TE}} = +0.135$, 95\% CI $[-0.001, +0.270]$ for $Q25 \to Q75$). Ordering the paradigms by $|\text{TE}|$ on the $Q25 \to Q75$ contrast yields Llama-3.3-70B ($+0.316$) > GPT-4o-mini baseline ($+0.255$) > Fine-tuned GPT-4o-mini ($+0.158$) > Fine-tuned RoBERTa ($+0.154$) > Human ($+0.135$). The two zero-shot LLM paradigms (Llama and GPT baseline) produce the largest Total Effects, while fine-tuning GPT-4o-mini slightly reduces the effect relative to its baseline ($+0.158$ vs $+0.255$), suggesting that task-specific fine-tuning attenuates, rather than amplifies, the Trump-sentiment signal.
 
 In every paradigm, the direct channel (NDE) carries the dominant share of the Total Effect: $|\text{NDE}| \gg |\text{NIE}|$ for all five annotators on both percentile contrasts. The proportion mediated through Politics sentiment is small where reliable: 12.4\% for Fine-tuned RoBERTa, 10.8\% for Fine-tuned GPT-4o-mini, and 2.4\% for GPT-4o-mini baseline. For Llama-3.3-70B, the NIE is essentially zero ($-0.000$ on $Q25 \to Q75$), indicating that the Trump-sentiment effect operates almost entirely through the direct pathway. This structural pattern, in which the direct channel dominates, is consistent across all paradigms and both percentile contrasts.
-
-% ------------------------------------------------------------------------------
-\subsection{Topic-Level Cross-Paradigm Comparison}
-\label{sec:cross-paradigm}
-% ------------------------------------------------------------------------------
 
 The multi-treatment results in Tables~\ref{tab:multi-continuous} and~\ref{tab:multi-nonsig} reveal a sharp dichotomy in cross-paradigm behaviour. When a topic produces significant effects, annotators tend to agree: seven of nine significant topics show complete directional consensus, and the two exceptions (White House, Defense and Security) involve significance in only a single paradigm (Llama-3.3-70B). When a topic does not produce significant effects, annotators frequently disagree on direction: Politics, Elections, and Russia all exhibit mixed directionality, with baseline zero-shot models (GPT-4o-mini baseline, Llama-3.3-70B) often diverging from the fine-tuned and human paradigms.
 
