@@ -1,13 +1,25 @@
-\chapter{Community-Level Mediation Results}
+\chapter{Community and Topic-level Mediation Results}
 \label{sec:appendix-community-mediation}
 
-This appendix provides the full community-level mediation results referenced in Section~\ref{sec:community-mediation}, including pathway selection rationale and complete numerical tables.
+This appendix provides the full community-level and topic-level mediation results referenced in Sections~\ref{sec:community-mediation-results} and ~\ref{sec:topic-mediation-results}, including pathway selection rationale and complete numerical tables.
 
 \section{Pathway Selection}
 
 All treatment-mediator pairs were evaluated across communities the significant communities, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. All others failed the minimum presence test (fewer than 50 articles tagged with both the treatment and mediator community) and were therefore dropped from analysis.
 
-\section{Full Mediation Results}
+\section{Confounder Reduction Details}
+
+Confounders consist of all community sentiment scores except those of the treatment and mediator communities, reduced in two sequential steps:
+
+\begin{enumerate}
+    \item \textbf{Presence filter:} Communities whose sentiment is non-zero in fewer than 50 articles in the treatment subsample are dropped.
+    \item \textbf{PCA:} The remaining matrix is reduced via PCA retaining 95\% of variance.
+\end{enumerate}
+
+Because this reduction depends only on the treatment subsample, not on ideology labels, it is identical across all annotation paradigms for a given treatment community. All treatment communities begin with 11 potential confounders. For Communities 1, 3, and 11, the presence filter removes 3, leaving 8; PCA further reduces these to 7 components. Community~9 loses one additional community (4 removed, leaving 7), and PCA retains all 7. All configurations therefore yield 7 final confounder components; the choice of mediator community has no effect on this reduction.
+
+
+\section{Full Community Mediation Results}
 
 Table~\ref{tab:mediation_full} reports total effects (TE), natural direct effects (NDE), and natural indirect effects (NIE) for both viable pathways under the $Q_{25} \to Q_{75}$ contrast across all available annotation paradigms.
 
@@ -43,167 +55,47 @@ For the $9 \to 11$ pathway, no annotator produces a significant Total Effect. Th
 
 For the $11 \to 9$ pathway, no annotator reaches significance on the Total Effect, but Llama-3.3-70B's Natural Direct Effect crosses the 95\% threshold (NDE $= -0.057$, 95\% CI $[-0.126, -0.003]$), and Llama also carries the largest-magnitude TE ($-0.081$) of any paradigm in this pathway. All five paradigms now estimate a negative Total Effect (Human $-0.045$, Fine-tuned RoBERTa $-0.016$, baseline GPT $-0.027$, Fine-tuned GPT $-0.040$, Llama $-0.081$); the directional consensus in $11 \to 9$ is therefore complete, while the $9 \to 11$ pathway contains a single directional outlier (Fine-tuned GPT). The asymmetry between the two pathways now lies primarily in \emph{which} paradigm carries the significant direct channel (baseline GPT in $9 \to 11$, Llama in $11 \to 9$) and in directional homogeneity (4/5 in $9 \to 11$ vs 5/5 in $11 \to 9$), rather than in whether either pathway is significant on the Total Effect.
 
-\section{Full Multi-Treatment DML Results (Continuous Encoding)}
+\section{Topic Mediation Results For Treatment Donald Trump}
 
-Table~\ref{tab:multi-continuous-full} reports the complete multi-treatment DML results for all 20 qualifying topics, summarized (top 10 by article count) in Table~\ref{tab:multi-continuous} of Chapter~\ref{sec:causal-inference}, including the 95\% bootstrap confidence interval ($B = \num{2000}$) accompanying every ATE estimate.
-
-\begin{sidewaystable}
+\begin{table}[ht]
   \centering
-  \sisetup{table-format=+1.4}
-  \tiny
-  \begin{tabular}{l c
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l
-      S[table-format=+1.4] @{~} l @{~} l}
+  \sisetup{table-format=+1.3}
+  \begin{tabular}{llS[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]}
     \toprule
-    & & \multicolumn{3}{c}{\textbf{Human}}
-    & \multicolumn{3}{c}{\textbf{Fine-tuned RoBERTa}}
-    & \multicolumn{3}{c}{\textbf{GPT-4o-mini (baseline)}}
-    & \multicolumn{3}{c}{\textbf{Fine-tuned GPT-4o-mini}}
-    & \multicolumn{3}{c}{\textbf{Llama-3.3-70B}} \\
-    \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(lr){12-14}\cmidrule(lr){15-17}
-    \textbf{Topic} & {\textbf{N}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
-      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} \\
+    \textbf{Paradigm} & \textbf{Contrast} &
+      {\textbf{TE}} &
+      {\textbf{CI lower}} & {\textbf{CI upper}} &
+      {\textbf{NDE}} & {\textbf{NIE}} \\
     \midrule
-    Elections & 1709
-      & -0.0066 & {[}${-0.023}$ & ${+0.016}${]}
-      & -0.0198 & {[}${-0.038}$ & ${+0.001}${]}
-      & -0.0050 & {[}${-0.021}$ & ${+0.010}${]}
-      & -0.0131 & {[}${-0.032}$ & ${+0.007}${]}
-      & +0.0027 & {[}${-0.018}$ & ${+0.023}${]} \\
-    Politics & 1520
-      & -0.0056 & {[}${-0.022}$ & ${+0.012}${]}
-      & -0.0092 & {[}${-0.026}$ & ${+0.009}${]}
-      & +0.0069 & {[}${-0.008}$ & ${+0.023}${]}
-      & -0.0121 & {[}${-0.029}$ & ${+0.005}${]}
-      & +0.0058 & {[}${-0.011}$ & ${+0.025}${]} \\
-    Donald Trump & 1424
-      & \textbf{+0.0427} & {[}${+0.025}$ & ${+0.059}${]}
-      & \textbf{+0.0449} & {[}${+0.029}$ & ${+0.062}${]}
-      & \textbf{+0.0862} & {[}${+0.072}$ & ${+0.097}${]}
-      & \textbf{+0.0448} & {[}${+0.027}$ & ${+0.063}${]}
-      & \textbf{+0.1055} & {[}${+0.088}$ & ${+0.119}${]} \\
-    Presidential Elections & 1331
-      & +0.0039 & {[}${-0.017}$ & ${+0.022}${]}
-      & +0.0019 & {[}${-0.017}$ & ${+0.020}${]}
-      & +0.0085 & {[}${-0.005}$ & ${+0.024}${]}
-      & +0.0030 & {[}${-0.017}$ & ${+0.022}${]}
-      & +0.0080 & {[}${-0.011}$ & ${+0.029}${]} \\
-    White House & 701
-      & -0.0143 & {[}${-0.030}$ & ${+0.004}${]}
-      & -0.0059 & {[}${-0.020}$ & ${+0.013}${]}
-      & +0.0129 & {[}${-0.001}$ & ${+0.027}${]}
-      & -0.0043 & {[}${-0.020}$ & ${+0.012}${]}
-      & \textbf{+0.0186} & {[}${+0.001}$ & ${+0.035}${]} \\
-    World & 646
-      & -0.0068 & {[}${-0.022}$ & ${+0.011}${]}
-      & -0.0095 & {[}${-0.026}$ & ${+0.011}${]}
-      & -0.0041 & {[}${-0.016}$ & ${+0.009}${]}
-      & +0.0015 & {[}${-0.016}$ & ${+0.021}${]}
-      & -0.0075 & {[}${-0.022}$ & ${+0.008}${]} \\
-    Immigration & 485
-      & -0.0096 & {[}${-0.024}$ & ${+0.008}${]}
-      & +0.0034 & {[}${-0.011}$ & ${+0.022}${]}
-      & +0.0105 & {[}${-0.004}$ & ${+0.031}${]}
-      & -0.0089 & {[}${-0.022}$ & ${+0.007}${]}
-      & +0.0174 & {[}${-0.000}$ & ${+0.040}${]} \\
-    Economy and Jobs & 462
-      & -0.0001 & {[}${-0.024}$ & ${+0.017}${]}
-      & +0.0075 & {[}${-0.012}$ & ${+0.023}${]}
-      & -0.0060 & {[}${-0.016}$ & ${+0.006}${]}
-      & -0.0004 & {[}${-0.025}$ & ${+0.016}${]}
-      & +0.0005 & {[}${-0.013}$ & ${+0.018}${]} \\
-    Coronavirus & 441
-      & -0.0043 & {[}${-0.021}$ & ${+0.011}${]}
-      & -0.0016 & {[}${-0.018}$ & ${+0.022}${]}
-      & -0.0069 & {[}${-0.018}$ & ${+0.004}${]}
-      & -0.0041 & {[}${-0.024}$ & ${+0.010}${]}
-      & -0.0123 & {[}${-0.026}$ & ${+0.001}${]} \\
-    Healthcare & 373
-      & \textbf{-0.0288} & {[}${-0.045}$ & ${-0.011}${]}
-      & \textbf{-0.0219} & {[}${-0.037}$ & ${-0.002}${]}
-      & \textbf{-0.0315} & {[}${-0.043}$ & ${-0.018}${]}
-      & \textbf{-0.0308} & {[}${-0.046}$ & ${-0.011}${]}
-      & \textbf{-0.0424} & {[}${-0.056}$ & ${-0.024}${]} \\
-    Defense and Security & 352
-      & -0.0013 & {[}${-0.019}$ & ${+0.015}${]}
-      & +0.0035 & {[}${-0.013}$ & ${+0.017}${]}
-      & +0.0148 & {[}${-0.000}$ & ${+0.030}${]}
-      & -0.0076 & {[}${-0.024}$ & ${+0.012}${]}
-      & \textbf{+0.0248} & {[}${+0.008}$ & ${+0.043}${]} \\
-    Middle East & 325
-      & +0.0054 & {[}${-0.007}$ & ${+0.026}${]}
-      & +0.0037 & {[}${-0.005}$ & ${+0.028}${]}
-      & +0.0023 & {[}${-0.010}$ & ${+0.013}${]}
-      & +0.0093 & {[}${-0.001}$ & ${+0.031}${]}
-      & +0.0127 & {[}${-0.006}$ & ${+0.026}${]} \\
-    Public Health & 297
-      & -0.0095 & {[}${-0.024}$ & ${+0.006}${]}
-      & -0.0081 & {[}${-0.024}$ & ${+0.009}${]}
-      & +0.0022 & {[}${-0.008}$ & ${+0.014}${]}
-      & -0.0088 & {[}${-0.026}$ & ${+0.008}${]}
-      & +0.0017 & {[}${-0.011}$ & ${+0.015}${]} \\
-    Republican Party & 293
-      & \textbf{+0.0367} & {[}${+0.023}$ & ${+0.052}${]}
-      & \textbf{+0.0274} & {[}${+0.012}$ & ${+0.043}${]}
-      & \textbf{+0.0464} & {[}${+0.034}$ & ${+0.059}${]}
-      & \textbf{+0.0277} & {[}${+0.013}$ & ${+0.042}${]}
-      & \textbf{+0.0504} & {[}${+0.034}$ & ${+0.069}${]} \\
-    Joe Biden & 288
-      & -0.0143 & {[}${-0.032}$ & ${+0.000}${]}
-      & \textbf{-0.0192} & {[}${-0.036}$ & ${-0.002}${]}
-      & \textbf{-0.0244} & {[}${-0.038}$ & ${-0.013}${]}
-      & \textbf{-0.0217} & {[}${-0.038}$ & ${-0.004}${]}
-      & \textbf{-0.0291} & {[}${-0.047}$ & ${-0.015}${]} \\
-    Barack Obama & 286
-      & \textbf{-0.0385} & {[}${-0.055}$ & ${-0.023}${]}
-      & \textbf{-0.0317} & {[}${-0.048}$ & ${-0.016}${]}
-      & \textbf{-0.0494} & {[}${-0.060}$ & ${-0.035}${]}
-      & \textbf{-0.0378} & {[}${-0.053}$ & ${-0.021}${]}
-      & \textbf{-0.0575} & {[}${-0.069}$ & ${-0.040}${]} \\
-    Hillary Clinton & 279
-      & \textbf{-0.0444} & {[}${-0.063}$ & ${-0.027}${]}
-      & \textbf{-0.0529} & {[}${-0.072}$ & ${-0.037}${]}
-      & \textbf{-0.0603} & {[}${-0.077}$ & ${-0.044}${]}
-      & \textbf{-0.0478} & {[}${-0.067}$ & ${-0.031}${]}
-      & \textbf{-0.0632} & {[}${-0.081}$ & ${-0.044}${]} \\
-    Russia & 270
-      & -0.0008 & {[}${-0.018}$ & ${+0.015}${]}
-      & +0.0044 & {[}${-0.016}$ & ${+0.019}${]}
-      & -0.0044 & {[}${-0.013}$ & ${+0.004}${]}
-      & +0.0036 & {[}${-0.015}$ & ${+0.017}${]}
-      & +0.0144 & {[}${-0.004}$ & ${+0.030}${]} \\
-    Democratic Party & 261
-      & \textbf{-0.0458} & {[}${-0.059}$ & ${-0.031}${]}
-      & \textbf{-0.0403} & {[}${-0.053}$ & ${-0.024}${]}
-      & \textbf{-0.0538} & {[}${-0.067}$ & ${-0.040}${]}
-      & \textbf{-0.0471} & {[}${-0.059}$ & ${-0.033}${]}
-      & \textbf{-0.0508} & {[}${-0.064}$ & ${-0.036}${]} \\
-    Violence in America & 260
-      & -0.0072 & {[}${-0.025}$ & ${+0.011}${]}
-      & -0.0015 & {[}${-0.022}$ & ${+0.016}${]}
-      & -0.0004 & {[}${-0.013}$ & ${+0.016}${]}
-      & -0.0016 & {[}${-0.019}$ & ${+0.018}${]}
-      & -0.0053 & {[}${-0.020}$ & ${+0.014}${]} \\
+    Human
+      & $Q25 \to Q75$  & +0.135 & -0.001 & +0.270 & +0.124 & +0.010 \\
+    Human
+      & $P10 \to P90$  & +0.314 & -0.002 & +0.630 & +0.300 & +0.014 \\
+    \addlinespace
+    Fine-tuned RoBERTa
+      & $Q25 \to Q75$  & {$\mathbf{+0.154^{*}}$} & {$\mathbf{+0.016}$} & {$\mathbf{+0.292}$} & +0.135 & +0.019 \\
+    Fine-tuned RoBERTa
+      & $P10 \to P90$  & {$\mathbf{+0.359^{*}}$} & {$\mathbf{+0.038}$} & {$\mathbf{+0.681}$} & +0.320 & +0.040 \\
+    \addlinespace
+    GPT-4o-mini (baseline)
+      & $Q25 \to Q75$  & {$\mathbf{+0.255^{*}}$} & {$\mathbf{+0.155}$} & {$\mathbf{+0.355}$} & +0.249 & +0.006 \\
+    GPT-4o-mini (baseline)
+      & $P10 \to P90$  & {$\mathbf{+0.595^{*}}$} & {$\mathbf{+0.362}$} & {$\mathbf{+0.828}$} & +0.585 & +0.010 \\
+    \addlinespace
+    Fine-tuned GPT-4o-mini
+      & $Q25 \to Q75$  & {$\mathbf{+0.158^{*}}$} & {$\mathbf{+0.022}$} & {$\mathbf{+0.293}$} & +0.141 & +0.017 \\
+    Fine-tuned GPT-4o-mini
+      & $P10 \to P90$  & {$\mathbf{+0.368^{*}}$} & {$\mathbf{+0.052}$} & {$\mathbf{+0.684}$} & +0.335 & +0.032 \\
+    \addlinespace
+    Llama-3.3-70B
+      & $Q25 \to Q75$  & {$\mathbf{+0.316^{*}}$} & {$\mathbf{+0.187}$} & {$\mathbf{+0.445}$} & +0.316 & -0.000 \\
+    Llama-3.3-70B
+      & $P10 \to P90$  & {$\mathbf{+0.737^{*}}$} & {$\mathbf{+0.437}$} & {$\mathbf{+1.037}$} & +0.741 & -0.004 \\
     \bottomrule
   \end{tabular}
-  \caption{Full multi-treatment DML results: ATE per topic under continuous encoding (one-SD increase in sentiment score) with 95\% bootstrap CIs ($B = \num{2000}$). Topics ordered by article count (descending). Bolded ATEs have CIs that exclude zero.}
-  \label{tab:multi-continuous-full}
-\end{sidewaystable}
-
-\section{Confounder Reduction Details}
-
-Confounders consist of all community sentiment scores except those of the treatment and mediator communities, reduced in two sequential steps:
-
-\begin{enumerate}
-    \item \textbf{Presence filter:} Communities whose sentiment is non-zero in fewer than 50 articles in the treatment subsample are dropped.
-    \item \textbf{PCA:} The remaining matrix is reduced via PCA retaining 95\% of variance.
-\end{enumerate}
-
-Because this reduction depends only on the treatment subsample, not on ideology labels, it is identical across all annotation paradigms for a given treatment community. All treatment communities begin with 11 potential confounders. For Communities 1, 3, and 11, the presence filter removes 3, leaving 8; PCA further reduces these to 7 components. Community~9 loses one additional community (4 removed, leaving 7), and PCA retains all 7. All configurations therefore yield 7 final confounder components; the choice of mediator community has no effect on this reduction.
+  \caption{Total Effect (TE) of Donald Trump sentiment on ideology label for
+    two percentile contrasts. $N = \num{1424}$ articles. All five paradigms agree on a
+    positive direction; four of five reach 95\%
+    significance under both contrasts (marked $^*$), with Human narrowly missing. The direct channel (NDE) dominates the indirect channel (NIE) in all paradigms.}
+  \label{tab:te-trump}
+\end{table}

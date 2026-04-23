@@ -71,3 +71,97 @@ Dick Morris & 2 & 1 \\
 \end{table}
 
 The original dataset, as described in Section~\ref{sec:dataset}, contains a total of 27,890 articles in the training set and 1,300 articles in the test set. AllSidesV2 increases the training set to 36,774 articles and the test set to 9,830 articles. Table~\ref{tab:sources_comparison} presents the distribution of sources in the original versus extended dataset. Notable expansions include CNN (Web News) increasing from 101 to 2,398 articles, BBC News from 100 to 1,125, and Reuters from 100 to 950. The expanded dataset available on \href{https://huggingface.co/datasets/dragonslayer631/article-bias-prediction-media-splits-updated}{HuggingFace} under the Apache 2.0 licence. This is the same as the original dataset published by \citet{baly2020we}, which can be found on \href{https://github.com/ramybaly/Article-Bias-Prediction/tree/main?tab=readme-ov-file}{GitHub}.
+
+\section{Classifier Performance by Evaluation Paradigm}
+\label{appendix:leakage-stats}
+
+The following tables report F1-macro and Cohen's $\kappa$ for the best-performing domain-adapted model ($T_{id}(32){+}T_h$) under the media-split and random-split evaluation paradigms described in Section~\ref{sec:source-leakage}. Media-split results are computed on the full AllSidesV2 test set ($n=9{,}830$); random-split results are computed on a 4,104-article subset in which sources overlap between training and test.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+ & \multicolumn{3}{c}{\textbf{Media Split}} & \multicolumn{3}{c}{\textbf{Random Split}} \\
+\textbf{Year} & $n$ & F1-Macro & $\kappa$ & $n$ & F1-Macro & $\kappa$ \\
+\midrule
+2012 & 462  & 48.3 & 0.33 & 114 & 69.2 & 0.59 \\
+2013 & 836  & 48.9 & 0.44 & 248 & 74.2 & 0.79 \\
+2014 & 811  & 55.8 & 0.50 & 212 & 81.4 & 0.80 \\
+2015 & 840  & 62.1 & 0.55 & 244 & 74.3 & 0.69 \\
+2016 & 1060 & 60.0 & 0.58 & 325 & 71.4 & 0.67 \\
+2017 & 1042 & 61.7 & 0.45 & 344 & 90.3 & 0.85 \\
+2018 & 1296 & 56.2 & 0.35 & 387 & 90.4 & 0.86 \\
+2019 & 1520 & 59.6 & 0.42 & 431 & 90.3 & 0.85 \\
+2020 & 1018 & 55.9 & 0.37 & 501 & 85.4 & 0.78 \\
+2021 & 189  & 54.1 & 0.38 & 281 & 85.9 & 0.81 \\
+2022 & 253  & 57.4 & 0.33 & 379 & 87.0 & 0.83 \\
+2023 & 242  & 55.7 & 0.29 & 333 & 86.9 & 0.81 \\
+2024 & 206  & 55.1 & 0.32 & 253 & 87.2 & 0.81 \\
+2025 & 46   & 57.0 & 0.56 & 48  & 92.0 & 0.87 \\
+\bottomrule
+\end{tabular}
+\caption{Year-by-year F1-macro and Cohen's $\kappa$ under each evaluation paradigm. The leakage gap widens sharply from 2017 onward as the random split improves to over 90\% while the media split remains in the 54--62\% range, confirming a source-routing explanation rather than a content-difficulty effect. The 2025 rows have small $n$ and should be interpreted with caution.}
+\label{tab:year_leakage}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lcrrrr}
+\toprule
+ & & \multicolumn{2}{c}{\textbf{Media Split}} & \multicolumn{2}{c}{\textbf{Random Split}} \\
+\textbf{Source} & \textbf{Label} & $n$ & F1-Macro & $n$ & F1-Macro \\
+\midrule
+ABC News           & Left   & 197  & 10.3 & 40  & 26.9 \\
+Guest Writer       & Mixed  & 98   & 14.8 & 24  & 18.2 \\
+Reason             & Right  & 524  & 16.9 & 116 & 58.5 \\
+Reuters            & Center & 842  & 17.4 & 187 & 33.0 \\
+Newsmax (News)     & Right  & 207  & 18.1 & 47  & 29.4 \\
+BBC News           & Center & 1023 & 18.5 & 221 & 32.3 \\
+Newsmax            & Right  & 489  & 18.5 & 114 & 28.3 \\
+Newsmax (News alt.)& Right  & 56   & 18.8 & --- & ---  \\
+CBN                & Right  & 432  & 23.1 & 105 & 32.2 \\
+ABC News (Online)  & Left   & 147  & 26.3 & 33  & 32.8 \\
+Salon              & Left   & 606  & 26.4 & 137 & 30.1 \\
+The Daily Caller   & Right  & 206  & 29.3 & 57  & 32.7 \\
+The Guardian       & Left   & 686  & 30.9 & 143 & 32.4 \\
+Guest Writer (Left)& Left   & 205  & 31.3 & 47  & 31.5 \\
+Breitbart News     & Right  & 434  & 31.4 & 92  & 32.0 \\
+Guest Writer (Right)& Right & 445  & 32.1 & 114 & 32.4 \\
+American Spectator & Right  & 215  & 32.5 & 46  & 32.6 \\
+CNN (Web News)     & Center & 2283 & 33.0 & 518 & 33.1 \\
+Associated Press   & Center & 629  & 45.2 & 147 & 63.6 \\
+\bottomrule
+\end{tabular}
+\caption{Per-source F1-macro under each evaluation paradigm for sources with at least 20 articles in the media-split test set, sorted by media-split F1-macro. ``---'' indicates the source has fewer than 20 articles in the random-split subset. For single-class sources, macro F1 has a ceiling of approximately 33\%; performance below this ceiling reflects misclassification of the source's articles. Associated Press appears last as it has articles in multiple ideology classes. The Label column reflects AllSides political ratings.}
+\label{tab:source_leakage}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+ & \multicolumn{2}{c}{\textbf{Media Split}} & \multicolumn{2}{c}{\textbf{Random Split}} \\
+\textbf{Topic} & $n$ & Miss (\%) & $n$ & Miss (\%) \\
+\midrule
+\multicolumn{5}{l}{\textit{Source-leakage-dependent topics}} \\
+disaster            & 29 & 89.7 & --- & --- \\
+ukraine\_war        & 12 & 66.7 & --- & --- \\
+us\_military        & 46 & 56.5 & 9   & 22.2 \\
+labor               & 18 & 55.6 & 5   & 60.0 \\
+sports              & 40 & 55.0 & --- & --- \\
+business            & 34 & 52.9 & --- & --- \\
+sexual\_misconduct  & 45 & 51.1 & --- & --- \\
+\midrule
+\multicolumn{5}{l}{\textit{Content-level hard topics (persistent regardless of leakage)}} \\
+race\_and\_racism   & --- & $<$50 & 34 & 38.2 \\
+polarization        & --- & $<$50 & 66 & 34.8 \\
+economic\_policy    & --- & $<$50 & 15 & 26.7 \\
+terrorism           & --- & $<$50 & 37 & 24.3 \\
+\bottomrule
+\end{tabular}
+\caption{Topic-level misclassification rates under each evaluation paradigm (topics with $n \geq 5$ in the respective split). ``---'' indicates the topic did not appear in that split's test set or had fewer than 5 articles. ``$<$50'' indicates the topic was not among the 20 worst-performing topics in that split, implying a miss rate below approximately 50\%. Source-leakage-dependent topics show high miss rates in the media split but low miss rates (or absence) in the random split; content-level hard topics remain difficult in the random split despite resolved source routing.}
+\label{tab:topic_leakage}
+\end{table}

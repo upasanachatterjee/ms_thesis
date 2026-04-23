@@ -5,7 +5,7 @@ Figure~\ref{fig:community_ate} shows the community-level ATE estimates across th
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{sections/images/community_analysis/ate_communities.png}
+    \includegraphics[width=0.7\textwidth]{sections/images/causal_analysis/media_split/ate_communities.png}
     \caption{Community-level ATE (continuous sentiment) for communities with significant effects in any annotation paradigm.}
     \label{fig:community_ate}
 \end{figure}
@@ -35,5 +35,5 @@ Only baseline GPT produces a significant effect in Community~5: $-0.019$. All ot
 Among the significant communities, the fine-tuned models show the closest alignment with human annotations. In Community~0, Fine-tuned GPT ($-0.025$) and Fine-tuned RoBERTa ($-0.023$) bracket the human estimate ($-0.024$), with deviations of $0.001$ and $0.001$ respectively. In Community~2, Fine-tuned GPT ($-0.031$) is the closest paradigm to Human ($-0.036$) with a deviation of $0.005$, followed by baseline GPT ($-0.035$, deviation $0.001$) and Fine-tuned RoBERTa ($-0.027$, deviation $0.009$). Llama-3.3-70B produces the largest magnitudes in Community~2 ($-0.045$) and Community~1 ($+0.056$), consistent with its tendency toward inflated effect sizes at the topic level.
 
 % Old mediation analysis for previous community detection run (communities 9 and 11); not applicable to full-dataset min-weight-2 communities.
-% \subsection{Community-Level Mediation Analysis}
-% \label{sec:community-mediation}
+\subsection{Community-Level Mediation Analysis}
+\label{sec:community-mediation-results}

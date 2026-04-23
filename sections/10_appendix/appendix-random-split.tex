@@ -1,0 +1,149 @@
+\chapter{Random-Split Causal Results}
+\label{sec:appendix-random-split}
+
+This appendix provides the full community-level, topic-level, and Donald Trump mediation results for the AllSidesV2 random split ($\num{4104}$-article subset) referenced in Section~\ref{sec:random-split-comparison}. Only two annotation paradigms are reported: Human annotations and the fine-tuned RoBERTa model ($\text{F1}_{\text{macro}} = 89.29$, Best Full row of Table~\ref{tab:extended_main}).
+
+\section{Complete Community-Level ATE Table (Random Split)}
+
+\begin{table}[h!]
+  \centering
+  \small
+  \begin{tabular}{l c c c}
+  \toprule
+  Community & Human & Fine-tuned RoBERTa & Num.\ Articles\\
+  \midrule
+  Comm.\ 0 (White House/Congress)    & $-0.013\ [-0.042,\ +0.012]$ & $-0.015\ [-0.045,\ +0.009]$ & \num{1022} \\
+  Comm.\ 1 (Elections/Campaigns)     & $+0.006\ [-0.021,\ +0.036]$ & $-0.002\ [-0.030,\ +0.027]$ & \num{1551} \\
+  Comm.\ 2 (Public Health)           & $-0.025\ [-0.056,\ +0.001]$ & $-0.011\ [-0.042,\ +0.016]$ & 536 \\
+  Comm.\ 3 (Media/Technology)        & $-0.000\ [-0.027,\ +0.033]$ & $-0.012\ [-0.041,\ +0.020]$ & 507 \\
+  Comm.\ 4 (Culture/Education)       & $-0.012\ [-0.049,\ +0.014]$ & $+0.010\ [-0.024,\ +0.035]$ & 372 \\
+  Comm.\ 5 (Env./Fiscal Policy)      & $-0.014\ [-0.042,\ +0.014]$ & $-0.012\ [-0.036,\ +0.020]$ & 756 \\
+  Comm.\ 6 (Constitutional Rights)   & $-0.018\ [-0.051,\ +0.007]$ & $-0.013\ [-0.051,\ +0.008]$ & 467 \\
+  Comm.\ 8 (Foreign Policy)          & $+0.007\ [-0.019,\ +0.032]$ & $+0.013\ [-0.011,\ +0.041]$ & \num{1026} \\
+  Comm.\ 9 (Criminal Justice)        & $-0.009\ [-0.047,\ +0.007]$ & $-0.014\ [-0.051,\ +0.004]$ & 662 \\
+  \bottomrule
+  \end{tabular}
+  \caption{Community-level ATE under the AllSidesV2 random split (continuous sentiment, min presence${}=50$, min weight${}=2$). No community reaches 95\% significance under either paradigm. Community themes correspond to the groupings introduced in Table~\ref{tab:community-structure}.}
+  \label{tab:random-community-ate-full}
+\end{table}
+
+None of the nine communities produces a significant ATE under either paradigm on the random split. Directional agreement between the two paradigms is high in seven of the nine communities; the two exceptions (Community~1 and Community~4) are discussed in Section~\ref{sec:random-community-level-results}.
+
+\section{Full Multi-Treatment DML Results (Random Split)}
+
+Table~\ref{tab:random-multi-continuous-full} reports the complete multi-treatment DML results for all 20 qualifying topics under the AllSidesV2 random split, including the 95\% bootstrap confidence interval ($B = \num{2000}$) accompanying every ATE estimate. Topics are ordered by random-split article count (descending). Four of the 20 topics reach significance under at least one paradigm: Donald Trump (both), Joe Biden (both), Republican Party (Human only), and Elections (Fine-tuned RoBERTa only).
+
+\begin{sidewaystable}
+  \centering
+  \sisetup{table-format=+1.4}
+  \scriptsize
+  \begin{tabular}{l c
+      S[table-format=+1.4] @{~} l @{~} l
+      S[table-format=+1.4] @{~} l @{~} l}
+    \toprule
+    & & \multicolumn{3}{c}{\textbf{Human}}
+    & \multicolumn{3}{c}{\textbf{Fine-tuned RoBERTa}} \\
+    \cmidrule(lr){3-5}\cmidrule(lr){6-8}
+    \textbf{Topic} & {\textbf{N}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}}
+      & {\textbf{ATE}} & \multicolumn{2}{c}{\textbf{95\% CI}} \\
+    \midrule
+    Politics & 632
+      & -0.0076 & {[}${-0.034}$ & ${+0.022}${]}
+      & -0.0151 & {[}${-0.040}$ & ${+0.015}${]} \\
+    Donald Trump & 572
+      & \textbf{+0.0513} & {[}${+0.017}$ & ${+0.073}${]}
+      & \textbf{+0.0495} & {[}${+0.018}$ & ${+0.075}${]} \\
+    Elections & 572
+      & -0.0180 & {[}${-0.042}$ & ${+0.019}${]}
+      & \textbf{-0.0375} & {[}${-0.061}$ & ${-0.006}${]} \\
+    Presidential Elections & 362
+      & -0.0122 & {[}${-0.052}$ & ${+0.015}${]}
+      & -0.0075 & {[}${-0.041}$ & ${+0.020}${]} \\
+    World & 267
+      & -0.0017 & {[}${-0.030}$ & ${+0.025}${]}
+      & -0.0024 & {[}${-0.024}$ & ${+0.026}${]} \\
+    Joe Biden & 260
+      & \textbf{-0.0461} & {[}${-0.072}$ & ${-0.021}${]}
+      & \textbf{-0.0458} & {[}${-0.073}$ & ${-0.024}${]} \\
+    Economy and Jobs & 255
+      & -0.0056 & {[}${-0.034}$ & ${+0.026}${]}
+      & +0.0063 & {[}${-0.022}$ & ${+0.035}${]} \\
+    Coronavirus & 254
+      & +0.0141 & {[}${-0.022}$ & ${+0.037}${]}
+      & +0.0212 & {[}${-0.014}$ & ${+0.041}${]} \\
+    White House & 245
+      & -0.0229 & {[}${-0.047}$ & ${+0.009}${]}
+      & -0.0231 & {[}${-0.049}$ & ${+0.005}${]} \\
+    Immigration & 188
+      & -0.0216 & {[}${-0.047}$ & ${+0.006}${]}
+      & -0.0173 & {[}${-0.047}$ & ${+0.010}${]} \\
+    Public Health & 155
+      & -0.0035 & {[}${-0.030}$ & ${+0.023}${]}
+      & -0.0117 & {[}${-0.032}$ & ${+0.015}${]} \\
+    Defense and Security & 144
+      & -0.0029 & {[}${-0.032}$ & ${+0.021}${]}
+      & +0.0083 & {[}${-0.014}$ & ${+0.036}${]} \\
+    Russia & 131
+      & -0.0176 & {[}${-0.050}$ & ${+0.016}${]}
+      & -0.0214 & {[}${-0.049}$ & ${+0.020}${]} \\
+    Republican Party & 127
+      & \textbf{+0.0387} & {[}${+0.014}$ & ${+0.065}${]}
+      & +0.0204 & {[}${-0.002}$ & ${+0.051}${]} \\
+    US Senate & 126
+      & -0.0147 & {[}${-0.042}$ & ${+0.017}${]}
+      & -0.0066 & {[}${-0.033}$ & ${+0.023}${]} \\
+    Healthcare & 125
+      & -0.0109 & {[}${-0.036}$ & ${+0.021}${]}
+      & +0.0017 & {[}${-0.020}$ & ${+0.035}${]} \\
+    Supreme Court & 124
+      & +0.0061 & {[}${-0.028}$ & ${+0.028}${]}
+      & +0.0054 & {[}${-0.030}$ & ${+0.027}${]} \\
+    Middle East & 123
+      & +0.0126 & {[}${-0.023}$ & ${+0.036}${]}
+      & +0.0127 & {[}${-0.014}$ & ${+0.046}${]} \\
+    Democratic Party & 120
+      & -0.0118 & {[}${-0.041}$ & ${+0.019}${]}
+      & -0.0053 & {[}${-0.039}$ & ${+0.027}${]} \\
+    Violence in America & 112
+      & -0.0128 & {[}${-0.042}$ & ${+0.012}${]}
+      & -0.0138 & {[}${-0.043}$ & ${+0.012}${]} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Full multi-treatment DML results under the AllSidesV2 random split: ATE per topic under continuous encoding (one-SD increase in sentiment score) with 95\% bootstrap CIs ($B = \num{2000}$). Topics ordered by random-split article count (descending). Bolded ATEs have CIs that exclude zero.}
+  \label{tab:random-multi-continuous-full}
+\end{sidewaystable}
+
+The top-20 topic set under the random split differs from that under the media split (Table~\ref{tab:multi-continuous-full}): Barack Obama and Hillary Clinton fall below the 20-topic cutoff on the random-split subset, while US Senate and Supreme Court rise into the top 20. The remaining 18 topics are shared across both splits.
+
+\section{Full Donald Trump Mediation Table (Random Split)}
+
+Table~\ref{tab:random-te-trump-full} reports Total Effect, Natural Direct Effect, and Natural Indirect Effect estimates for Donald Trump sentiment as treatment with Politics sentiment as mediator under the AllSidesV2 random split ($N = 572$). Both the $Q_{25} \to Q_{75}$ and $P_{10} \to P_{90}$ percentile contrasts are reported; under the random split these correspond to the treatment windows $-0.6 \to 0.0$ and $-1.1 \to +0.3$ respectively (compared to $-0.4 \to +0.2$ and $-0.9 \to +0.5$ under the media split).
+
+\begin{table}[h!]
+  \centering
+  \sisetup{table-format=+1.3}
+  \small
+  \begin{tabular}{llS[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]S[table-format=+1.3]}
+    \toprule
+    \textbf{Paradigm} & \textbf{Contrast} &
+      {\textbf{TE}} &
+      {\textbf{CI lower}} & {\textbf{CI upper}} &
+      {\textbf{NDE}} & {\textbf{NIE}} \\
+    \midrule
+    Human
+      & $Q25 \to Q75$ & +0.125 & -0.033 & +0.283 & +0.124 & +0.001 \\
+    Human
+      & $P10 \to P90$ & +0.292 & -0.077 & +0.660 & +0.304 & -0.012 \\
+    \addlinespace
+    Fine-tuned RoBERTa
+      & $Q25 \to Q75$ & +0.125 & -0.036 & +0.286 & +0.142 & -0.017 \\
+    Fine-tuned RoBERTa
+      & $P10 \to P90$ & +0.291 & -0.085 & +0.667 & +0.345 & -0.054 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Total Effect (TE), Natural Direct Effect (NDE), and Natural Indirect Effect (NIE) of Donald Trump sentiment on ideology label under the AllSidesV2 random split ($N = 572$ articles). Neither paradigm reaches 95\% significance on the Total Effect under either contrast. The Fine-tuned RoBERTa Natural Indirect Effect flips sign between the media split ($+0.019$ under $Q25 \to Q75$; see Table~\ref{tab:te-trump}) and the random split ($-0.017$).}
+  \label{tab:random-te-trump-full}
+\end{table}
+
+Neither paradigm reaches significance on the Total Effect under either percentile contrast, and both paradigms assign the dominant share of the Total Effect to the direct channel. The Fine-tuned RoBERTa Natural Indirect Effect is negative under both contrasts on the random split ($-0.017$ on $Q_{25} \to Q_{75}$, $-0.054$ on $P_{10} \to P_{90}$), whereas under the media split the corresponding RoBERTa NIEs were positive ($+0.019$ and $+0.040$; Table~\ref{tab:te-trump}). Human NIEs are small and positive in both splits under the $Q_{25} \to Q_{75}$ contrast but differ in sign under $P_{10} \to P_{90}$ ($+0.014$ media, $-0.012$ random). No NIE reaches 95\% significance in any paradigm-contrast-split combination.
