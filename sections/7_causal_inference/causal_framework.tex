@@ -224,7 +224,7 @@ Formally, the Total Effect (TE) decomposes into:
 
 For example, positive Trump sentiment ($F_T$) may incline an article toward positive Politics framing ($F_M$). If positive Politics sentiment then influences the ideology classifier, the NIE captures that indirect path; the NDE captures all remaining direct pathways. In Figure~\ref{fig:articles}, topics sharing the same color belong to the same Louvain community; when we perform community-level mediation (Section~\ref{sec:community-aggregation}), we aggregate all same-colored topics into a single community sentiment score and ask whether one community's aggregate sentiment affects ideology directly or through its influence on another community's sentiment.
 
-We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals. Because the TE confidence interval consistently includes zero in our results (see Section~\ref{sec:mediation-results}), we suppress the proportional mediation $(\text{NIE}/\text{TE})$ to avoid division-by-near-zero artifacts.
+We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals. 
 
 
 \begin{figure}[h!]
