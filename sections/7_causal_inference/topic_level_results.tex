@@ -40,7 +40,7 @@ Table~\ref{tab:multi-continuous} reports the ATE of a one-standard-deviation inc
     Democratic Party & 261 & -0.0458 & -0.0403 & -0.0538 & -0.0471 & -0.0508 \\
     \bottomrule
   \end{tabular}
-  \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score), showing topics from the 20 qualifying topics where at least one paradigm produces a significant result. \colorbox{blue!15}{Highlighted} cells denote statistically insignificant results. Bolded cells indicate paradigms whose ATE sign diverges from the majority direction for that topic. The full table with 95\% confidence intervals is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.}
+  \caption{Multi-treatment DML: ATE per topic under continuous encoding (one-SD increase in sentiment score), showing topics from the 20 qualifying topics where at least one paradigm produces a significant result. \colorbox{blue!15}{Highlighted} cells denote statistically insignificant results. \textbf{Bolded} cells indicate paradigms whose ATE sign diverges from the majority direction for that topic. The full table with 95\% confidence intervals is reported in Appendix~\ref{sec:appendix-community-mediation}, Table~\ref{tab:multi-continuous-full}.}
   \label{tab:multi-continuous}
 \end{table}
 
@@ -76,7 +76,7 @@ Article count does not correlate with effect significance. The three largest top
     Violence in America & 260 & -0.0072 & -0.0015 & -0.0004 & -0.0016 & -0.0053 \\
     \bottomrule
   \end{tabular}
-  \caption{Multi-treatment DML: ATE for selected non-significant topics. No cell reaches significance under any paradigm. Bolded cells indicate paradigms whose ATE sign diverges from the majority direction for that topic.}
+  \caption{Multi-treatment DML: ATE for selected non-significant topics. No cell reaches significance under any paradigm. \textbf{Bolded} cells indicate paradigms whose ATE sign diverges from the majority direction for that topic.}
   \label{tab:multi-nonsig}
 \end{table}
 
@@ -94,11 +94,11 @@ Figure~\ref{fig:media_trump_mediation} reports Total Effect estimates for both p
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.7\textwidth]{sections/images/causal_analysis/media_split/mediation_topic_Donald_Trump_m_Politics.png}
-  \caption{Mediation decomposition for Donald Trump sentiment as treatment and Politics sentiment as mediator under the AllSidesV2 random split ($N = 572$). Total Effect (TE), Natural Direct Effect (NDE), and Natural Indirect Effect (NIE) shown for the $Q_{25} \to Q_{75}$ contrast across all annotation paradigms.}
+  \caption{Mediation decomposition for Donald Trump sentiment as treatment and Politics sentiment as mediator under the AllSidesV2 media split ($N = \num{1424}$). Total Effect (TE), Natural Direct Effect (NDE), and Natural Indirect Effect (NIE) shown for the $Q_{25} \to Q_{75}$ contrast across all five annotation paradigms.}
   \label{fig:media_trump_mediation}
 \end{figure}
 
-All five paradigms agree on the direction of the Trump-sentiment effect: more positive Trump sentiment is associated with a rightward shift in ideology classification. Four of five paradigms reach 95\% significance under both percentile contrasts; only Human narrowly misses ($\widehat{\text{TE}} = +0.135$, 95\% CI $[-0.001, +0.270]$ for $Q25 \to Q75$). Ordering the paradigms by $|\text{TE}|$ on the $Q25 \to Q75$ contrast yields Llama-3.3-70B ($+0.316$) > GPT-4o-mini baseline ($+0.255$) > Fine-tuned GPT-4o-mini ($+0.158$) > Fine-tuned RoBERTa ($+0.154$) > Human ($+0.135$). The two zero-shot LLM paradigms (Llama and GPT baseline) produce the largest Total Effects, while fine-tuning GPT-4o-mini slightly reduces the effect relative to its baseline ($+0.158$ vs $+0.255$), suggesting that task-specific fine-tuning attenuates, rather than amplifies, the Trump-sentiment signal.
+All five paradigms agree on the direction of the Trump-sentiment effect: more positive Trump sentiment is associated with a rightward shift in ideology classification. Four of five paradigms reach 95\% significance under both percentile contrasts; only Human narrowly misses ($\widehat{\text{TE}} = +0.135$). Ordering the paradigms by $|\text{TE}|$ on the $Q25 \to Q75$ contrast yields Llama-3.3-70B ($+0.316$) > GPT-4o-mini baseline ($+0.255$) > Fine-tuned GPT-4o-mini ($+0.158$) > Fine-tuned RoBERTa ($+0.154$) > Human ($+0.135$). The two zero-shot LLM paradigms (Llama and GPT baseline) produce the largest Total Effects, while fine-tuning GPT-4o-mini slightly reduces the effect relative to its baseline ($+0.158$ vs $+0.255$), suggesting that task-specific fine-tuning attenuates, rather than amplifies, the Trump-sentiment signal.
 
 In every paradigm, the direct channel (NDE) carries the dominant share of the Total Effect: $|\text{NDE}| \gg |\text{NIE}|$ for all five annotators on both percentile contrasts. The proportion mediated through Politics sentiment is small where reliable: 12.4\% for Fine-tuned RoBERTa, 10.8\% for Fine-tuned GPT-4o-mini, and 2.4\% for GPT-4o-mini baseline. For Llama-3.3-70B, the NIE is essentially zero ($-0.000$ on $Q25 \to Q75$), indicating that the Trump-sentiment effect operates almost entirely through the direct pathway. This structural pattern, in which the direct channel dominates, is consistent across all paradigms and both percentile contrasts.
 

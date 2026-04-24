@@ -5,7 +5,7 @@ This appendix provides the full community-level and topic-level mediation result
 
 \section{Pathway Selection}
 
-All treatment-mediator pairs were evaluated across communities the significant communities, but only $9 \to 11$ and $11 \to 9$ yielded non-degenerate mediation decompositions. All others failed the minimum presence test (fewer than 50 articles tagged with both the treatment and mediator community) and were therefore dropped from analysis.
+The pathways reported here are the treatment-mediator pairs drawn from the three communities $\{0, 1, 2\}$ for which all or nearly all annotation paradigms produced significant ATEs in Section~\ref{sec:community-level-results} (Communities~0, 1, and 2 correspond to White House and Congress, Elections and Campaigns, and Public Health respectively). Of the six ordered pairs among these three communities, four satisfied the minimum presence requirement (at least 50 articles tagged with both the treatment and mediator community) in at least one paradigm and produced non-degenerate mediation decompositions. These are the pathways reported in Table~\ref{tab:mediation_full_communities}: the two configurations with Community~1 as treatment ($1 \to 0$ and $1 \to 2$) and the two contrast configurations with Community~1 as mediator ($0 \to 1$ and $2 \to 1$).
 
 \section{Confounder Reduction Details}
 
@@ -16,44 +16,55 @@ Confounders consist of all community sentiment scores except those of the treatm
     \item \textbf{PCA:} The remaining matrix is reduced via PCA retaining 95\% of variance.
 \end{enumerate}
 
-Because this reduction depends only on the treatment subsample, not on ideology labels, it is identical across all annotation paradigms for a given treatment community. All treatment communities begin with 11 potential confounders. For Communities 1, 3, and 11, the presence filter removes 3, leaving 8; PCA further reduces these to 7 components. Community~9 loses one additional community (4 removed, leaving 7), and PCA retains all 7. All configurations therefore yield 7 final confounder components; the choice of mediator community has no effect on this reduction.
-
+Because this reduction depends only on the treatment subsample, not on ideology labels, it is identical across all annotation paradigms for a given treatment community. The number of retained components therefore varies only by treatment community and not by mediator choice.
 
 \section{Full Community Mediation Results}
 
-Table~\ref{tab:mediation_full} reports total effects (TE), natural direct effects (NDE), and natural indirect effects (NIE) for both viable pathways under the $Q_{25} \to Q_{75}$ contrast across all available annotation paradigms.
+Table~\ref{tab:mediation_full_communities} reports Total Effects (TE), Natural Direct Effects (NDE), and Natural Indirect Effects (NIE) under the $Q_{25} \to Q_{75}$ contrast across all five media-split annotation paradigms and all four viable pathways. The $P_{10} \to P_{90}$ contrast yields directionally concordant results.
 
 \begin{table}[h]
 \centering
-\small
+\footnotesize
 \begin{tabular}{lcccccc}
 \toprule
-Annotator & TE & 95\% CI & NDE & 95\% CI & NIE & \% med. \\
+Annotator & TE & 95\% CI (TE) & NDE & 95\% CI (NDE) & NIE & 95\% CI (NIE) \\
 \midrule
-\multicolumn{7}{l}{\textit{Community $9 \to 11$ ($N=139$, sentiment contrast $-0.3$ to $0.0$)}} \\
+\multicolumn{7}{l}{\textit{Community $1 \to 0$ ($N=3{,}628$, sentiment contrast $-0.3$ to $+0.2$)}} \\
 \midrule
-Human              & $-0.045$ & $[-0.164,\ +0.075]$ & $-0.059$ & $[-0.151,\ +0.045]$ & $+0.015$ & --- \\
-Fine-tuned RoBERTa & $-0.069$ & $[-0.181,\ +0.043]$ & $-0.080$ & $[-0.147,\ +0.031]$ & $+0.011$ & --- \\
-Fine-tuned GPT     & $+0.003$ & $[-0.120,\ +0.126]$ & $-0.035$ & $[-0.111,\ +0.063]$ & $+0.038$ & --- \\
-GPT (baseline)     & $-0.064$ & $[-0.183,\ +0.054]$ & $\mathbf{-0.093^*}$ & $\mathbf{[-0.174,\ -0.002]}$ & $+0.029$ & --- \\
-Llama-3.3-70B      & $-0.050$ & $[-0.207,\ +0.108]$ & $-0.088$ & $[-0.187,\ +0.031]$ & $+0.038$ & --- \\
+Human              & $+0.018$ & $[-0.044,\ +0.080]$ & $+0.017$ & $[-0.008,\ +0.043]$ & $+0.001$ & $[-0.005,\ +0.010]$ \\
+Fine-tuned RoBERTa & $+0.013$ & $[-0.051,\ +0.077]$ & $+0.009$ & $[-0.017,\ +0.034]$ & $+0.004$ & $[-0.004,\ +0.010]$ \\
+GPT (baseline)     & $+0.039$ & $[-0.013,\ +0.091]$ & $\mathbf{+0.039^*}$ & $\mathbf{[+0.018,\ +0.060]}$ & $-0.000$ & $[-0.003,\ +0.009]$ \\
+Fine-tuned GPT     & $+0.010$ & $[-0.053,\ +0.073]$ & $+0.003$ & $[-0.022,\ +0.028]$ & $+0.007$ & $[-0.000,\ +0.014]$ \\
+Llama-3.3-70B      & $\mathbf{+0.065^*}$ & $\mathbf{[+0.001,\ +0.129]}$ & $\mathbf{+0.069^*}$ & $\mathbf{[+0.041,\ +0.093]}$ & $-0.003$ & $[-0.006,\ +0.009]$ \\
 \midrule
-\multicolumn{7}{l}{\textit{Community $11 \to 9$ ($N=772$, sentiment contrast $-0.4$ to $0.1$)}} \\
+\multicolumn{7}{l}{\textit{Community $1 \to 2$ ($N=3{,}628$, sentiment contrast $-0.3$ to $+0.2$)}} \\
 \midrule
-Human              & $-0.045$ & $[-0.162,\ +0.071]$ & $-0.049$ & $[-0.100,\ +0.012]$ & $+0.004$ & --- \\
-Fine-tuned RoBERTa & $-0.016$ & $[-0.133,\ +0.102]$ & $-0.015$ & $[-0.079,\ +0.034]$ & $-0.000$ & --- \\
-Fine-tuned GPT     & $-0.040$ & $[-0.161,\ +0.081]$ & $-0.030$ & $[-0.082,\ +0.027]$ & $-0.009$ & --- \\
-GPT (baseline)     & $-0.027$ & $[-0.141,\ +0.087]$ & $-0.020$ & $[-0.073,\ +0.030]$ & $-0.007$ & --- \\
-Llama-3.3-70B      & $-0.081$ & $[-0.220,\ +0.059]$ & $\mathbf{-0.057^*}$ & $\mathbf{[-0.126,\ -0.003]}$ & $-0.024$ & --- \\
+Human              & $+0.018$ & $[-0.042,\ +0.078]$ & $+0.014$ & $[-0.010,\ +0.042]$ & $+0.005$ & $[-0.001,\ +0.009]$ \\
+Fine-tuned RoBERTa & $+0.014$ & $[-0.046,\ +0.074]$ & $+0.007$ & $[-0.016,\ +0.033]$ & $+0.007$ & $[-0.001,\ +0.009]$ \\
+GPT (baseline)     & $+0.039$ & $[-0.011,\ +0.089]$ & $\mathbf{+0.037^*}$ & $\mathbf{[+0.018,\ +0.060]}$ & $+0.002$ & $[-0.001,\ +0.007]$ \\
+Fine-tuned GPT     & $+0.005$ & $[-0.056,\ +0.065]$ & $-0.000$ & $[-0.022,\ +0.027]$ & $+0.005$ & $[-0.002,\ +0.007]$ \\
+Llama-3.3-70B      & $\mathbf{+0.067^*}$ & $\mathbf{[+0.005,\ +0.129]}$ & $\mathbf{+0.067^*}$ & $\mathbf{[+0.041,\ +0.092]}$ & $-0.000$ & $[-0.001,\ +0.009]$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Community $0 \to 1$ ($N=2{,}743$, sentiment contrast $-0.2$ to $+0.1$)}} \\
+\midrule
+Human              & $-0.021$ & $[-0.083,\ +0.041]$ & $\mathbf{-0.030^*}$ & $\mathbf{[-0.046,\ -0.002]}$ & $+0.009$ & $[-0.012,\ +0.010]$ \\
+Fine-tuned RoBERTa & $-0.029$ & $[-0.091,\ +0.034]$ & $\mathbf{-0.030^*}$ & $\mathbf{[-0.047,\ -0.004]}$ & $+0.001$ & $[-0.012,\ +0.008]$ \\
+GPT (baseline)     & $-0.013$ & $[-0.066,\ +0.041]$ & $-0.012$ & $[-0.028,\ +0.009]$ & $\mathbf{-0.001^*}$ & $\mathbf{[-0.021,\ -0.003]}$ \\
+Fine-tuned GPT     & $-0.026$ & $[-0.089,\ +0.036]$ & $\mathbf{-0.034^*}$ & $\mathbf{[-0.052,\ -0.006]}$ & $+0.008$ & $[-0.012,\ +0.010]$ \\
+Llama-3.3-70B      & $-0.014$ & $[-0.077,\ +0.050]$ & $-0.003$ & $[-0.022,\ +0.024]$ & $\mathbf{-0.011^*}$ & $\mathbf{[-0.031,\ -0.008]}$ \\
+\midrule
+\multicolumn{7}{l}{\textit{Community $2 \to 1$ ($N=1{,}116$, sentiment contrast $-0.3$ to $+0.1$)}} \\
+\midrule
+Human              & $-0.081$ & $[-0.182,\ +0.020]$ & $\mathbf{-0.081^*}$ & $\mathbf{[-0.122,\ -0.039]}$ & $+0.000$ & $[-0.011,\ +0.011]$ \\
+Fine-tuned RoBERTa & $-0.052$ & $[-0.163,\ +0.059]$ & $\mathbf{-0.055^*}$ & $\mathbf{[-0.109,\ -0.017]}$ & $+0.003$ & $[-0.006,\ +0.019]$ \\
+GPT (baseline)     & $-0.074$ & $[-0.160,\ +0.012]$ & $\mathbf{-0.085^*}$ & $\mathbf{[-0.120,\ -0.055]}$ & $+0.011$ & $[-0.009,\ +0.015]$ \\
+Fine-tuned GPT     & $-0.071$ & $[-0.179,\ +0.037]$ & $\mathbf{-0.059^*}$ & $\mathbf{[-0.114,\ -0.026]}$ & $-0.012$ & $[-0.011,\ +0.011]$ \\
+Llama-3.3-70B      & $-0.087$ & $[-0.182,\ +0.008]$ & $\mathbf{-0.104^*}$ & $\mathbf{[-0.141,\ -0.065]}$ & $+0.017$ & $[-0.014,\ +0.013]$ \\
 \bottomrule
 \end{tabular}
-\caption{Community-level mediation results ($Q_{25} \to Q_{75}$ contrast). $^*$Significant at 95\% (CI excludes zero).}
-\label{tab:mediation_full}
+\caption{Community-level mediation results ($Q_{25} \to Q_{75}$ contrast) across media-split annotation paradigms. $^*$Significant at 95\% (CI excludes zero).}
+\label{tab:mediation_full_communities}
 \end{table}
-
-For the $9 \to 11$ pathway, no annotator produces a significant Total Effect. The only significant cell is the Natural Direct Effect under baseline GPT-4o-mini (NDE $= -0.093$, 95\% CI $[-0.174, -0.002]$): when Community~11 sentiment is held at its $Q_{25}$ level, increasing Community~9 sentiment from $Q_{25}$ to $Q_{75}$ shifts the predicted ideology label leftward in the baseline GPT-4o-mini paradigm, even though the corresponding TE ($-0.064$) does not itself reach significance. Four of the five paradigms estimate a negative Total Effect (Human $-0.045$, Fine-tuned RoBERTa $-0.069$, baseline GPT $-0.064$, Llama-3.3-70B $-0.050$); Fine-tuned GPT-4o-mini is the lone directional outlier with TE $= +0.003$, the only paradigm whose point estimate is positive in this pathway. Among the four agreeing paradigms, Fine-tuned RoBERTa carries the largest negative magnitude.
-
-For the $11 \to 9$ pathway, no annotator reaches significance on the Total Effect, but Llama-3.3-70B's Natural Direct Effect crosses the 95\% threshold (NDE $= -0.057$, 95\% CI $[-0.126, -0.003]$), and Llama also carries the largest-magnitude TE ($-0.081$) of any paradigm in this pathway. All five paradigms now estimate a negative Total Effect (Human $-0.045$, Fine-tuned RoBERTa $-0.016$, baseline GPT $-0.027$, Fine-tuned GPT $-0.040$, Llama $-0.081$); the directional consensus in $11 \to 9$ is therefore complete, while the $9 \to 11$ pathway contains a single directional outlier (Fine-tuned GPT). The asymmetry between the two pathways now lies primarily in \emph{which} paradigm carries the significant direct channel (baseline GPT in $9 \to 11$, Llama in $11 \to 9$) and in directional homogeneity (4/5 in $9 \to 11$ vs 5/5 in $11 \to 9$), rather than in whether either pathway is significant on the Total Effect.
 
 \section{Topic Mediation Results For Treatment Donald Trump}
 
@@ -99,3 +110,28 @@ For the $11 \to 9$ pathway, no annotator reaches significance on the Total Effec
     significance under both contrasts (marked $^*$), with Human narrowly missing. The direct channel (NDE) dominates the indirect channel (NIE) in all paradigms.}
   \label{tab:te-trump}
 \end{table}
+
+\section{Random-Split Community Mediation Decompositions}
+
+This section collects the mediation decomposition figures for the three pathways not embedded in Section~\ref{sec:random-community-mediation-results}. The corresponding numerical values are reported in Table~\ref{tab:random-community-mediation}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{sections/images/causal_analysis/random_split/mediation_community_0_1.png}
+    \caption{Mediation decomposition for the Community $0 \to 1$ pathway under the AllSidesV2 random split ($N = \num{1022}$), $Q_{25} \to Q_{75}$ contrast, Human and Fine-tuned RoBERTa paradigms.}
+    \label{fig:random-mediation-0-1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{sections/images/causal_analysis/random_split/mediation_community_1_2.png}
+    \caption{Mediation decomposition for the Community $1 \to 2$ pathway under the AllSidesV2 random split ($N = \num{1551}$), $Q_{25} \to Q_{75}$ contrast, Human and Fine-tuned RoBERTa paradigms.}
+    \label{fig:random-mediation-1-2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{sections/images/causal_analysis/random_split/mediation_community_2_1.png}
+    \caption{Mediation decomposition for the Community $2 \to 1$ pathway under the AllSidesV2 random split ($N = 536$), $Q_{25} \to Q_{75}$ contrast, Human and Fine-tuned RoBERTa paradigms.}
+    \label{fig:random-mediation-2-1}
+\end{figure}

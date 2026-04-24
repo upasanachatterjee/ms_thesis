@@ -224,7 +224,7 @@ Formally, the Total Effect (TE) decomposes into:
 
 For example, positive Trump sentiment ($F_T$) may incline an article toward positive Politics framing ($F_M$). If positive Politics sentiment then influences the ideology classifier, the NIE captures that indirect path; the NDE captures all remaining direct pathways. In Figure~\ref{fig:articles}, topics sharing the same color belong to the same Louvain community; when we perform community-level mediation (Section~\ref{sec:community-aggregation}), we aggregate all same-colored topics into a single community sentiment score and ask whether one community's aggregate sentiment affects ideology directly or through its influence on another community's sentiment.
 
-We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals. Because the TE confidence interval consistently includes zero in our results (see Section~\ref{sec:mediation-results}), we suppress the proportional mediation $(\text{NIE}/\text{TE})$ to avoid division-by-near-zero artifacts.
+We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals.
 
 
 \begin{figure}[h!]
@@ -302,7 +302,7 @@ In addition to the topic-level analysis above, we perform a community-level anal
 
 \noindent estimated via a single \texttt{LinearDML} model with $\mathbf{F}_C$ as the treatment matrix and PCA-reduced topic-presence indicators as confounders. Community-level aggregation increases the number of articles per treatment unit and yields more reliable estimates than topic-level analysis, particularly for topics that individually appear in few articles.
 
-For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, i.e. communities where the treatment community's sentiment and the mediator community's sentiment are both observable. \authortodo{Add community mediation results when available.}
+For community-level mediation, we restrict the analysis to articles that contain topics from \emph{both} the treatment community and the mediator community. Returning to Figure~\ref{fig:articles}, this means selecting only articles whose topic tags span at least two community colors, i.e. communities where the treatment community's sentiment and the mediator community's sentiment are both observable.
 
 Sections~\ref{sec:community-level-results} and~\ref{sec:topic-level-results} present the empirical analysis at two levels of granularity. We lead with \emph{community-level} results because they are the more robust analysis: aggregating sentiments within Louvain-detected topic communities pools many low-frequency topics into a smaller number of high-frequency treatments, which increases per-treatment sample size, stabilizes the nuisance-model fits, and supports tighter confidence intervals. The \emph{topic-level} results that follow are presented as a finer-grained robustness check on the same data, asking whether the community-level picture holds when we look at individual topics with much smaller per-treatment $N$.
 
