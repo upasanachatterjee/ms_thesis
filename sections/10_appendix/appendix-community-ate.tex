@@ -7,9 +7,9 @@ This appendix provides the full community-level ATE breakdown for the nine commu
 
 Table~\ref{tab:community_ate_full} presents the average treatment effect of community-level sentiment on ideology classification across all nine communities that met the minimum presence threshold. We compare estimates derived from human annotations against three LLM-based annotation pipelines (GPT-4o-mini (baseline), Fine-tuned GPT-4o-mini, and Llama-3.3-70B) and one fine-tuned encoder model (Fine-tuned RoBERTa). Community theme labels correspond to the thematic groupings in Table~\ref{tab:community-structure}.
 
-\begin{table}[h!]
+\begin{sidewaystable}[h!]
   \centering
-  \resizebox{\textwidth}{!}{%
+  \resizebox{\textheight}{!}{%
   \begin{tabular}{l c c c c c c}
   \toprule
   Community & Human & Fine-tuned RoBERTa & GPT-4o-mini (baseline) & Fine-tuned GPT-4o-mini & Llama-3.3-70B & Num.\ Articles\\
@@ -28,7 +28,7 @@ Table~\ref{tab:community_ate_full} presents the average treatment effect of comm
   }
   \caption{Community-level ATE by annotation paradigm (continuous sentiment, min presence${}=50$, min weight${}=2$). $^*p < 0.05$.}
   \label{tab:community_ate_full}
-\end{table}
+\end{sidewaystable}
 
 Four of nine communities produce at least one significant ATE, yielding 14 significant cells in total. This represents a substantial increase in statistical power relative to prior runs with smaller datasets, where only two cells reached significance. Community~2 (Public Health) is the standout result: all five paradigms produce significant negative ATEs (Human $-0.036$, Fine-tuned RoBERTa $-0.027$, baseline GPT $-0.035$, Fine-tuned GPT $-0.031$, Llama $-0.045$), making it the only community with full cross-paradigm replication, analogous to the partisan topics (e.g.\ Healthcare, Democratic Party) that achieve universal significance at the topic level in Table~\ref{tab:multi-continuous-full}.
 

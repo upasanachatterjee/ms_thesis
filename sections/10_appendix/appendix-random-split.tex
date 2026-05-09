@@ -33,10 +33,8 @@ None of the nine communities produces a significant ATE under either paradigm on
 
 Table~\ref{tab:random-multi-continuous-full} reports the complete multi-treatment DML results for all 20 qualifying topics under the AllSidesV2 random split, including the 95\% bootstrap confidence interval ($B = \num{2000}$) accompanying every ATE estimate. Topics are ordered by random-split article count (descending). Four of the 20 topics reach significance under at least one paradigm: Donald Trump (both), Joe Biden (both), Republican Party (Human only), and Elections (Fine-tuned RoBERTa only).
 
-\begin{sidewaystable}
+\begin{table}
   \centering
-  \sisetup{table-format=+1.4}
-  \scriptsize
   \begin{tabular}{l c
       S[table-format=+1.4] @{~} l @{~} l
       S[table-format=+1.4] @{~} l @{~} l}
@@ -112,7 +110,7 @@ Table~\ref{tab:random-multi-continuous-full} reports the complete multi-treatmen
   \end{tabular}
   \caption{Full multi-treatment DML results under the AllSidesV2 random split: ATE per topic under continuous encoding (one-SD increase in sentiment score) with 95\% bootstrap CIs ($B = \num{2000}$). Topics ordered by random-split article count (descending). \textbf{Bolded} ATEs have CIs that exclude zero.}
   \label{tab:random-multi-continuous-full}
-\end{sidewaystable}
+\end{table}
 
 The top-20 topic set under the random split differs from that under the media split (Table~\ref{tab:multi-continuous-full}): Barack Obama and Hillary Clinton fall below the 20-topic cutoff on the random-split subset, while US Senate and Supreme Court rise into the top 20. The remaining 18 topics are shared across both splits.
 

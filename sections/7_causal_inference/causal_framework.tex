@@ -158,7 +158,7 @@ The final representation of an article can be seen in Figure~\ref{fig:articles}.
         \bottomrule
         \end{tabular}
     \end{minipage}
-    \caption{Top five communities and topic tags in the AllSidesV2 media split test set. Total article count is 9,830. The full community structure with all 14 communities and their constituent topics is provided in Appendix~\ref{appendix:community-structure}.}
+    \caption{Top five communities and topic tags in the AllSidesV2 media split test set. Total article count is 9,830. An extended discussion of the 14 communities and their constituent topics is provided in Appendix~\ref{appendix:community-structure}.}
     \label{tab:topical-summary}
 \end{table}
 
@@ -227,7 +227,7 @@ For example, positive Trump sentiment ($F_T$) may incline an article toward posi
 We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootstrap iterations for 95\% confidence intervals.
 
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
   \centering
   \begin{tikzpicture}[
       >=latex,
@@ -276,14 +276,13 @@ We estimate NDE and NIE using nested DML estimators with $B = \num{2000}$ bootst
 
 All analyses use a continuous treatment encoding: the raw sentiment score on the $[-100, +100]$ scale, standardized (zero mean, unit variance) before estimation, so that the ATE represents the effect of a one-standard-deviation increase. This preserves fine-grained variation: a score of $+45$ carries more positive framing than $+1$.
 
-For the mediation analysis, treatment contrasts are evaluated at the interquartile range ($Q25 \to Q75$, primary) and the 10th--90th percentile range ($P10 \to P90$, secondary), computed from the empirical distribution of the continuous treatment score in the filtered subsample. For example, a CATE of $-0.21$ for Left-leaning outlets means that increasing Trump sentiment from $Q25$ to $Q75$ is associated with a $-0.21$ shift in ideology on the $[0,2]$ scale.
-
+For the mediation analysis, treatment contrasts are evaluated at the interquartile range ($Q25 \to Q75$, primary) and the 10th--90th percentile range ($P10 \to P90$, secondary), computed from the empirical distribution of the continuous treatment score in the filtered subsample.
 \subsubsection{Confounder Dimensionality Reduction}
 \label{sec:pca}
 
 The topic-presence indicator matrix $W$ has \num{1691} columns, one per AllSides topic tag. We apply PCA to $W$, retaining components that together explain 95\% of the variance (capped at 50 components). The 95\% threshold is chosen because it preserves the substantive between-topic variation that drives our causal estimates while collapsing the long tail of low-variance dimensions that mostly contribute estimation noise; the 50-component cap is necessary to keep nuisance-model fitting numerically stable in the smaller filtered subsamples used for mediation, where the effective sample size can drop into the low hundreds and an unconstrained PCA expansion would over-parameterize the first-stage models.
 
-Missing topic-presence values are imputed as 0, reflecting the semantic equivalence of ``topic absent'' and ``indicator = 0.'' Sentiment scores for absent topics are similarly imputed as 0 (neutral).
+Missing topic-presence values are input as 0, reflecting the semantic equivalence of ``topic absent'' and ``indicator = 0.'' Sentiment scores for absent topics are similarly input as 0 (neutral).
 
 \subsubsection{Multi-Treatment DML}
 \label{sec:multi-treatment-design}

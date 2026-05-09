@@ -3,11 +3,11 @@
 \section{Large Language Model Evaluation}
 \label{sec:llm-baselines}
 
-The recent emergence of large-scale language models necessitates comprehensive evaluation of their capabilities for political bias classification. We assess five recent large language models from the GPT \citep{openai2024gpt4,openai_o3_systemcard_2025,openai_gpt5_systemcard_2025} and LLaMA \citep{touvron2023llama} families, spanning different scales, organizations, and release dates, in zero-shot configuration to establish baseline performance without task-specific adaptation.
+The emergence of large-scale language models necessitates comprehensive evaluation of their capabilities for political bias classification. We assess five recent large language models from the GPT \citep{openai2024gpt4,openai_o3_systemcard_2025,openai_gpt5_systemcard_2025} and LLaMA \citep{touvron2023llama} families, spanning different scales, organizations, and release dates, in zero-shot configuration to establish baseline performance without task-specific adaptation.
 
 \subsection{Model Selection and Access}
 
-Our evaluation encompasses models from two prominent LLM families. From the GPT family, we evaluate GPT-4o-mini, GPT-5-nano, and o3-mini, all accessed via the OpenAI API. From the LLaMA family, we evaluate LLaMA-3.1-8B-instant and LLaMA-3.3-70B-versatile, accessed via the GroqCloud API platform. Both LLaMA and GPT models were evaluated at temperature 1.0. For computational efficiency, we conducted preliminary screening on a 100-article subset, ranked candidate GPT models by F1-Macro on that subset, and selected the top three for full-scale evaluation.
+Our evaluation encompasses models from the GPT and LLaMA families. From the GPT family, we evaluate GPT-4o-mini, GPT-5-nano, and o3-mini, all accessed via the OpenAI API. From the LLaMA family, we evaluate LLaMA-3.1-8B-instant and LLaMA-3.3-70B-versatile, accessed via the GroqCloud API platform. Both LLaMA and GPT models were evaluated at temperature 1.0. We chose a less deterministic temperature to mirror natural variation in human opinions. For computational efficiency, we conducted preliminary screening on a 100-article subset, ranked candidate GPT models by F1-Macro on that subset, and selected the top three for full-scale evaluation.
 
 \subsection{Prompt Design and Evaluation Protocol}
 
